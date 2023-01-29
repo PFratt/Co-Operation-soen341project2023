@@ -11,7 +11,7 @@ Project
 
 
 Team Members
-
+Samuel Wong - im-samwong - Backend Lead
 
 Technologies
 HTML
