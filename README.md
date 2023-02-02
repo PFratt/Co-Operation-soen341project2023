@@ -16,6 +16,7 @@ Team Members
 Samuel Wong - im-samwong - Backend Lead
 Qian Yi Wang - q1an-w - Frontend Lead
 Jessica Beauchemin - JBeauche - Backend
+Denis Oh - Denis-Oh - Frontend
 
 Technologies
 HTML
