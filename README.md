@@ -1,4 +1,4 @@
-# SOEN 341
+# SOEN 341 - Co-Operation
 # Objective
 - Develop a job seeking application for students and employers.
 
@@ -9,6 +9,7 @@
 - Samuel Wong - im-samwong - Backend Lead/SCRUM master
 - Qian Yi Wang - q1an-w - Frontend Lead
 - Jessica Beauchemin - JBeauche - Backend
+- Philip Frattolillo - PFratt - Frontend
 
 # Technologies
 - HTML
