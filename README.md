@@ -11,6 +11,7 @@
 - Jessica Beauchemin - JBeauche - Backend
 - Philip Frattolillo - PFratt - Frontend
 - Altamash Sheikh - altam-sh - Frontend 
+- Denis Oh - Denis-Oh - Frontend
 
 # Technologies
 - HTML
