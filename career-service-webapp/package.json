@@ -1,17 +1,25 @@
 {
   "name": "career-service-webapp",
   "version": "0.1.0",
+  "homepage": "https://q1an-w.github.io/Co-Operation-soen341project2023/",
   "private": true,
   "dependencies": {
+    "@fluentui/font-icons-mdl2": "^8.5.5",
+    "@fluentui/react": "^7.113.0",
+    "@fluentui/react-hooks": "^8.6.14",
+    "axios": "^1.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.6.1",
     "react-scripts": "5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
