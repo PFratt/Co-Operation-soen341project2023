@@ -1,6 +1,13 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
+var bodyParser = require('body-parser');
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
 
 const secretKey = 'soen341courseterm4';
 
@@ -44,8 +51,7 @@ console.log('Before connect');
         // Retrieve the user's credentials from the request body
         console.log(req.url);
         console.log(req.body);
-        const username = req.body.username;
-        const password = req.body.password;
+        const { username, password } = req.body;
         console.log(`Login request at ${req.query}`);
 
         // Check if the user exists in the database
