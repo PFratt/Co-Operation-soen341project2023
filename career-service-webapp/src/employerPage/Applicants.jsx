@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Icon } from "@fluentui/react/lib/Icon";
 
-export default class AdminPage extends React.Component {
+export default class Applicants extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -10,6 +10,6 @@ export default class AdminPage extends React.Component {
   }
 
   render() {
-    return <div className="admin-page-container">Admin page</div>;
+    return <div className="applicants-page-container">applicants list</div>;
   }
 }
