@@ -61,7 +61,7 @@ console.log('Before connect');
     });
 
     // Turning on express app to listen at that port. Specify IPv4 for listening.
-    app.listen(5000, "192.168.0.158", () => {
+    app.listen(5000, () => {
         console.log('Server listening on port 5000');
     });
   } catch (err) {
