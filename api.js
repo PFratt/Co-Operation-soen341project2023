@@ -42,10 +42,11 @@ console.log('Before connect');
     // Add a route for token generation
     app.post('/login', async (req, res) => {
         // Retrieve the user's credentials from the request body
+        console.log(req.url);
+        console.log(req.body);
         const username = req.body.username;
         const password = req.body.password;
         console.log(`Login request at ${req.query}`);
-        console.log(req.body);
 
         // Check if the user exists in the database
         const user = await collection.findOne({ username, password });
