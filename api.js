@@ -20,6 +20,7 @@ console.log('Before connect');
     // Set up a route to retrieve data from the users collection
     app.get('/users', async (req, res) => {
         // Verify the token
+        console.log(req);
         const token = req.header('Authorization').replace('Bearer ', '');
         try {
             const decoded = jwt.verify(token, secretKey);
@@ -42,6 +43,8 @@ console.log('Before connect');
     app.post('/login', async (req, res) => {
         // Retrieve the user's credentials from the request body
         const { username, password } = req.body;
+        console.log(`Login request at ${req.query}`);
+        console.log(req.body);
 
         // Check if the user exists in the database
         const user = await collection.findOne({ username, password });
