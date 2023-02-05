@@ -42,7 +42,8 @@ console.log('Before connect');
     // Add a route for token generation
     app.post('/login', async (req, res) => {
         // Retrieve the user's credentials from the request body
-        const { username, password } = req.body;
+        const username = req.body.username;
+        const password = req.body.password;
         console.log(`Login request at ${req.query}`);
         console.log(req.body);
 
@@ -60,7 +61,7 @@ console.log('Before connect');
     });
 
     // Turning on express app to listen at that port. Specify IPv4 for listening.
-    app.listen(5000, () => {
+    app.listen(5000, "192.168.0.158", () => {
         console.log('Server listening on port 5000');
     });
   } catch (err) {
