@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/main.b411c128.css","mappings":"AAAA,WACI,gBAEJ,CACA,WACI,wBACJ,CAKA,oBACI,iBACJ","sources":["homePage/css/Home.css"],"sourcesContent":[".test-link{\r\n    margin-right: 5px;\r\n\r\n}\r\n.test-menu{\r\n    background-color: rgb(195, 218, 242);\r\n}\r\n\r\n\r\n\r\n\r\n.homepage-container{\r\n    text-align: center;\r\n}"],"names":[],"sourceRoot":""}
