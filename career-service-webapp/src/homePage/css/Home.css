@@ -12,3 +12,40 @@
 .homepage-container{
     text-align: center;
 }
+.login-wrapper{
+    background-color: rgb(230, 243, 255);
+    border-width:1px;
+    border-color: rgb(166, 211, 250);
+    height: 20%;
+    width: 30%;
+    
+    min-width:fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+.signup-wrapper{
+    background-color: aliceblue;
+    border-width:1px;
+    height: 20%;
+    width: 30%;
+    min-width:fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+.login-input{
+    margin-top: 8px;
+}
+.login-button{
+    margin-top: 5px;
+}
+.selected-user-type{
+    background: rgb(216, 252, 252);
+    border-width:1px;
+}
+.selected-user-type:hover{
+    background: rgb(145, 187, 187);
+    
+
+}
