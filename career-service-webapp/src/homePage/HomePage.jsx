@@ -1,8 +1,18 @@
 import * as React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import { Icon } from "@fluentui/react/lib/Icon";
-
+import LoginPage from "./LoginPage";
+import CandidatePage from "../candidatePage/CandidatePage";
+import EmployerPage from "../employerPage/EmployerPage";
+import AdminPage from "../adminPage/AdminPage";
+import ErrorPage from "./ErrorPage";
+import "./css/Home.css";
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
 export default class HomePage extends React.Component {
   constructor(props) {
     super(props);
@@ -13,26 +23,68 @@ export default class HomePage extends React.Component {
 
   render() {
     return (
-      <>
-        Login Page
-        <br></br>
-        <input defaultValue={"Username"} />
-        <br></br>
-        <input defaultValue={"Password"} />
-        this is just a proof that it works
-        {/* <div className="router-page-container">
-          <div className="selected-page-container">
-            {console.log(process.env.PUBLIC_URL)}
-            <Routes>
-              <Route path={"/"} element={<Home />} />
-              <Route path={"/calendar"} element={<CalendarApp />} />
-              <Route path={"/school"} element={<SchoolApp />} />
-              <Route path={"/snake"} element={<SnakeGame />} />
-              <Route path={"*"} element={<NoPage />} />
-            </Routes>
-          </div>
-        </div> */}
-      </>
+      <div className="homepage-container">
+        <TempLinkAccess />
+        <div className="selected-page-container">
+          <Routes>
+            <Route path={"/"} element={<LoginPage />} />
+            <Route
+              path={"/candidate"}
+              element={
+                <ProtectedRoute user={true}>
+                  {" "}
+                  <CandidatePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={"/employer/*"}
+              element={
+                <ProtectedRoute user={true}>
+                  {" "}
+                  <EmployerPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={"/admin"}
+              element={
+                <ProtectedRoute user={true}>
+                  <AdminPage />
+                </ProtectedRoute>
+              }
+            />{" "}
+            <Route path={"*"} element={<ErrorPage />} />
+          </Routes>
+        </div>
+      </div>
     );
   }
 }
+const TempLinkAccess = ({ props }) => {
+  return (
+    <div className="test-menu">
+      <a href="./#/candidate" className=" test-link">
+        {" "}
+        candidate
+      </a>
+      <a href="./#/employer" className=" test-link">
+        employer
+      </a>
+      <a href="./#/admin" className=" test-link">
+        admin
+      </a>
+      <a href="./" className=" test-link">
+        home
+      </a>
+    </div>
+  );
+};
+const ProtectedRoute = ({ user, redirectPath = "/", children }) => {
+  console.log(user);
+  if (!user) {
+    return <Navigate to={redirectPath} replace />;
+  }
+
+  return children;
+};
