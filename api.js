@@ -128,7 +128,7 @@ console.log('Before connect');
         console.log(req.url);
         console.log(req.body);
         const { name, email, password, usertype } = req.body;
-        console.log(`Login request at ${req.query}`);
+        console.log(`Signup request at ${req.query}`);
 
         const myObj = {
             name: name,
@@ -148,10 +148,9 @@ console.log('Before connect');
             await collection.insertOne(myObj, function(err, res) {
                 if (err) throw err;
                 console.log("1 document inserted");
-                return res.status(200).send({accessToken});
             });
         }
-        
+        res.status(200).send({accessToken}); 
     });
 
     app.get('/validate', async (req, res) => {
