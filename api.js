@@ -142,7 +142,7 @@ console.log('Before connect');
 
         // Check if the user exists in the database
         const user = await collection.findOne({email: email});
-        if(!user){
+        if(user){
             return res.status(406).send("Email already used by another user.");
         } else {
             await collection.insertOne(myObj, function(err, res) {
