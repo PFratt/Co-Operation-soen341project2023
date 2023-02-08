@@ -9,6 +9,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+// Allow all CORS
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+  });
+
 const secretKey = 'soen341courseterm4';
 
 // Connect to MongoDB database
@@ -90,8 +100,6 @@ console.log('Before connect');
         }
     });
 
-
-
     // Add a route for token generation
     app.post('/login', async (req, res) => {
         // Retrieve the user's credentials from the request body
@@ -144,6 +152,21 @@ console.log('Before connect');
             });
         }
         
+    });
+
+    app.get('/validate', async (req, res) => {
+        // Verify the token
+        console.log(req);
+        const token = req.header('Authorization').replace('Bearer ', '');
+        try {
+            const decoded = jwt.verify(token, secretKey);
+            console.log('Decoded:', decoded);
+        } catch (error) {
+            console.error(error);
+            return res.status(401).send({ message: 'Invalid token' });
+        }
+        
+        res.status(200).send("Token still valid.");
     });
 
     // Turning on express app to listen at that port. Specify IPv4 for listening.
