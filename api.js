@@ -148,14 +148,16 @@ console.log('Before connect');
         console.log(`Signup request at ${req.query}`);
 
         const numberholder = await collection.find({"Number": "Holder"});
+        console.log(numberholder);
         const userID = parseInt(numberholder.userId) + 1;
+        console.log(userID);
 
         const myObj = {
             name: name,
             email: email,
             password: password,
             usertype: usertype,
-            id: userID.userId 
+            id: userID
         };
 
         // Generate a JWT
