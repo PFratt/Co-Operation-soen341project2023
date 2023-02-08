@@ -2,6 +2,8 @@ import * as React from "react";
 import { Table } from "react-bootstrap";
 import { Icon } from "@fluentui/react/lib/Icon";
 import "./css/Candidate.css";
+import JobApplication from "./JobApplication";
+
 const fakejoblist = [
   {
     jobNum: 1,
@@ -39,6 +41,7 @@ export default class CandidatePage extends React.Component {
     super(props);
     this.state = {
       showMenu: true,
+      selectedJob: null
     };
   }
   //test function just to show how it works
@@ -50,7 +53,7 @@ export default class CandidatePage extends React.Component {
           <td>{jobNum}</td>
           <td
             onClick={() => {
-              this.jobApplication(jobNum, title, employer, date);
+              this.setState({ selectedJob: { jobNum, title, employer, date } });
             }}
           >
             {title}
@@ -62,8 +65,15 @@ export default class CandidatePage extends React.Component {
     });
   };
   jobApplication = (jobNum, title, employer, date) => {
-    alert(jobNum + " | " + title + " | " + employer + " | " + date);
     console.log(title);
+    return (
+      <JobApplication 
+        jobNum={jobNum}
+        title={title}
+        employer={employer}
+        date={date}
+        />
+    );
   };
   render() {
     return (
@@ -80,6 +90,9 @@ export default class CandidatePage extends React.Component {
             </thead>
             <tbody>{this.mapfunctiontest()}</tbody>
           </Table>{" "}
+        </div>
+        <div className="job-application-wrapper">
+          {this.state.selectedJob ? this.jobApplication(this.state.selectedJob.jobNum, this.state.selectedJob.title, this.state.selectedJob.employer, this.state.selectedJob.date) : null}
         </div>
       </div>
     );
