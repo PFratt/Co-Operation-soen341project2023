@@ -160,6 +160,11 @@ console.log('Before connect');
         const userID = userId;
         console.log(userID);
 
+        await collection.updateOne(
+            {"Number": "Holder"},
+            {$set: {"userId": userID}}
+        );
+
 
         const myObj = {
             name: name,
