@@ -23,6 +23,7 @@ const secretKey = 'soen341courseterm4';
 
 // Connect to MongoDB database
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { send } = require('process');
 const uri = "mongodb+srv://cooperation:SOEN341uu@soen341db.6srii44.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
@@ -33,6 +34,17 @@ console.log('Before connect');
     console.log('Success.');
 
     const collection = client.db("SOEN341DB").collection("users");
+
+    app.get('/testget', async(req, res) => {
+        console.log("Request at get");
+        res.status(200).send("Received request");
+    });
+
+    app.post('/testpost', async(req, res) => {
+        console.log("Request at post");
+        res.status(200).send("Received request");
+    });
+
 
     // Set up a route to retrieve data from the student users
     app.get('/users/students', async (req, res) => {
