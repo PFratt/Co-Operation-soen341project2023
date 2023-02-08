@@ -148,7 +148,7 @@ console.log('Before connect');
         console.log(`Signup request at ${req.query}`);
 
         const numberholder = await collection.find({"Number": "Holder"});
-        const userID = (Int)((Int)(numberholder.userId) + 1);
+        const userID = parseInt(numberholder.userId) + 1;
 
         const myObj = {
             name: name,
