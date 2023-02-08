@@ -24,8 +24,52 @@ console.log('Before connect');
 
     const collection = client.db("SOEN341DB").collection("users");
 
-    // Set up a route to retrieve data from the users collection
-    app.get('/users', async (req, res) => {
+    // Set up a route to retrieve data from the student users
+    app.get('/users/students', async (req, res) => {
+        // Verify the token
+        console.log(req);
+        const token = req.header('Authorization').replace('Bearer ', '');
+        try {
+            const decoded = jwt.verify(token, secretKey);
+            console.log('Decoded:', decoded);
+        } catch (error) {
+            console.error(error);
+            return res.status(401).send({ message: 'Invalid token' });
+        }
+
+        try {
+            const usersData = await collection.find({usertype:"student"}).toArray();
+            res.send(usersData);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ message: 'An error occurred' });
+        }
+    });
+
+     // Set up a route to retrieve data from the employer users
+     app.get('/users/employers', async (req, res) => {
+        // Verify the token
+        console.log(req);
+        const token = req.header('Authorization').replace('Bearer ', '');
+        try {
+            const decoded = jwt.verify(token, secretKey);
+            console.log('Decoded:', decoded);
+        } catch (error) {
+            console.error(error);
+            return res.status(401).send({ message: 'Invalid token' });
+        }
+
+        try {
+            const usersData = await collection.find({usertype:"employer"}).toArray();
+            res.send(usersData);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ message: 'An error occurred' });
+        }
+    });
+
+     // Set up a route to retrieve data from the users collection
+     app.get('/users', async (req, res) => {
         // Verify the token
         console.log(req);
         const token = req.header('Authorization').replace('Bearer ', '');
@@ -46,25 +90,60 @@ console.log('Before connect');
         }
     });
 
+
+
     // Add a route for token generation
     app.post('/login', async (req, res) => {
         // Retrieve the user's credentials from the request body
         console.log(req.url);
         console.log(req.body);
-        const { username, password } = req.body;
+        const { email, password, usertype } = req.body;
         console.log(`Login request at ${req.query}`);
 
         // Check if the user exists in the database
-        const user = await collection.findOne({ username, password });
+        const user = await collection.findOne({ email, password });
+
         if (!user) {
             return res.status(401).send({ message: 'Incorrect username or password' });
         }
 
         // Generate a JWT
-        const accessToken = jwt.sign({ username }, secretKey, { expiresIn: '2h' });
+        const accessToken = jwt.sign({ email }, secretKey, { expiresIn: '2h' });
 
         // Send the token to the client
         res.send({ accessToken });
+    });
+
+    // Add a new user
+    app.post('/signup', async (req, res) => {
+        // Retrieve the user's credentials from the request body
+        console.log(req.url);
+        console.log(req.body);
+        const { name, email, password, usertype } = req.body;
+        console.log(`Login request at ${req.query}`);
+
+        const myObj = {
+            name: name,
+            email: email,
+            password: password,
+            usertype: usertype
+        };
+
+        // Generate a JWT
+        const accessToken = jwt.sign({ email }, secretKey, { expiresIn: '2h' });
+
+        // Check if the user exists in the database
+        const user = await collection.findOne({email: email});
+        if(!user){
+            return res.status(406).send("Email already used by another user.");
+        } else {
+            await collection.insertOne(myObj, function(err, res) {
+                if (err) throw err;
+                console.log("1 document inserted");
+                return res.status(200).send({accessToken});
+            });
+        }
+        
     });
 
     // Turning on express app to listen at that port. Specify IPv4 for listening.
