@@ -383,10 +383,10 @@ console.log('Before connect');
             console.log(numberholder);
 
             let jobId = 0;
-            if (typeof numberholder.jobId === "number") {
-                jobId = numberholder.jobId + 1;
-            } else if (typeof numberholder.jobId === "string") {
-                jobId = parseInt(numberholder.jobId, 10) + 1;
+            if (typeof numberholder.jobID === "number") {
+                jobId = numberholder.jobID + 1;
+            } else if (typeof numberholder.jobID === "string") {
+                jobId = parseInt(numberholder.jobID, 10) + 1;
             }
 
             const jobID = jobId;
