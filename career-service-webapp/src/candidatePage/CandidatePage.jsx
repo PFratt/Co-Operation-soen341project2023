@@ -3,6 +3,7 @@ import { Table } from "react-bootstrap";
 import { Icon } from "@fluentui/react/lib/Icon";
 import "./css/Candidate.css";
 import JobApplication from "./JobApplication";
+import ApplicationStatus from "./ApplicationStatus";
 
 const fakejoblist = [
   {
@@ -10,30 +11,35 @@ const fakejoblist = [
     title: "software",
     employer: "big corporation",
     date: "from 2023-2024",
+    status: "",
   },
   {
     jobNum: 2,
     title: "elec",
     employer: "medium corporation",
     date: "from 2023-2024",
+    status: "pending",
   },
   {
     jobNum: 3,
     title: "aero",
     employer: "small corporation",
     date: "from 2023-2024",
+    status: "interview",
   },
   {
     jobNum: 4,
     title: "coen",
     employer: "bigger corporation",
     date: "from 2023-2024",
+    status: "offer",
   },
   {
     jobNum: 5,
     title: "soen",
     employer: "biggest corporation",
     date: "from 2023-2024",
+    status: "accepted",
   },
 ];
 export default class CandidatePage extends React.Component {
@@ -93,6 +99,9 @@ export default class CandidatePage extends React.Component {
         </div>
         <div className="job-application-wrapper">
           {this.state.selectedJob ? this.jobApplication(this.state.selectedJob.jobNum, this.state.selectedJob.title, this.state.selectedJob.employer, this.state.selectedJob.date) : null}
+        </div>
+        <div className="ApplicationStatusTEST-wrapper">
+          <ApplicationStatus statusValue={"accepted"}/>
         </div>
       </div>
     );
