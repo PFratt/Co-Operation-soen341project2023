@@ -137,6 +137,9 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Incorrect username or password' });
             }
 
+            if (user.usertype != usertype) {
+                return res.status(401).send({ message: `Registered user is not ${usertype}.` });
+            }
             // Generate a JWT
             const accessToken = jwt.sign({ email }, secretKey, { expiresIn: '2h' });
 
@@ -515,7 +518,7 @@ console.log('Before connect');
                 console.error(error);
                 return res.status(401).send({ message: 'Invalid token' });
             }
-            
+
             // Retrieve the user's credentials from the request body
             console.log(req.url);
             console.log(req.body);
