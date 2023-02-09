@@ -159,10 +159,10 @@ console.log('Before connect');
             console.log(numberholder);
 
             let userId = 0;
-            if (typeof numberholder.userId === "number") {
-                userId = numberholder.userId + 1;
-            } else if (typeof numberholder.userId === "string") {
-                userId = parseInt(numberholder.userId, 10) + 1;
+            if (typeof numberholder.userID === "number") {
+                userId = numberholder.userID + 1;
+            } else if (typeof numberholder.userID === "string") {
+                userId = parseInt(numberholder.userID, 10) + 1;
             }
 
             const userID = userId;
@@ -361,8 +361,6 @@ console.log('Before connect');
             }
         });
 
-
-
         // Add a new job
         app.post('/addjob', async (req, res) => {
             // Verify the token
@@ -392,7 +390,7 @@ console.log('Before connect');
             const jobID = jobId;
             console.log(jobID);
 
-            await collection.updateOne(
+            await jobs.updateOne(
                 { "Number": "Holder" },
                 { $set: { "jobID": jobID } }
             );
