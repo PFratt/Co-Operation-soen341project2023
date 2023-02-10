@@ -1,4 +1,5 @@
 import React from 'react'
+import './css/Candidate.css';
 
 export default function ApplicationStatus({statusValue}) {
     let bgColor;
@@ -15,7 +16,7 @@ export default function ApplicationStatus({statusValue}) {
     }
 
   return (
-    <div style={{ backgroundColor: bgColor, width: "80px", padding: "5px", borderRadius: "40px" }}>
+    <div className='ApplicationStatusComponent' style={{ backgroundColor: bgColor }}>
         {statusValue}
     </div>
   )
