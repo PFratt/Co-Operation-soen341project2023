@@ -41,7 +41,7 @@ export default class CandidatePage extends React.Component {
     super(props);
     this.state = {
       showMenu: true,
-      selectedJob: null
+      selectedJob: null,
     };
   }
   //test function just to show how it works
@@ -67,13 +67,17 @@ export default class CandidatePage extends React.Component {
   jobApplication = (jobNum, title, employer, date) => {
     console.log(title);
     return (
-      <JobApplication 
+      <JobApplication
         jobNum={jobNum}
         title={title}
         employer={employer}
         date={date}
-        />
+        hideJobApplication={this.hideJobApplication}
+      />
     );
+  };
+  hideJobApplication = () => {
+    this.setState({ selectedJob: null });
   };
   render() {
     return (
@@ -92,7 +96,14 @@ export default class CandidatePage extends React.Component {
           </Table>{" "}
         </div>
         <div className="job-application-wrapper">
-          {this.state.selectedJob ? this.jobApplication(this.state.selectedJob.jobNum, this.state.selectedJob.title, this.state.selectedJob.employer, this.state.selectedJob.date) : null}
+          {this.state.selectedJob
+            ? this.jobApplication(
+                this.state.selectedJob.jobNum,
+                this.state.selectedJob.title,
+                this.state.selectedJob.employer,
+                this.state.selectedJob.date
+              )
+            : null}
         </div>
       </div>
     );

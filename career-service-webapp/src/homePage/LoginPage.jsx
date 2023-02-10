@@ -2,23 +2,23 @@ import * as React from "react";
 import axios from "axios";
 import { Icon } from "@fluentui/react/lib/Icon";
 
-
-
 export default class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userType: "student",
+      userType: "",
       candidateButton: "",
       employerButton: "",
       adminButton: "",
     };
   }
   redirect = (response) => {
-    this.props.cookies.set("authToken", response.data.accessToken, { maxAge: 3600 });
+    this.props.cookies.set("authToken", response.data.accessToken, {
+      maxAge: 3600,
+    });
     this.props.cookies.set("userType", this.state.userType, { maxAge: 3600 });
-    window.location = ("./");
-  }
+    window.location = "./";
+  };
   login = () => {
     let inputEmail = document.getElementById("loginUser").value;
     let inputPassword = document.getElementById("loginPassword").value;
@@ -40,15 +40,12 @@ export default class LoginPage extends React.Component {
         },
       })
       .then((response) => {
-
         console.log("login api response");
         this.redirect(response);
-
       })
       .catch(function (error) {
         console.log(error);
       });
-
   };
   signUp = () => {
     let username = document.getElementById("signupUser").value;
@@ -93,7 +90,7 @@ export default class LoginPage extends React.Component {
       this.setState({ employerButton: "selected-user-type" });
 
     if (name === "admin") this.setState({ adminButton: "selected-user-type" });
-  }
+  };
   render() {
     return (
       <div className="login-page-container">
