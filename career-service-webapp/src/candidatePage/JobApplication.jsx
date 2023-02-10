@@ -1,4 +1,6 @@
-import React from "react";
+
+import React from 'react'
+import './css/Candidate.css';
 
 export default function JobApplication({
   jobNum,
@@ -8,16 +10,9 @@ export default function JobApplication({
   hideJobApplication,
 }) {
   return (
-    <div
-      style={{
-        backgroundColor: "skyblue",
-        margin: "20px",
-        padding: "10px",
-        width: "50%",
-        maxWidth: "400px",
-      }}
-    >
-      <button onClick={hideJobApplication}>Hide Job Application </button>
+
+    <div className='JobApplicationComponent' >
+    <button onClick={hideJobApplication}>Hide Job Application </button>
       <p>Job Number: {jobNum}</p>
       <p>Title: {title}</p>
       <p>Employer: {employer}</p>
