@@ -15,13 +15,13 @@ export default class EmployerPage extends React.Component {
   render() {
     return (
       <div className="employer-page-container">
-        employer page <br></br>
+        employer page maybe search bar here?<br></br>
         <a href="./#/employer/applicants" className=" test-link">
-          Particular applicants Job View
+          <button> Particular applicants Job View</button>
         </a>
         <br></br>
         <a href="./#/employer/" className=" test-link">
-          My Job List view
+          <button>My Job List view </button>
         </a>
         <br></br>
         <Routes>
