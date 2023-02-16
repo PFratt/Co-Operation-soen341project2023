@@ -2,3 +2,9 @@
     width: 500px;
     background-color: aliceblue;
 }
+.green{
+background-color: rgba(52, 201, 52, 0.471);
+}
+.red{
+background-color: rgba(255, 0, 0, 0.516);
+}

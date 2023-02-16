@@ -3,6 +3,7 @@ import { Icon } from "@fluentui/react/lib/Icon";
 import { Routes, Route } from "react-router-dom";
 import MyJobs from "./MyJobs";
 import Applicants from "./Applicants";
+import AllCandidates from "./AllCandidates";
 
 export default class EmployerPage extends React.Component {
   constructor(props) {
@@ -23,10 +24,14 @@ export default class EmployerPage extends React.Component {
         <a href="./#/employer/" className=" test-link">
           <button>My Job List view </button>
         </a>
+        <a href="./#/employer/all-candidates/" className=" test-link">
+          <button>All Candidates</button>
+        </a>
         <br></br>
         <Routes>
           <Route path={"/"} element={<MyJobs />} />
           <Route path={"/applicants"} element={<Applicants />} />
+          <Route path={"/all-candidates"} element={<AllCandidates />} />
         </Routes>
       </div>
     );

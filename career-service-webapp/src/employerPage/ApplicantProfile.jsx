@@ -9,6 +9,7 @@ export default function ApplicantProfile({
   closeApplicantView,
   interview,
   reject,
+  clear,
 }) {
   return (
     <div className="applicant-profile-wrapper">
@@ -19,6 +20,7 @@ export default function ApplicantProfile({
       <p>Date: {date}</p>
       <button onClick={interview}> Interview</button>
       <button onClick={reject}>Reject </button>
+      <button onClick={clear}>Clear </button>
     </div>
   );
 }

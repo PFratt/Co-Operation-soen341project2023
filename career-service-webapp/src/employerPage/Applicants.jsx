@@ -46,6 +46,7 @@ export default class Applicants extends React.Component {
     super(props);
     this.state = {
       viewApplicant: null,
+      applicantStatusColor: "",
     };
   }
   mapfunctiontest = () => {
@@ -81,11 +82,20 @@ export default class Applicants extends React.Component {
         closeApplicantView={this.closeApplicantView}
         interview={this.interview}
         reject={this.reject}
+        clear={this.clear}
       />
     );
   };
-  interview = () => {};
-  reject = () => {};
+  interview = () => {
+    this.setState({ applicantStatusColor: " green " });
+  };
+  reject = () => {
+    this.setState({ applicantStatusColor: " red " });
+  };
+  clear = () => {
+    this.setState({ applicantStatusColor: "" });
+  };
+  applicantStatusColor;
   closeApplicantView = () => {
     this.setState({ viewApplicant: null });
   };
