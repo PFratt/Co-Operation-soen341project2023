@@ -9,7 +9,6 @@ import AdminPage from "../adminPage/AdminPage";
 import ErrorPage from "./ErrorPage";
 import Cookies from "universal-cookie";
 
-
 import "./css/Home.css";
 
 const cookies = new Cookies();
@@ -25,9 +24,18 @@ export default class HomePage extends React.Component {
   }
   componentDidMount() {
     //timeouts needed to add "delay"
-    if (this.state.candidateAccess) setTimeout(() => { window.location = ("./#/candidate") }, 0);
-    if (this.state.employerAccess) setTimeout(() => { window.location = ("./#/employer"); }, 0);
-    if (this.state.adminAccess) setTimeout(() => { window.location = ("./#/admin") }, 0);
+    if (this.state.candidateAccess)
+      setTimeout(() => {
+        window.location = "./#/candidate";
+      }, 0);
+    if (this.state.employerAccess)
+      setTimeout(() => {
+        window.location = "./#/employer";
+      }, 0);
+    if (this.state.adminAccess)
+      setTimeout(() => {
+        window.location = "./#/admin";
+      }, 0);
   }
   checkAccess = () => {
     let userType = String(cookies.get("userType"));
@@ -40,12 +48,12 @@ export default class HomePage extends React.Component {
     if (userType === "admin") {
       this.state.adminAccess = true;
     }
-  }
+  };
   logout = () => {
     cookies.remove("authToken");
     cookies.remove("userType");
-    window.location = ("./");
-  }
+    window.location = "./";
+  };
   render() {
     return (
       <div className="homepage-container">
@@ -54,7 +62,12 @@ export default class HomePage extends React.Component {
         <div className="selected-page-container">
           <Routes>
             {/* login page, default page, login and signup */}
-            <Route path={"/"} element={<LoginPage cookies={cookies} shouldUpdate={this.shouldUpdate} />} />
+            <Route
+              path={"/"}
+              element={
+                <LoginPage cookies={cookies} shouldUpdate={this.shouldUpdate} />
+              }
+            />
             <Route
               path={"/candidate"}
               element={
@@ -68,7 +81,7 @@ export default class HomePage extends React.Component {
             <Route
               path={"/employer/*"}
               element={
-                <ProtectedRoute user={this.state.employerAccess} >
+                <ProtectedRoute user={this.state.employerAccess}>
                   {" "}
                   {/* brings to main employer page */}
                   <EmployerPage />
@@ -119,7 +132,7 @@ const ProtectedRoute = ({ user, redirectPath = "/", children }) => {
   if (!user) {
     cookies.remove("authToken");
     cookies.remove("userType");
-    window.location = ("./");
+    window.location = "./";
     return;
   }
 
