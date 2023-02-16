@@ -1,7 +1,10 @@
 const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
+const https = require('https');
+const fs = require('fs');
 var bodyParser = require('body-parser');
+const path = require('path');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -627,9 +630,18 @@ console.log('Before connect');
             res.status(200).send("Token still valid.");
         });
 
-        // Turning on express app to listen at that port. Specify IPv4 for listening.
-        app.listen(5000, () => {
-            console.log('Server listening on port 5000');
+        const keyPath = path.join(__dirname, 'code.key');
+        const certPath = path.join(__dirname, 'code.crt');
+
+        // HTTPS server options
+        const options = {
+            key: fs.readFileSync(keyPath),
+            cert: fs.readFileSync(certPath)
+        };
+
+        // Create HTTPS server
+        https.createServer(options, app).listen(5000, () => {
+            console.log('Server listening on port 5000 (HTTPS)');
         });
     } catch (err) {
         console.error(err);
