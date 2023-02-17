@@ -34,7 +34,7 @@ export default class LoginPage extends React.Component {
     //   userType: "student",
     // };
     axios
-      .post("http://sawongdomain.com/login", loginInfo, {
+      .post("https://sawongdomain.com/login", loginInfo, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
         },
@@ -64,7 +64,7 @@ export default class LoginPage extends React.Component {
     //   userType: "student",
     // };
     axios
-      .post("http://sawongdomain.com/signup", signupInfo, {
+      .post("https://sawongdomain.com/signup", signupInfo, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
         },
