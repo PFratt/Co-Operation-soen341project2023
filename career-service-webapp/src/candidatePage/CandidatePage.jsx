@@ -48,7 +48,10 @@ export default class CandidatePage extends React.Component {
     this.state = {
       showMenu: true,
       selectedJob: null,
+      applyNowBtnColor: "white",
+      applyNowBtnText: "Apply Now",
     };
+    this.applyNowBtnClicked = this.applyNowBtnClicked.bind(this);
   }
   //test function just to show how it works
   mapfunctiontest = () => {
@@ -79,11 +82,18 @@ export default class CandidatePage extends React.Component {
         employer={employer}
         date={date}
         hideJobApplication={this.hideJobApplication}
+        applyNowBtnColor={this.state.applyNowBtnColor}
+        applyNowBtnText={this.state.applyNowBtnText}
+        applyNowBtnClicked={this.applyNowBtnClicked}
       />
     );
   };
   hideJobApplication = () => {
     this.setState({ selectedJob: null });
+  };
+  applyNowBtnClicked = () => {
+    this.setState({ applyNowBtnColor: "green" });
+    this.setState({ applyNowBtnText: "Application Sent" })
   };
   render() {
     return (
