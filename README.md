@@ -10,6 +10,8 @@
 - Qian Yi Wang - q1an-w - Frontend Lead
 - Jessica Beauchemin - JBeauche - Backend
 - Philip Frattolillo - PFratt - Frontend
+- Altamash Sheikh - altam-sh - Frontend 
+- Denis Oh - Denis-Oh - Frontend
 
 # Technologies
 - HTML
