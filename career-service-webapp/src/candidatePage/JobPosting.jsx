@@ -10,6 +10,7 @@ export default function JobPosting({
   date,
   description,
   deadline,
+  status,
   hideJobPosting,
   jobApplicationBtnClicked,
   isApplicationBtnClicked,
@@ -24,8 +25,9 @@ export default function JobPosting({
       <p>Date: {date}</p>
       <p>Description: {description}</p>
       <p>Deadline: {deadline}</p>
-      <button style={{ backgroundColor: isApplicationBtnClicked ? "grey" : "green" }} onClick={jobApplicationBtnClicked}>{isApplicationBtnClicked ? "Hide Job Application": "Job Application"}</button>
-      {isApplicationBtnClicked ? <JobApplication /> : null}
+      <p>Status: {status}</p>
+      <button style={{ backgroundColor: isApplicationBtnClicked ? "lightgray" : "green" }} onClick={jobApplicationBtnClicked}>{isApplicationBtnClicked ? "Hide Job Application": "Job Application"}</button>
+      {isApplicationBtnClicked ? <JobApplication status /> : null}
     </div>
   );
 }

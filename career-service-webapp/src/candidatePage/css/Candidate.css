@@ -16,6 +16,13 @@
     padding: 10px;
 }
 
+.JobApplicationComponent{
+    background-color: lightgray;
+    margin: 20px;
+    padding: 10px;
+    border-radius: 10px;
+}
+
 .ApplicationStatusComponent{
     width: 80px;
     padding: 5px;

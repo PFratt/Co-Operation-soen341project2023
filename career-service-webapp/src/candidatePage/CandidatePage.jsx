@@ -14,7 +14,7 @@ const fakejoblist = [
     date: "from 2023-2024",
     description: "Software job in big corporation doing big corporation things",
     deadline: "May 1, 2023",
-    status: "",
+    status: "none",
   },
   {
     jobNum: 2,
@@ -72,7 +72,7 @@ export default class CandidatePage extends React.Component {
           <td>{jobNum}</td>
           <td
             onClick={() => {
-              this.setState({ selectedJob: { jobNum, title, employer, description, deadline, date } });
+              this.setState({ selectedJob: { jobNum, title, employer, date, description, deadline, status } });
             }}
           >
             {title}
@@ -83,7 +83,7 @@ export default class CandidatePage extends React.Component {
       );
     });
   };
-  jobPosting = (jobNum, title, employer, date, description, deadline) => {
+  jobPosting = (jobNum, title, employer, date, description, deadline, status) => {
     console.log(title);
     return (
       <JobPosting
@@ -93,6 +93,7 @@ export default class CandidatePage extends React.Component {
         date={date}
         description={description}
         deadline={deadline}
+        status={status}
         hideJobPosting={this.hideJobPosting}
         jobApplicationBtnClicked={this.jobApplicationBtnClicked}
         isApplicationBtnClicked={this.state.isApplicationBtnClicked}
