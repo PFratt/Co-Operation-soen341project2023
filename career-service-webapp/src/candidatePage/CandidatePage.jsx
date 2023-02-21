@@ -130,12 +130,12 @@ export default class CandidatePage extends React.Component {
                 this.state.selectedJob.employer,
                 this.state.selectedJob.date,
                 this.state.selectedJob.description,
-                this.state.selectedJob.deadline
+                this.state.selectedJob.deadline,
+                this.state.selectedJob.status
               )
             : null}
         </div>
         <div className="ApplicationStatusTEST-wrapper">
-          <ApplicationStatus statusValue={"accepted"}/>
         </div>
       </div>
     );

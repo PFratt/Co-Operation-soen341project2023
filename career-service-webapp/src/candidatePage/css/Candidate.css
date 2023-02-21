@@ -25,6 +25,7 @@
 
 .ApplicationStatusComponent{
     width: 80px;
-    padding: 5px;
+    padding: 5px 10px;
     border-radius: 40px;
+    text-transform: capitalize;
 }

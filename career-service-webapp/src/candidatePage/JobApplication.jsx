@@ -1,4 +1,5 @@
 import React from 'react'
+import ApplicationStatus from './ApplicationStatus'
 
 export default function JobApplication({
     status,
@@ -6,7 +7,11 @@ export default function JobApplication({
   return (
     <div className='JobApplicationComponent'>
         <h4>Application:</h4>
-        <p>status: {status}</p>
+        <p>
+          Status: <ApplicationStatus statusValue={status}/>
+        </p>
+        <p>Name: Denis</p>
+        <p>Resume: RandomResume.pdf</p>
     </div>
   )
 }
