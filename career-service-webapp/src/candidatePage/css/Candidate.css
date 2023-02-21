@@ -10,12 +10,10 @@
     text-align: center;
 }
 
-.JobApplicationComponent{
+.JobPostingComponent{
     background-color: skyblue;
     margin: 20px;
     padding: 10px;
-    width: 50%;
-    max-width: 400px;
 }
 
 .ApplicationStatusComponent{
