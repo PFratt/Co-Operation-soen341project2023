@@ -1,26 +1,17 @@
-
 import React from 'react'
-import './css/Candidate.css';
+import ApplicationStatus from './ApplicationStatus'
 
 export default function JobApplication({
-  jobNum,
-  title,
-  employer,
-  date,
-  hideJobApplication,
-  applyNowBtnColor,
-  applyNowBtnText,
-  applyNowBtnClicked,
+    status,
 }) {
   return (
-
-    <div className='JobApplicationComponent' >
-      <button onClick={hideJobApplication}>Hide Job Application </button>
-      <p>Job Number: {jobNum}</p>
-      <p>Title: {title}</p>
-      <p>Employer: {employer}</p>
-      <p>Date: {date}</p>
-      <button style={{ backgroundColor: applyNowBtnColor }} onClick={applyNowBtnClicked}>{applyNowBtnText}</button>
+    <div className='JobApplicationComponent'>
+        <h4>Application:</h4>
+        <p>
+          Status: <ApplicationStatus statusValue={status}/>
+        </p>
+        <p>Name: Denis</p>
+        <p>Resume: RandomResume.pdf</p>
     </div>
-  );
+  )
 }
