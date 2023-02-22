@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Icon } from "@fluentui/react/lib/Icon";
-
-const fakeEmployerJobList= [
+import { Table } from "react-bootstrap";
+const fakeEmployerJobList = [
   {
     jobID: "1",
     title: "job1",
@@ -37,7 +37,6 @@ const fakeEmployerJobList= [
     date_posted: "02-01-2023",
     date_deadline: "01-03-2023",
   },
-  
 ];
 export default class MyJobs extends React.Component {
   constructor(props) {
@@ -58,7 +57,13 @@ export default class MyJobs extends React.Component {
             <td
               onClick={() => {
                 this.setState({
-                  selectedJob: { jobID, title, role_description, date_posted, date_deadline },
+                  selectedJob: {
+                    jobID,
+                    title,
+                    role_description,
+                    date_posted,
+                    date_deadline,
+                  },
                 });
               }}
             >
@@ -74,7 +79,7 @@ export default class MyJobs extends React.Component {
   };
   myJobPost = (jobID, title, role_description, date_posted, date_deadline) => {
     return (
-      <myJobPost 
+      <myJobPost
         jobID={jobID}
         title={title}
         role_description={role_description}
@@ -85,24 +90,30 @@ export default class MyJobs extends React.Component {
     );
   };
   hideJob = () => {
-    this.setState({selectedJob: null});
+    this.setState({ selectedJob: null });
   };
   addJob = () => {
-    const newJob = {
-      employerID: userID,
-      jobID: jobID,
-      title: title,
-      role_description: role_description,
-      date_posted: date_posted,
-      date_deadline: date_deadline,
-    }
+    fakeEmployerJobList.add({
+      employerID: "userID",
+      jobID: "jobID",
+      title: "title",
+      role_description: "role_description",
+      date_posted: "date_posted",
+      date_deadline: "date_deadline",
+    });
   };
   render() {
     return (
       <div className="myjobs-page-container">
-        <div className = "myjobs-wrapper">
-        <button onClick = {addJob}>Add Job</button>
-          <Table className = "myjobs-table" striped bordered hover>
+        <div className="myjobs-wrapper">
+          <button
+            onClick={() => {
+              this.addJob();
+            }}
+          >
+            Add Job
+          </button>
+          <Table className="myjobs-table" striped bordered hover>
             <thead>
               <tr>
                 <th>#</th>
@@ -115,19 +126,18 @@ export default class MyJobs extends React.Component {
             <tbody>{this.mapfunctiontest()}</tbody>
           </Table>{" "}
         </div>
-        <div className ="myjobs-wrapper">
-          {this.state.selectedJob ? this.myJobList(
-            this.state.selectedJob.jobID,
-            this.state.selectedJob.title,
-            this.state.selectedJob.role_description,
-            this.state.selectedJob.date_posted,
-            this.state.selectedJob.date_deadline,
-          )
-            : null
-          }
-        </div>          
+        <div className="myjobs-wrapper">
+          {this.state.selectedJob
+            ? this.myJobList(
+                this.state.selectedJob.jobID,
+                this.state.selectedJob.title,
+                this.state.selectedJob.role_description,
+                this.state.selectedJob.date_posted,
+                this.state.selectedJob.date_deadline
+              )
+            : null}
+        </div>
       </div>
-      
-      );
+    );
   }
 }
