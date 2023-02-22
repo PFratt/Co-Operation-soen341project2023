@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Icon } from "@fluentui/react/lib/Icon";
 import { Table } from "react-bootstrap";
+import MyJobPost from "./MyJobPost";
 const fakeEmployerJobList = [
   {
     jobID: "1",
@@ -79,7 +80,7 @@ export default class MyJobs extends React.Component {
   };
   myJobPost = (jobID, title, role_description, date_posted, date_deadline) => {
     return (
-      <myJobPost
+      <MyJobPost
         jobID={jobID}
         title={title}
         role_description={role_description}
@@ -93,7 +94,7 @@ export default class MyJobs extends React.Component {
     this.setState({ selectedJob: null });
   };
   addJob = () => {
-    fakeEmployerJobList.add({
+    fakeEmployerJobList.push({
       employerID: "userID",
       jobID: "jobID",
       title: "title",
@@ -128,7 +129,7 @@ export default class MyJobs extends React.Component {
         </div>
         <div className="myjobs-wrapper">
           {this.state.selectedJob
-            ? this.myJobList(
+            ? this.myJobPost(
                 this.state.selectedJob.jobID,
                 this.state.selectedJob.title,
                 this.state.selectedJob.role_description,

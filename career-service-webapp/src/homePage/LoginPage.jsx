@@ -21,7 +21,7 @@ export default class LoginPage extends React.Component {
     this.props.cookies.set("authToken", response.data.accessToken, {
       maxAge: 3600,
     });
-    this.props.cookies.set("userType", this.state.userType, { maxAge: 3600 });
+    this.props.cookies.set("userType", this.state.usertype, { maxAge: 3600 });
     window.location = "./";
   };
   handleInputChange = (event) => {
@@ -62,7 +62,7 @@ export default class LoginPage extends React.Component {
       name: this.state.signupUsername,
       email: this.state.signupEmail,
       password: this.state.signupPassword,
-      usertype: this.state.userType,
+      usertype: this.state.usertype,
     };
     // let testSignupInfo = {
     //   name: "qian",
