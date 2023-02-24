@@ -5,6 +5,7 @@ import "./css/Candidate.css";
 import JobPosting from "./JobPosting";
 import JobApplication from "./JobApplication";
 import ApplicationStatus from "./ApplicationStatus";
+import CandidateProfile from "./CandidateProfile";
 
 const fakejoblist = [
   {
@@ -41,7 +42,7 @@ const fakejoblist = [
     date: "from 2023-2024",
     description: "Job description Job description Job description",
     deadline: "May 4, 2023",
-    status: "offer",
+    status: "rejected",
   },
   {
     jobNum: 5,
@@ -60,6 +61,7 @@ export default class CandidatePage extends React.Component {
       showMenu: true,
       selectedJob: null,
       isApplicationBtnClicked: false,
+      showProfilePage: false,
     };
     this.jobApplicationBtnClicked = this.jobApplicationBtnClicked.bind(this);
   }
@@ -106,10 +108,17 @@ export default class CandidatePage extends React.Component {
   jobApplicationBtnClicked = () => {
     this.setState({ isApplicationBtnClicked: !this.state.isApplicationBtnClicked })
   };
+  profilePageClose = () => {
+    this.setState({ showProfilePage: false })
+  };
+  profilePageOpen = () => {
+    this.setState({ showProfilePage: true })
+  };
   render() {
     return (
       <div className="candidate-page-container">
         <div className="job-list-wrapper">
+          <button onClick={this.profilePageOpen} className="ViewProfileBtn">View Profile</button>
           <Table className="job-list-table" striped bordered hover>
             <thead>
               <tr>
@@ -135,7 +144,8 @@ export default class CandidatePage extends React.Component {
               )
             : null}
         </div>
-        <div className="ApplicationStatusTEST-wrapper">
+        <div className="candidate-profile-wrapper">
+          {this.state.showProfilePage ? <CandidateProfile profilePageClose={this.profilePageClose} /> : null}
         </div>
       </div>
     );

@@ -12,6 +12,7 @@ export default function JobApplication({
         </p>
         <p>Name: Denis</p>
         <p>Resume: RandomResume.pdf</p>
+        <p>Cover Letter: CoverLetter.pdf</p>
     </div>
   )
 }
