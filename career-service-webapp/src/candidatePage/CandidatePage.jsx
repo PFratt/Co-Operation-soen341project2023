@@ -147,6 +147,8 @@ export default class CandidatePage extends React.Component {
         <div className="candidate-profile-wrapper">
           {this.state.showProfilePage ? <CandidateProfile profilePageClose={this.profilePageClose} /> : null}
         </div>
+        <div><CandidateProfile/></div>
+          
       </div>
     );
   }
