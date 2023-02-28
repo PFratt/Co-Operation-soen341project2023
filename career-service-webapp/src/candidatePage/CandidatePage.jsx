@@ -4,6 +4,7 @@ import { Icon } from "@fluentui/react/lib/Icon";
 import "./css/Candidate.css";
 import JobApplication from "./JobApplication";
 import ApplicationStatus from "./ApplicationStatus";
+import CandidateProfile from "./CandidateProfile";
 
 const fakejoblist = [
   {
@@ -114,6 +115,8 @@ export default class CandidatePage extends React.Component {
         <div className="ApplicationStatusTEST-wrapper">
           <ApplicationStatus statusValue={"accepted"}/>
         </div>
+        <div><CandidateProfile/></div>
+          
       </div>
     );
   }
