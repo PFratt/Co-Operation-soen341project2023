@@ -6,35 +6,43 @@ export default class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userType: "",
+      usertype: "",
       candidateButton: "",
       employerButton: "",
       adminButton: "",
+      loginEmail: "",
+      loginPassword: "",
+      signupUsername: "",
+      signupEmail: "",
+      signupPassword: "",
     };
   }
   redirect = (response) => {
     this.props.cookies.set("authToken", response.data.accessToken, {
       maxAge: 3600,
     });
-    this.props.cookies.set("userType", this.state.userType, { maxAge: 3600 });
+    this.props.cookies.set("userType", this.state.usertype, { maxAge: 3600 });
     window.location = "./";
   };
-  login = () => {
-    let inputEmail = document.getElementById("loginUser").value;
-    let inputPassword = document.getElementById("loginPassword").value;
+  handleInputChange = (event) => {
+    event.preventDefault();
+    const target = event.target;
+    this.setState({
+      [target.name]: target.value,
+    });
+  };
+  login = (event) => {
+    event.preventDefault();
 
     let loginInfo = {
-      email: inputEmail,
-      password: inputPassword,
-      userType: this.state.userType,
+      email: this.state.loginEmail,
+      password: this.state.loginPassword,
+      usertype: this.state.usertype,
     };
-    // let testLoginInfo = {
-    //   email: "qianywang25@gmail.com",
-    //   password: "abc123",
-    //   userType: "student",
-    // };
+    console.log(loginInfo);
+
     axios
-      .post("http://sawongdomain.com/login", loginInfo, {
+      .post("https://sawongdomain.com/login", loginInfo, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
         },
@@ -47,15 +55,14 @@ export default class LoginPage extends React.Component {
         console.log(error);
       });
   };
-  signUp = () => {
-    let username = document.getElementById("signupUser").value;
-    let email = document.getElementById("signupEmail").value;
-    let password = document.getElementById("signupPassword").value;
+  signUp = (event) => {
+    event.preventDefault();
+
     let signupInfo = {
-      name: username,
-      email: email,
-      password: password,
-      userType: this.state.userType,
+      name: this.state.signupUsername,
+      email: this.state.signupEmail,
+      password: this.state.signupPassword,
+      usertype: this.state.usertype,
     };
     // let testSignupInfo = {
     //   name: "qian",
@@ -64,7 +71,7 @@ export default class LoginPage extends React.Component {
     //   userType: "student",
     // };
     axios
-      .post("http://sawongdomain.com/signup", signupInfo, {
+      .post("https://sawongdomain.com/signup", signupInfo, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
         },
@@ -78,7 +85,7 @@ export default class LoginPage extends React.Component {
   };
   selectUser = (name) => {
     this.setState({
-      userType: name,
+      usertype: name,
       candidateButton: "",
       employerButton: "",
       adminButton: "",
@@ -91,7 +98,18 @@ export default class LoginPage extends React.Component {
 
     if (name === "admin") this.setState({ adminButton: "selected-user-type" });
   };
+  checkDisplayLogin = () => {
+    if (
+      this.state.employerButton != "" ||
+      this.state.candidateButton != "" ||
+      this.state.adminButton != ""
+    ) {
+      return true;
+    } else return false;
+  };
   render() {
+    let allowLoginSignup = this.checkDisplayLogin();
+
     return (
       <div className="login-page-container">
         <div className="login-wrapper">
@@ -102,22 +120,30 @@ export default class LoginPage extends React.Component {
             adminButton={this.state.adminButton}
             selectUser={this.selectUser}
           />
-          <input
-            id="loginUser"
-            className="login-input"
-            placeholder={"User Email"}
-          />
-          <br></br>
-          <input
-            id="loginPassword"
-            className="login-input"
-            type="password"
-            placeholder={"Password"}
-          />
-          <br></br>
-          <button className="login-button" onClick={this.login}>
-            Login
-          </button>
+          {allowLoginSignup ? (
+            <form onSubmit={this.login}>
+              <input
+                name="loginEmail"
+                className="login-input"
+                placeholder={"User Email"}
+                value={this.state.loginEmail}
+                onChange={this.handleInputChange}
+              />
+              <br></br>
+              <input
+                name="loginPassword"
+                className="login-input"
+                type="password"
+                placeholder={"Password"}
+                value={this.state.loginPassword}
+                onChange={this.handleInputChange}
+              />
+              <br></br>
+              <button className="login-button" type="submit">
+                Login
+              </button>
+            </form>
+          ) : null}
         </div>
         <div className="signup-wrapper">
           Signup
@@ -127,28 +153,38 @@ export default class LoginPage extends React.Component {
             adminButton={this.state.adminButton}
             selectUser={this.selectUser}
           />
-          <input
-            id="signupUser"
-            className="login-input"
-            placeholder={"Username"}
-          />
-          <br></br>
-          <input
-            id="signupEmail"
-            className="login-input"
-            placeholder={"Email"}
-          />
-          <br></br>
-          <input
-            id="signupPassword"
-            className="login-input"
-            type="password"
-            placeholder={"Password"}
-          />
-          <br></br>
-          <button className="login-button" onClick={this.signUp}>
-            Sign up
-          </button>
+          {allowLoginSignup ? (
+            <form onSubmit={this.signUp}>
+              <input
+                name="signupUsername"
+                className="login-input"
+                placeholder={"Username"}
+                value={this.state.signupUsername}
+                onChange={this.handleInputChange}
+              />
+              <br></br>
+              <input
+                name="signupEmail"
+                className="login-input"
+                placeholder={"Email"}
+                value={this.state.signupEmail}
+                onChange={this.handleInputChange}
+              />
+              <br></br>
+              <input
+                name="signupPassword"
+                className="login-input"
+                type="password"
+                placeholder={"Password"}
+                value={this.state.signupPassword}
+                onChange={this.handleInputChange}
+              />
+              <br></br>
+              <button className="login-button" type="submit">
+                Sign up
+              </button>
+            </form>
+          ) : null}
         </div>
       </div>
     );
