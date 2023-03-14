@@ -60,33 +60,37 @@ export default class LoginPage extends React.Component {
         }
       });
   };
+  validEmail = () => {
+    let comCheck = this.state.signupEmail.slice(-4);
+    console.log(comCheck);
+    if (this.state.signupEmail.includes("@") && comCheck === ".com") {
+      return true;
+    } else return false;
+  };
   signUp = (event) => {
     event.preventDefault();
-
-    let signupInfo = {
-      name: this.state.signupUsername,
-      email: this.state.signupEmail,
-      password: this.state.signupPassword,
-      usertype: this.state.usertype,
-    };
-    // let testSignupInfo = {
-    //   name: "qian",
-    //   email: "qianywang25@gmail.com",
-    //   password: "abc123",
-    //   userType: "student",
-    // };
-    axios
-      .post("https://sawongdomain.com/signup", signupInfo, {
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-      })
-      .then((response) => {
-        this.redirect(response);
-      })
-      .catch(function (error) {
-        console.log(error.code);
-      });
+    if (this.validEmail()) {
+      let signupInfo = {
+        name: this.state.signupUsername,
+        email: this.state.signupEmail,
+        password: this.state.signupPassword,
+        usertype: this.state.usertype,
+      };
+      axios
+        .post("https://sawongdomain.com/signup", signupInfo, {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+        })
+        .then((response) => {
+          this.redirect(response);
+        })
+        .catch(function (error) {
+          console.log(error.code);
+        });
+    } else {
+      alert("enter valid email");
+    }
   };
   selectUser = (name) => {
     this.setState({
@@ -163,7 +167,7 @@ export default class LoginPage extends React.Component {
               <input
                 name="signupUsername"
                 className="login-input"
-                placeholder={"Username"}
+                placeholder={"Full Name"}
                 value={this.state.signupUsername}
                 onChange={this.handleInputChange}
               />
