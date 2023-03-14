@@ -49,3 +49,16 @@
     
 
 }
+.menu{
+    text-align: right;
+    background-color: grey;
+}
+.login-false{
+    background-color: darkgrey;
+    opacity:0.5;
+    z-index: 1000;
+    position: relative;
+    pointer-events: none;
+    height:100%;
+    width:100%;
+}
