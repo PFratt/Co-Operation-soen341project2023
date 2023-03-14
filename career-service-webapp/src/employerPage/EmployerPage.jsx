@@ -29,9 +29,15 @@ export default class EmployerPage extends React.Component {
         </a>
         <br></br>
         <Routes>
-          <Route path={"/"} element={<MyJobs />} />
-          <Route path={"/applicants"} element={<Applicants />} />
-          <Route path={"/all-candidates"} element={<AllCandidates />} />
+          <Route path={"/"} element={<MyJobs cookies={this.props.cookies} />} />
+          <Route
+            path={"/applicants"}
+            element={<Applicants cookies={this.props.cookies} />}
+          />
+          <Route
+            path={"/all-candidates"}
+            element={<AllCandidates cookies={this.props.cookies} />}
+          />
         </Routes>
       </div>
     );

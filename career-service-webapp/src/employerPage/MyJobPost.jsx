@@ -16,7 +16,7 @@ export default function MyJobPost({
       <p>Title: {title}</p>
       <p>role description: {role_description}</p>
       <p>date posted: {date_posted}</p>
-      <p>date posted: {date_deadline}</p>
+      <p>date deadline: {date_deadline}</p>
     </div>
   );
 }
