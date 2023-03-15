@@ -14,9 +14,10 @@ export default function MyJobPost({
       <button onClick={hideJob}>Hide Job Post </button>
       <p>Job ID: {jobID}</p>
       <p>Title: {title}</p>
-      <p>role description: {role_description}</p>
-      <p>date posted: {date_posted}</p>
-      <p>date deadline: {date_deadline}</p>
+
+      <p>Role Description: {role_description}</p>
+      <p>Date Posted: {date_posted}</p>
+      <p>Deadline: {date_deadline}</p>
     </div>
   );
 }
