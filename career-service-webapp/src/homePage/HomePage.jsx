@@ -22,6 +22,7 @@ export default class HomePage extends React.Component {
     };
     this.checkAccess();
   }
+
   componentDidMount() {
     //timeouts needed to add "delay"
     if (this.state.candidateAccess)
@@ -84,7 +85,7 @@ export default class HomePage extends React.Component {
                 <ProtectedRoute user={this.state.employerAccess}>
                   {" "}
                   {/* brings to main employer page */}
-                  <EmployerPage />
+                  <EmployerPage cookies={cookies} />
                 </ProtectedRoute>
               }
             />
@@ -108,20 +109,7 @@ export default class HomePage extends React.Component {
 //temporary link access for development
 const TempLinkAccess = ({ logout }) => {
   return (
-    <div className="test-menu">
-      <a href="./#/candidate" className=" test-link">
-        {" "}
-        candidate
-      </a>
-      <a href="./#/employer" className=" test-link">
-        employer
-      </a>
-      <a href="./#/admin" className=" test-link">
-        admin
-      </a>
-      <a href="./" className=" test-link">
-        home
-      </a>
+    <div className="menu">
       <button onClick={logout}> logout</button>
     </div>
   );

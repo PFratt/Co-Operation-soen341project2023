@@ -1,6 +1,7 @@
 import * as React from "react";
 import axios from "axios";
 import { Icon } from "@fluentui/react/lib/Icon";
+import "./css/Home.css";
 
 export default class LoginPage extends React.Component {
   constructor(props) {
@@ -53,35 +54,43 @@ export default class LoginPage extends React.Component {
       })
       .catch(function (error) {
         console.log(error);
+        if (error.code === "ERR_NETWORK") {
+          alert("Try Visiting and Allowing sawongdomain.com in your browser");
+          window.open("https://sawongdomain.com", "_blank", "noreferrer");
+        }
       });
+  };
+  validEmail = () => {
+    let comCheck = this.state.signupEmail.slice(-4);
+    console.log(comCheck);
+    if (this.state.signupEmail.includes("@") && comCheck === ".com") {
+      return true;
+    } else return false;
   };
   signUp = (event) => {
     event.preventDefault();
-
-    let signupInfo = {
-      name: this.state.signupUsername,
-      email: this.state.signupEmail,
-      password: this.state.signupPassword,
-      usertype: this.state.usertype,
-    };
-    // let testSignupInfo = {
-    //   name: "qian",
-    //   email: "qianywang25@gmail.com",
-    //   password: "abc123",
-    //   userType: "student",
-    // };
-    axios
-      .post("https://sawongdomain.com/signup", signupInfo, {
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-      })
-      .then((response) => {
-        this.redirect(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    if (this.validEmail()) {
+      let signupInfo = {
+        name: this.state.signupUsername,
+        email: this.state.signupEmail,
+        password: this.state.signupPassword,
+        usertype: this.state.usertype,
+      };
+      axios
+        .post("https://sawongdomain.com/signup", signupInfo, {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+        })
+        .then((response) => {
+          this.redirect(response);
+        })
+        .catch(function (error) {
+          console.log(error.code);
+        });
+    } else {
+      alert("enter valid email");
+    }
   };
   selectUser = (name) => {
     this.setState({
@@ -104,8 +113,8 @@ export default class LoginPage extends React.Component {
       this.state.candidateButton != "" ||
       this.state.adminButton != ""
     ) {
-      return true;
-    } else return false;
+      return "login-true";
+    } else return "login-false";
   };
   render() {
     let allowLoginSignup = this.checkDisplayLogin();
@@ -120,7 +129,7 @@ export default class LoginPage extends React.Component {
             adminButton={this.state.adminButton}
             selectUser={this.selectUser}
           />
-          {allowLoginSignup ? (
+          <div className={allowLoginSignup}>
             <form onSubmit={this.login}>
               <input
                 name="loginEmail"
@@ -143,7 +152,7 @@ export default class LoginPage extends React.Component {
                 Login
               </button>
             </form>
-          ) : null}
+          </div>
         </div>
         <div className="signup-wrapper">
           Signup
@@ -153,12 +162,12 @@ export default class LoginPage extends React.Component {
             adminButton={this.state.adminButton}
             selectUser={this.selectUser}
           />
-          {allowLoginSignup ? (
+          <div className={allowLoginSignup}>
             <form onSubmit={this.signUp}>
               <input
                 name="signupUsername"
                 className="login-input"
-                placeholder={"Username"}
+                placeholder={"Full Name"}
                 value={this.state.signupUsername}
                 onChange={this.handleInputChange}
               />
@@ -184,7 +193,7 @@ export default class LoginPage extends React.Component {
                 Sign up
               </button>
             </form>
-          ) : null}
+          </div>
         </div>
       </div>
     );
