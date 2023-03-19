@@ -24,6 +24,10 @@ export default class MyJobs extends React.Component {
       addJobDatePosted: currentDate,
       addJobDeadline: "",
       addJobView: false,
+      editJobTitle: "",
+      editJobDesc: "",
+      editJobDeadline: "",
+      editJobView: false,
     };
     this.getJobList();
   }
@@ -90,6 +94,8 @@ export default class MyJobs extends React.Component {
   hideJob = (value) => {
     if (value === "add") this.setState({ addJobView: false });
     this.setState({ selectedJob: null });
+    if (value === "edit") this.setState({ modJobView: false });
+    this.setState({ selectedJob: null });
   };
   addJob = () => {
     this.setState({ addJobView: true });
@@ -119,6 +125,44 @@ export default class MyJobs extends React.Component {
       })
       .then((response) => {
         console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  editJob = () => {
+    let modifyJob = {
+      title: this.state.editJobTitle,
+      role_description: this.state.editJobDesc,
+      date_deadline: this.state.editJobDeadline,
+    }
+    axios
+      .put("https://samwongdimain.com/modifyjob/:"+this.selectedJob.jobID, modifyJob, { //how to send id of selected job? 
+        headers: {
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  deleteJob = () => {
+    axios
+      .delete("https://samwongdimain.com/modifyjob/:"+this.selectedJob.jobID, { //how to send id of selected job? 
+        headers: {
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        alert("Job Deleted");
       })
       .catch(function (error) {
         console.log(error);
@@ -170,6 +214,18 @@ export default class MyJobs extends React.Component {
             }}
             handleInputChange={this.handleInputChange}
             sendJob={this.sendJob}
+          />
+        ) : null}
+        {this.state.editJobView ? (
+          <EditJobPopup
+            title={this.state.modJobTitle}
+            role_description={this.state.modJobDesc}
+            date_deadline={this.state.modJobDeadline}
+            hideJob={() => {
+              this.hideJob("edit");
+            }}
+            handleInputChange={this.handleInputChange}
+            editJob={this.editJob}
           />
         ) : null}
       </div>
@@ -224,6 +280,56 @@ function AddJobPopup({
           <input
             name="addJobDeadline"
             className="add-job-input"
+            placeholder={date_posted}
+            value={date_deadline}
+            onChange={handleInputChange}
+          />
+        </p>
+        <button className="login-button" type="submit">
+          Save Job
+        </button>
+      </form>
+    </div>
+  );
+}
+function EditJobPopup({
+  title,
+  role_description,
+  date_posted,
+  date_deadline,
+  hideJob,
+  handleInputChange,
+  editJob,
+}) {
+  return (
+    <div className="edit-job-component">
+      <button onClick={hideJob}>Cancel </button>
+      <form onSubmit={editJob}>
+        <p>
+          Title:{" "}
+          <input
+            name="editJobTitle"
+            className="edit-job-input"
+            placeholder="Job Title"
+            value={title}
+            onChange={handleInputChange}
+          />
+        </p>
+        <p>
+          Description:{" "}
+          <input
+            name="editJobDesc"
+            className="edit-job-input"
+            placeholder="Short Role Description"
+            value={role_description}
+            onChange={handleInputChange}
+          />
+        </p>
+        <p>
+          Deadline:
+          <input
+            name="addJobDeadline"
+            className="edit-job-input"
             placeholder={date_posted}
             value={date_deadline}
             onChange={handleInputChange}

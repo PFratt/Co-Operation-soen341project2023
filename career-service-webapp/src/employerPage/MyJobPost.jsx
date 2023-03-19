@@ -12,6 +12,8 @@ export default function MyJobPost({
   return (
     <div className="JobApplicationComponent">
       <button onClick={hideJob}>Hide Job Post </button>
+      <button onClick={editJob}>Edit Job Post</button>
+      <button onClick={deleteJob}>Delete Job Post</button>
       <p>Job ID: {jobID}</p>
       <p>Title: {title}</p>
 
