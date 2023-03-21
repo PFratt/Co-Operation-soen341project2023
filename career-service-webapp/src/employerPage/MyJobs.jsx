@@ -33,8 +33,9 @@ export default class MyJobs extends React.Component {
   }
 
   getJobList = async () => {
+    console.log("Request");
     axios
-      .get("https://sawongdomain.com/jobs", {
+      .get(`https://sawongdomain.com/jobs/${this.props.cookies.get("userID")}`, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
           Authorization: this.props.cookies.get("authToken"),
@@ -42,6 +43,7 @@ export default class MyJobs extends React.Component {
         },
       })
       .then((response) => {
+        console.log(response.data.length == 0);
         this.setState({ jobList: response.data });
       })
       .catch(function (error) {
@@ -51,10 +53,14 @@ export default class MyJobs extends React.Component {
   mapfunctiontest = () => {
     console.log("maptest called");
 
-    return this.state.jobList.map(
+    if (this.state.jobList.length == 0) {
+      return (<tr>
+        <td align="center" colspan="5">You have no job postings yet.</td>
+      </tr>);
+    } else return this.state.jobList.map(
       ({ jobID, title, role_description, date_posted, date_deadline }) => {
         return (
-          <tr>
+          <tr key={jobID}>
             <td>{jobID}</td>
             <td
               onClick={() => {
@@ -88,7 +94,8 @@ export default class MyJobs extends React.Component {
         date_posted={date_posted}
         date_deadline={date_deadline}
         hideJob={this.hideJob}
-      />
+      >
+      </MyJobPost>
     );
   };
   hideJob = (value) => {
@@ -109,7 +116,7 @@ export default class MyJobs extends React.Component {
   };
   sendJob = () => {
     let newJob = {
-      employerID: "qian", //to be made dynamic
+      employerID: this.props.cookies.get("userID"),
       title: this.state.addJobTitle,
       role_description: this.state.addJobDesc,
       date_posted: this.state.addJobDatePosted,
@@ -137,7 +144,7 @@ export default class MyJobs extends React.Component {
       date_deadline: this.state.editJobDeadline,
     }
     axios
-      .put("https://samwongdimain.com/modifyjob/:"+this.selectedJob.jobID, modifyJob, { //how to send id of selected job? 
+      .put("https://samwongdimain.com/modifyjob/:" + this.selectedJob.jobID, modifyJob, { //how to send id of selected job? 
         headers: {
           Authorization: this.props.cookies.get("authToken"),
           "Access-Control-Allow-Headers": "Authorization",
@@ -153,7 +160,7 @@ export default class MyJobs extends React.Component {
   };
   deleteJob = () => {
     axios
-      .delete("https://samwongdimain.com/modifyjob/:"+this.selectedJob.jobID, { //how to send id of selected job? 
+      .delete("https://samwongdimain.com/modifyjob/:" + this.selectedJob.jobID, { //how to send id of selected job? 
         headers: {
           Authorization: this.props.cookies.get("authToken"),
           "Access-Control-Allow-Headers": "Authorization",
@@ -173,7 +180,6 @@ export default class MyJobs extends React.Component {
       <div className="myjobs-page-container">
         <div className="myjobs-wrapper">
           <button
-            className="button-9 small"
             onClick={() => {
               this.addJob();
             }}
@@ -183,25 +189,25 @@ export default class MyJobs extends React.Component {
           <Table className="myjobs-table" striped bordered hover>
             <thead>
               <tr>
-                <th className="number">#</th>
-                <th className="title">Job Title</th>
-                <th className="desc">Description</th>
-                <th className="date-posted">Date Posted</th>
-                <th className="deadline">Deadline</th>
+                <th>#</th>
+                <th>Job Title</th>
+                <th>Description</th>
+                <th>Date Posted</th>
+                <th>Deadline</th>
               </tr>
             </thead>
-            <tbody className="table-body">{this.mapfunctiontest()}</tbody>
-          </Table>{" "}
+            <tbody>{this.mapfunctiontest()}</tbody>
+          </Table>
         </div>
         <div className="myjobs-wrapper">
           {this.state.selectedJob
             ? this.myJobPost(
-                this.state.selectedJob.jobID,
-                this.state.selectedJob.title,
-                this.state.selectedJob.role_description,
-                this.state.selectedJob.date_posted,
-                this.state.selectedJob.date_deadline
-              )
+              this.state.selectedJob.jobID,
+              this.state.selectedJob.title,
+              this.state.selectedJob.role_description,
+              this.state.selectedJob.date_posted,
+              this.state.selectedJob.date_deadline
+            )
             : null}
         </div>
         {this.state.addJobView ? (
@@ -277,11 +283,11 @@ function AddJobPopup({
           />
         </p>
         <p>
-          Deadline:
+          Deadline:{" "}
           <input
             name="addJobDeadline"
             className="add-job-input"
-            placeholder={date_posted}
+            placeholder={date_deadline}
             value={date_deadline}
             onChange={handleInputChange}
           />
