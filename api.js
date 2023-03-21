@@ -147,7 +147,7 @@ console.log('Before connect');
             const accessToken = jwt.sign({ email }, secretKey, { expiresIn: '2h' });
 
             // Send the token to the client
-            res.send({ accessToken });
+            res.send({ accessToken, user});
         });
 
         // Add a new user
@@ -176,7 +176,6 @@ console.log('Before connect');
                 { $set: { "userID": userID } }
             );
 
-
             const myObj = {
                 name: name,
                 email: email,
@@ -198,7 +197,7 @@ console.log('Before connect');
                     console.log("1 document inserted");
                 });
             }
-            res.status(200).send({ accessToken });
+            res.status(200).send({ accessToken, myObj});
         });
 
         // Modify an existing user
@@ -432,6 +431,27 @@ console.log('Before connect');
             try {
                 const jobsData = await jobs.find().toArray();
                 res.send(jobsData);
+            } catch (error) {
+                console.error(error);
+                res.status(500).send({ message: 'An error occurred' });
+            }
+        });
+
+        app.get('/jobs/:userID', async (req, res) => {
+            // Verify the token
+            console.log(req);
+            const token = req.header('Authorization').replace('Bearer ', '');
+            try {
+                const decoded = jwt.verify(token, secretKey);
+                console.log('Decoded:', decoded);
+            } catch (error) {
+                console.error(error);
+                return res.status(401).send({ message: 'Invalid token' });
+            }
+
+            try {
+                const jobsData = await jobs.find({employerID: req.params.userID}).toArray();
+                res.status(200).send(jobsData);
             } catch (error) {
                 console.error(error);
                 res.status(500).send({ message: 'An error occurred' });
