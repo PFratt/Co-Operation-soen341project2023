@@ -173,6 +173,7 @@ export default class MyJobs extends React.Component {
       <div className="myjobs-page-container">
         <div className="myjobs-wrapper">
           <button
+            className="button-9 small"
             onClick={() => {
               this.addJob();
             }}
@@ -182,14 +183,14 @@ export default class MyJobs extends React.Component {
           <Table className="myjobs-table" striped bordered hover>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Job Title</th>
-                <th>Description</th>
-                <th>Date Posted</th>
-                <th>Deadline</th>
+                <th className="number">#</th>
+                <th className="title">Job Title</th>
+                <th className="desc">Description</th>
+                <th className="date-posted">Date Posted</th>
+                <th className="deadline">Deadline</th>
               </tr>
             </thead>
-            <tbody>{this.mapfunctiontest()}</tbody>
+            <tbody className="table-body">{this.mapfunctiontest()}</tbody>
           </Table>{" "}
         </div>
         <div className="myjobs-wrapper">
