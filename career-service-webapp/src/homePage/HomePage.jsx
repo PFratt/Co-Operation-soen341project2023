@@ -110,7 +110,10 @@ export default class HomePage extends React.Component {
 const TempLinkAccess = ({ logout }) => {
   return (
     <div className="menu">
-      <button onClick={logout}> logout</button>
+      <button className="button-9 logout" onClick={logout}>
+        {" "}
+        logout
+      </button>
     </div>
   );
 };
