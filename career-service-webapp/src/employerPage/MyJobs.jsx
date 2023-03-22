@@ -35,13 +35,16 @@ export default class MyJobs extends React.Component {
   getJobList = async () => {
     console.log("Request");
     axios
-      .get(`https://sawongdomain.com/jobs/${this.props.cookies.get("userID")}`, {
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-          Authorization: this.props.cookies.get("authToken"),
-          "Access-Control-Allow-Headers": "Authorization",
-        },
-      })
+      .get(
+        `https://sawongdomain.com/jobs/${this.props.cookies.get("userID")}`,
+        {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
+        }
+      )
       .then((response) => {
         console.log(response.data.length == 0);
         this.setState({ jobList: response.data });
@@ -54,36 +57,41 @@ export default class MyJobs extends React.Component {
     console.log("maptest called");
 
     if (this.state.jobList.length == 0) {
-      return (<tr>
-        <td align="center" colspan="5">You have no job postings yet.</td>
-    </tr>);
-    } else return this.state.jobList.map(
-      ({ jobID, title, role_description, date_posted, date_deadline }) => {
-        return (
-          <tr key={jobID}>
-            <td>{jobID}</td>
-            <td
-              onClick={() => {
-                this.setState({
-                  selectedJob: {
-                    jobID,
-                    title,
-                    role_description,
-                    date_posted,
-                    date_deadline,
-                  },
-                });
-              }}
-            >
-              {title}
-            </td>
-            <td>{role_description}</td>
-            <td>{date_posted}</td>
-            <td>{date_deadline}</td>
-          </tr>
-        );
-      }
-    );
+      return (
+        <tr>
+          <td align="center" colspan="5">
+            You have no job postings yet.
+          </td>
+        </tr>
+      );
+    } else
+      return this.state.jobList.map(
+        ({ jobID, title, role_description, date_posted, date_deadline }) => {
+          return (
+            <tr key={jobID}>
+              <td>{jobID}</td>
+              <td
+                onClick={() => {
+                  this.setState({
+                    selectedJob: {
+                      jobID,
+                      title,
+                      role_description,
+                      date_posted,
+                      date_deadline,
+                    },
+                  });
+                }}
+              >
+                {title}
+              </td>
+              <td>{role_description}</td>
+              <td>{date_posted}</td>
+              <td>{date_deadline}</td>
+            </tr>
+          );
+        }
+      );
   };
   myJobPost = (jobID, title, role_description, date_posted, date_deadline) => {
     return (
@@ -93,11 +101,10 @@ export default class MyJobs extends React.Component {
         role_description={role_description}
         date_posted={date_posted}
         date_deadline={date_deadline}
-        hideJob={this.hideJob()}
-        editJob={this.editJob()}
-        deleteJob={this.deleteJob()}
-      >
-      </MyJobPost>
+        hideJob={this.hideJob}
+        editJob={this.editJob}
+        deleteJob={this.deleteJob}
+      ></MyJobPost>
     );
   };
   hideJob = (value) => {
@@ -144,15 +151,21 @@ export default class MyJobs extends React.Component {
       title: this.state.editJobTitle,
       role_description: this.state.editJobDesc,
       date_deadline: this.state.editJobDeadline,
-    }
+    };
     axios
-      .put(`https://samwongdimain.com/modifyjob/${this.state.selectedJob.jobID}`, modifyJob, { //how to send id of selected job? 
-        headers: {
-          Authorization: this.props.cookies.get("authToken"),
-          "Access-Control-Allow-Headers": "Authorization",
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-      })
+      .put(
+        `https://samwongdimain.com/modifyjob/${this.props.cookies.get(
+          "jobID"
+        )}`,
+        modifyJob,
+        {
+          headers: {
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
       })
@@ -162,13 +175,18 @@ export default class MyJobs extends React.Component {
   };
   deleteJob = () => {
     axios
-      .delete(`https://samwongdimain.com/deletejob/${this.state.selectedJob.jobID}`, { //how to send id of selected job? 
-        headers: {
-          Authorization: this.props.cookies.get("authToken"),
-          "Access-Control-Allow-Headers": "Authorization",
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-      })
+      .delete(
+        `https://samwongdimain.com/deletejob/${this.props.cookies.get(
+          "jobID"
+        )}`,
+        {
+          headers: {
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+        }
+      )
       .then((response) => {
         console.log(response);
         alert("Job Deleted");
@@ -204,12 +222,12 @@ export default class MyJobs extends React.Component {
         <div className="myjobs-wrapper">
           {this.state.selectedJob
             ? this.myJobPost(
-              this.state.selectedJob.jobID,
-              this.state.selectedJob.title,
-              this.state.selectedJob.role_description,
-              this.state.selectedJob.date_posted,
-              this.state.selectedJob.date_deadline
-            )
+                this.state.selectedJob.jobID,
+                this.state.selectedJob.title,
+                this.state.selectedJob.role_description,
+                this.state.selectedJob.date_posted,
+                this.state.selectedJob.date_deadline
+              )
             : null}
         </div>
         {this.state.addJobView ? (
