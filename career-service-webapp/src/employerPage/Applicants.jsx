@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Icon } from "@fluentui/react/lib/Icon";
-
+import axios from "axios";
 import { Table } from "react-bootstrap";
 import ApplicantProfile from "./ApplicantProfile";
 import "./css/Employer.css";
@@ -48,19 +48,95 @@ export default class Applicants extends React.Component {
     this.state = {
       viewApplicant: null,
       applicantStatusColor: "",
+      applicants: []
     };
+    this.getApplicantsList();
   }
+
+  getApplicantsList = async () => {
+    console.log("Request");
+
+    try {
+      const response = await axios.all([
+        axios.get(`https://sawongdomain.com/users/students`, {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
+        }),
+        axios.get(`https://sawongdomain.com/profiles`, {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
+        }),
+        axios.get(`https://sawongdomain.com/jobs/${this.props.cookies.get("userID")}`, {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
+        }),
+        axios.get(`https://sawongdomain.com/applications`, {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
+        })
+      ]);
+
+      const [studentsResponse, profilesResponse, jobsResponse, applicationsResponse] = response;
+
+      const studentListWithProfiles = studentsResponse.data.map((student) => {
+        const profile = profilesResponse.data.find((profile) => profile.userID == student.id);
+        if (profile) {
+          return { student, profile };
+        }
+        return null; // skip this entry
+      }).filter(Boolean); // filter out null entries
+
+      const applicationsToMyJobs = applicationsResponse.data.map((application) => {
+        const job = jobsResponse.data.find((job) => job.jobID == application.jobID);
+        if(job){
+          return {job, application};
+        }
+        return null;
+      }).filter(Boolean);
+
+      const applicants = applicationsToMyJobs.map(application => {
+        const student = studentListWithProfiles.find(student => student.student.id == application.application.userID);
+        if(student){
+          return {student, application};
+        }
+        return null;
+      }).filter(Boolean);
+
+      console.log(applicants);
+
+      this.setState({ applicants: applicants });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   mapfunctiontest = () => {
     console.log("maptest called");
-    return fakeApplications.map(
-      ({ applicationNum, userName, appliedjob, date }) => {
+    return this.state.applicants.map(
+      (applicant) => {
+        let status = applicant.application.application.status;
+        let userName = applicant.student.student.name;
+        let appliedjob = applicant.application.job.title;
+        let date = applicant.application.application.date_applied;
         return (
           <tr>
-            <td>{applicationNum}</td>
+            <td>{status}</td>
             <td
               onClick={() => {
                 this.setState({
-                  viewApplicant: { applicationNum, userName, appliedjob, date },
+                  viewApplicant: { status, userName, appliedjob, date },
                 });
               }}
             >
@@ -73,10 +149,10 @@ export default class Applicants extends React.Component {
       }
     );
   };
-  applicantProfile = (applicationNum, userName, appliedjob, date) => {
+  applicantProfile = (status, userName, appliedjob, date) => {
     return (
       <ApplicantProfile
-        applicationNum={applicationNum}
+        status={status}
         userName={userName}
         appliedjob={appliedjob}
         date={date}
@@ -107,7 +183,7 @@ export default class Applicants extends React.Component {
           <Table className="job-list-table" striped bordered hover>
             <thead>
               <tr>
-                <th>#</th>
+                <th>Status</th>
                 <th>Applicant Name</th>
                 <th>Applied Job</th>
                 <th>Date</th>
@@ -117,7 +193,7 @@ export default class Applicants extends React.Component {
           </Table>{" "}
           {this.state.viewApplicant
             ? this.applicantProfile(
-                this.state.viewApplicant.applicantNum,
+                this.state.viewApplicant.status,
                 this.state.viewApplicant.userName,
                 this.state.viewApplicant.appliedjob,
                 this.state.viewApplicant.date

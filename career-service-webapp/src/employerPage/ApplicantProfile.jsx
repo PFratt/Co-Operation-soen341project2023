@@ -2,7 +2,7 @@ import React from "react";
 import "./css/Employer.css";
 
 export default function ApplicantProfile({
-  applicationNum,
+  status,
   userName,
   appliedjob,
   date,
@@ -14,8 +14,8 @@ export default function ApplicantProfile({
   return (
     <div className="applicant-profile-wrapper">
       <button onClick={closeApplicantView}>Close Applicant View </button>
-      <p>Applciation Number {applicationNum}</p>
-      <p>USer name: {userName}</p>
+      <p>Applciation Status: {status}</p>
+      <p>Name: {userName}</p>
       <p>applied job: {appliedjob}</p>
       <p>Date: {date}</p>
       <button onClick={interview}> Interview</button>
