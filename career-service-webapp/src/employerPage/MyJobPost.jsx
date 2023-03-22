@@ -8,6 +8,8 @@ export default function MyJobPost({
   date_posted,
   date_deadline,
   hideJob,
+  editJob,
+  deleteJob,
 }) {
   return (
     <div className="JobApplicationComponent">
