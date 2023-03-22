@@ -56,7 +56,7 @@ export default class MyJobs extends React.Component {
     if (this.state.jobList.length == 0) {
       return (<tr>
         <td align="center" colspan="5">You have no job postings yet.</td>
-      </tr>);
+    </tr>);
     } else return this.state.jobList.map(
       ({ jobID, title, role_description, date_posted, date_deadline }) => {
         return (
@@ -93,7 +93,9 @@ export default class MyJobs extends React.Component {
         role_description={role_description}
         date_posted={date_posted}
         date_deadline={date_deadline}
-        hideJob={this.hideJob}
+        hideJob={this.hideJob()}
+        editJob={this.editJob()}
+        deleteJob={this.deleteJob()}
       >
       </MyJobPost>
     );
@@ -144,7 +146,7 @@ export default class MyJobs extends React.Component {
       date_deadline: this.state.editJobDeadline,
     }
     axios
-      .put("https://samwongdimain.com/modifyjob/:" + this.selectedJob.jobID, modifyJob, { //how to send id of selected job? 
+      .put(`https://samwongdimain.com/modifyjob/${this.state.selectedJob.jobID}`, modifyJob, { //how to send id of selected job? 
         headers: {
           Authorization: this.props.cookies.get("authToken"),
           "Access-Control-Allow-Headers": "Authorization",
@@ -160,7 +162,7 @@ export default class MyJobs extends React.Component {
   };
   deleteJob = () => {
     axios
-      .delete("https://samwongdimain.com/modifyjob/:" + this.selectedJob.jobID, { //how to send id of selected job? 
+      .delete(`https://samwongdimain.com/deletejob/${this.state.selectedJob.jobID}`, { //how to send id of selected job? 
         headers: {
           Authorization: this.props.cookies.get("authToken"),
           "Access-Control-Allow-Headers": "Authorization",
