@@ -56,7 +56,7 @@ export default class MyJobs extends React.Component {
     if (this.state.jobList.length == 0) {
       return (<tr>
         <td align="center" colspan="5">You have no job postings yet.</td>
-      </tr>);
+    </tr>);
     } else return this.state.jobList.map(
       ({ jobID, title, role_description, date_posted, date_deadline }) => {
         return (
@@ -93,7 +93,9 @@ export default class MyJobs extends React.Component {
         role_description={role_description}
         date_posted={date_posted}
         date_deadline={date_deadline}
-        hideJob={this.hideJob}
+        hideJob={this.hideJob()}
+        editJob={this.editJob()}
+        deleteJob={this.deleteJob()}
       >
       </MyJobPost>
     );
