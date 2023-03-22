@@ -24,13 +24,18 @@ export default class MyJobs extends React.Component {
       addJobDatePosted: currentDate,
       addJobDeadline: "",
       addJobView: false,
+      editJobTitle: "",
+      editJobDesc: "",
+      editJobDeadline: "",
+      editJobView: false,
     };
     this.getJobList();
   }
 
   getJobList = async () => {
+    console.log("Request");
     axios
-      .get("https://sawongdomain.com/jobs", {
+      .get(`https://sawongdomain.com/jobs/${this.props.cookies.get("userID")}`, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
           Authorization: this.props.cookies.get("authToken"),
@@ -38,6 +43,7 @@ export default class MyJobs extends React.Component {
         },
       })
       .then((response) => {
+        console.log(response.data.length == 0);
         this.setState({ jobList: response.data });
       })
       .catch(function (error) {
@@ -47,10 +53,14 @@ export default class MyJobs extends React.Component {
   mapfunctiontest = () => {
     console.log("maptest called");
 
-    return this.state.jobList.map(
+    if (this.state.jobList.length == 0) {
+      return (<tr>
+        <td align="center" colspan="5">You have no job postings yet.</td>
+      </tr>);
+    } else return this.state.jobList.map(
       ({ jobID, title, role_description, date_posted, date_deadline }) => {
         return (
-          <tr>
+          <tr key={jobID}>
             <td>{jobID}</td>
             <td
               onClick={() => {
@@ -84,11 +94,14 @@ export default class MyJobs extends React.Component {
         date_posted={date_posted}
         date_deadline={date_deadline}
         hideJob={this.hideJob}
-      />
+      >
+      </MyJobPost>
     );
   };
   hideJob = (value) => {
     if (value === "add") this.setState({ addJobView: false });
+    this.setState({ selectedJob: null });
+    if (value === "edit") this.setState({ modJobView: false });
     this.setState({ selectedJob: null });
   };
   addJob = () => {
@@ -103,7 +116,7 @@ export default class MyJobs extends React.Component {
   };
   sendJob = () => {
     let newJob = {
-      employerID: "qian", //to be made dynamic
+      employerID: this.props.cookies.get("userID"),
       title: this.state.addJobTitle,
       role_description: this.state.addJobDesc,
       date_posted: this.state.addJobDatePosted,
@@ -124,12 +137,49 @@ export default class MyJobs extends React.Component {
         console.log(error);
       });
   };
+  editJob = () => {
+    let modifyJob = {
+      title: this.state.editJobTitle,
+      role_description: this.state.editJobDesc,
+      date_deadline: this.state.editJobDeadline,
+    }
+    axios
+      .put("https://samwongdimain.com/modifyjob/:" + this.selectedJob.jobID, modifyJob, { //how to send id of selected job? 
+        headers: {
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  deleteJob = () => {
+    axios
+      .delete("https://samwongdimain.com/modifyjob/:" + this.selectedJob.jobID, { //how to send id of selected job? 
+        headers: {
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        alert("Job Deleted");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   render() {
     return (
       <div className="myjobs-page-container">
         <div className="myjobs-wrapper">
           <button
-            className="button-9 small"
             onClick={() => {
               this.addJob();
             }}
@@ -139,25 +189,25 @@ export default class MyJobs extends React.Component {
           <Table className="myjobs-table" striped bordered hover>
             <thead>
               <tr>
-                <th className="number">#</th>
-                <th className="title">Job Title</th>
-                <th className="desc">Description</th>
-                <th className="date-posted">Date Posted</th>
-                <th className="deadline">Deadline</th>
+                <th>#</th>
+                <th>Job Title</th>
+                <th>Description</th>
+                <th>Date Posted</th>
+                <th>Deadline</th>
               </tr>
             </thead>
-            <tbody className="table-body">{this.mapfunctiontest()}</tbody>
-          </Table>{" "}
+            <tbody>{this.mapfunctiontest()}</tbody>
+          </Table>
         </div>
         <div className="myjobs-wrapper">
           {this.state.selectedJob
             ? this.myJobPost(
-                this.state.selectedJob.jobID,
-                this.state.selectedJob.title,
-                this.state.selectedJob.role_description,
-                this.state.selectedJob.date_posted,
-                this.state.selectedJob.date_deadline
-              )
+              this.state.selectedJob.jobID,
+              this.state.selectedJob.title,
+              this.state.selectedJob.role_description,
+              this.state.selectedJob.date_posted,
+              this.state.selectedJob.date_deadline
+            )
             : null}
         </div>
         {this.state.addJobView ? (
@@ -171,6 +221,18 @@ export default class MyJobs extends React.Component {
             }}
             handleInputChange={this.handleInputChange}
             sendJob={this.sendJob}
+          />
+        ) : null}
+        {this.state.editJobView ? (
+          <EditJobPopup
+            title={this.state.modJobTitle}
+            role_description={this.state.modJobDesc}
+            date_deadline={this.state.modJobDeadline}
+            hideJob={() => {
+              this.hideJob("edit");
+            }}
+            handleInputChange={this.handleInputChange}
+            editJob={this.editJob}
           />
         ) : null}
       </div>
@@ -221,10 +283,60 @@ function AddJobPopup({
           />
         </p>
         <p>
-          Deadline:
+          Deadline:{" "}
           <input
             name="addJobDeadline"
             className="add-job-input"
+            placeholder={date_deadline}
+            value={date_deadline}
+            onChange={handleInputChange}
+          />
+        </p>
+        <button className="login-button" type="submit">
+          Save Job
+        </button>
+      </form>
+    </div>
+  );
+}
+function EditJobPopup({
+  title,
+  role_description,
+  date_posted,
+  date_deadline,
+  hideJob,
+  handleInputChange,
+  editJob,
+}) {
+  return (
+    <div className="edit-job-component">
+      <button onClick={hideJob}>Cancel </button>
+      <form onSubmit={editJob}>
+        <p>
+          Title:{" "}
+          <input
+            name="editJobTitle"
+            className="edit-job-input"
+            placeholder="Job Title"
+            value={title}
+            onChange={handleInputChange}
+          />
+        </p>
+        <p>
+          Description:{" "}
+          <input
+            name="editJobDesc"
+            className="edit-job-input"
+            placeholder="Short Role Description"
+            value={role_description}
+            onChange={handleInputChange}
+          />
+        </p>
+        <p>
+          Deadline:
+          <input
+            name="addJobDeadline"
+            className="edit-job-input"
             placeholder={date_posted}
             value={date_deadline}
             onChange={handleInputChange}

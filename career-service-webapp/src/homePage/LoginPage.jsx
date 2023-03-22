@@ -23,6 +23,9 @@ export default class LoginPage extends React.Component {
     this.props.cookies.set("authToken", response.data.accessToken, {
       maxAge: 3600,
     });
+    this.props.cookies.set("userID", response.data.user.id, {
+      maxAge: 3600,
+    });
     this.props.cookies.set("userType", this.state.usertype, { maxAge: 3600 });
     window.location = "./";
   };
@@ -51,6 +54,7 @@ export default class LoginPage extends React.Component {
       })
       .then((response) => {
         console.log("login api response");
+        console.log(response);
         this.redirect(response);
       })
       .catch(function (error) {
@@ -125,9 +129,9 @@ export default class LoginPage extends React.Component {
 
     return (
       <div className="login-page-container">
-        <label class="toggle">
+        <label className="toggle">
           <input type="checkbox" />
-          <span class="slider"></span>
+          <span className="slider"></span>
           <span
             class="labels"
             onClick={this.toggleLogin}
