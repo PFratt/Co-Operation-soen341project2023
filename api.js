@@ -18,7 +18,7 @@ app.use((req, response, next) => {
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader(
         "Access-Control-Allow-Methods",
-        "GET,HEAD,OPTIONS,POST,PUT"
+        "GET,HEAD,OPTIONS,POST,PUT,DELETE"
     );
     response.setHeader(
         "Access-Control-Allow-Headers",
@@ -217,7 +217,7 @@ console.log('Before connect');
             console.log(req.body);
             const { name, email, password, usertype } = req.body;
 
-            const id = req.params.id;
+            const id = parseInt(req.params.id);
 
             try {
                 // Check if the user exists in the database
@@ -247,7 +247,7 @@ console.log('Before connect');
                 console.error(error);
                 return res.status(401).send({ message: 'Invalid token' });
             }
-            const id = req.params.id;
+            const id = parseInt(req.params.id);
 
             try {
                 // Check if the user exists in the database
@@ -335,7 +335,7 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
             // Delete the profile based on the userID passed in the endpoint
-            const profile = await profiles.findOneAndDelete({ userID: req.params.userID });
+            const profile = await profiles.findOneAndDelete({ userID: parseInt(req.params.userID) });
             if (profile) {
                 res.status(200).send({ message: 'Profile deleted' });
             } else {
@@ -355,7 +355,7 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
             // Update the profile based on the userID passed in the endpoint and the changes specified in the request body
-            const profile = await profiles.findOneAndUpdate({ userID: req.params.userID }, { $set: req.body });
+            const profile = await profiles.findOneAndUpdate({ userID: parseInt(req.params.userID) }, { $set: req.body });
             if (profile) {
                 res.status(200).send({ message: 'Profile modified' });
             } else {
@@ -450,7 +450,7 @@ console.log('Before connect');
             }
 
             try {
-                const jobsData = await jobs.find({employerID: req.params.userID}).toArray();
+                const jobsData = await jobs.find({employerID: parseInt(req.params.userID)}).toArray();
                 res.status(200).send(jobsData);
             } catch (error) {
                 console.error(error);
@@ -470,7 +470,7 @@ console.log('Before connect');
                 console.error(error);
                 return res.status(401).send({ message: 'Invalid token' });
             }
-            const jobID = req.params.jobID;
+            const jobID = parseInt(req.params.jobID);
             console.log(req.params);
             try {
                 const job = await jobs.findOne({ jobID: jobID });
@@ -500,7 +500,7 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
 
-            const jobID = req.params.jobID;
+            const jobID = parseInt(req.params.jobID);
             console.log(req.params);
             console.log(req.body);
             const { employerID, title, role_description, date_posted, date_deadline } = req.body;
@@ -596,7 +596,7 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
             try {
-                const id = req.params.id;
+                const id = parseInt(req.params.id);
                 const result = await applications.deleteOne({ _id: new ObjectID(id) });
                 if (result.deletedCount === 0) {
                     return res.status(404).send({ message: 'Application not found' });
@@ -621,7 +621,7 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
             try {
-                const id = req.params.id;
+                const id = parseInt(req.params.id);
                 const updates = req.body;
                 const result = await applications.updateOne({ _id: new ObjectID(id) }, { $set: updates });
                 if (result.modifiedCount === 0) {
