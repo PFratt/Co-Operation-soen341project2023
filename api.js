@@ -501,7 +501,7 @@ console.log('Before connect');
             }
 
             const jobID = parseInt(req.params.jobID);
-            console.log(req.params);
+            console.log(jobID);
             console.log(req.body);
             const { employerID, title, role_description, date_posted, date_deadline } = req.body;
             try {
@@ -510,7 +510,7 @@ console.log('Before connect');
                     return res.status(406).send({ message: 'Job not found' });
                 }
 
-                await jobs.updateOne({ jobID: jobID },
+                const result = await jobs.updateOne({ jobID: jobID },
                     {
                         $set: {
                             employerID: employerID,
@@ -520,6 +520,7 @@ console.log('Before connect');
                             date_deadline: date_deadline
                         }
                     });
+                console.log(result);
                 res.status(200).send({ message: 'Job successfully modified' });
             } catch (error) {
                 console.error(error);
