@@ -197,7 +197,7 @@ console.log('Before connect');
                     console.log("1 document inserted");
                 });
             }
-            res.status(200).send({ accessToken, myObj});
+            res.status(200).send({ accessToken, user: myObj});
         });
 
         // Modify an existing user
