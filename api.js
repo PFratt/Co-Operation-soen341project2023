@@ -163,9 +163,9 @@ console.log('Before connect');
 
             let userId = 0;
             if (typeof numberholder.userID === "number") {
-                userId = numberholder.userID + 1;
+                userId = numberholder.userID;
             } else if (typeof numberholder.userID === "string") {
-                userId = parseInt(numberholder.userID, 10) + 1;
+                userId = parseInt(numberholder.userID, 10);
             }
 
             const userID = userId;
@@ -173,7 +173,7 @@ console.log('Before connect');
 
             await collection.updateOne(
                 { "Number": "Holder" },
-                { $set: { "userID": userID } }
+                { $set: { "userID": parseInt(userID)+1 } }
             );
 
             const myObj = {
@@ -384,9 +384,9 @@ console.log('Before connect');
 
             let jobId = 0;
             if (typeof numberholder.jobID === "number") {
-                jobId = numberholder.jobID + 1;
+                jobId = numberholder.jobID;
             } else if (typeof numberholder.jobID === "string") {
-                jobId = parseInt(numberholder.jobID, 10) + 1;
+                jobId = parseInt(numberholder.jobID, 10);
             }
 
             const jobID = jobId;
@@ -394,7 +394,7 @@ console.log('Before connect');
 
             await jobs.updateOne(
                 { "Number": "Holder" },
-                { $set: { "jobID": jobID } }
+                { $set: { "jobID": parseInt(jobID) + 1 } }
             );
 
             const myObj = {
