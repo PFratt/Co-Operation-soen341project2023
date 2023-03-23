@@ -146,7 +146,7 @@ export default class MyJobs extends React.Component {
       date_deadline: this.state.editJobDeadline,
     }
     axios
-      .put(`https://samwongdimain.com/modifyjob/${this.state.selectedJob.jobID}`, modifyJob, { //how to send id of selected job? 
+      .put(`https://samwongdimain.com/modifyjob/${this.props.cookies.get("jobID")}`, modifyJob, { 
         headers: {
           Authorization: this.props.cookies.get("authToken"),
           "Access-Control-Allow-Headers": "Authorization",
@@ -162,7 +162,7 @@ export default class MyJobs extends React.Component {
   };
   deleteJob = () => {
     axios
-      .delete(`https://samwongdimain.com/deletejob/${this.state.selectedJob.jobID}`, { //how to send id of selected job? 
+      .delete(`https://samwongdimain.com/deletejob/${this.props.cookies.get("jobID")}`, { 
         headers: {
           Authorization: this.props.cookies.get("authToken"),
           "Access-Control-Allow-Headers": "Authorization",
