@@ -24,9 +24,6 @@ export default class MyJobs extends React.Component {
       addJobDatePosted: currentDate,
       addJobDeadline: "",
       addJobView: false,
-      editJobTitle: "",
-      editJobDesc: "",
-      editJobDeadline: "",
       editJobView: false,
     };
     this.getJobList();
@@ -102,8 +99,7 @@ export default class MyJobs extends React.Component {
         date_posted={date_posted}
         date_deadline={date_deadline}
         hideJob={this.hideJob}
-        editJob={this.editJob}
-        deleteJob={this.deleteJob}
+        cookies={this.props.cookies}
       ></MyJobPost>
     );
   };
@@ -146,55 +142,55 @@ export default class MyJobs extends React.Component {
         console.log(error);
       });
   };
-  editJob = () => {
-    let modifyJob = {
-      title: this.state.editJobTitle,
-      role_description: this.state.editJobDesc,
-      date_deadline: this.state.editJobDeadline,
-    };
-    axios
-      .put(
-        `https://samwongdimain.com/modifyjob/${this.props.cookies.get(
-          "jobID"
-        )}`,
-        modifyJob,
-        {
-          headers: {
-            Authorization: this.props.cookies.get("authToken"),
-            "Access-Control-Allow-Headers": "Authorization",
-            "Content-Type": "application/json;charset=UTF-8",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-  deleteJob = () => {
-    axios
-      .delete(
-        `https://samwongdimain.com/deletejob/${this.props.cookies.get(
-          "jobID"
-        )}`,
-        {
-          headers: {
-            Authorization: this.props.cookies.get("authToken"),
-            "Access-Control-Allow-Headers": "Authorization",
-            "Content-Type": "application/json;charset=UTF-8",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-        alert("Job Deleted");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  // editJob = () => {
+  //   let modifyJob = {
+  //     title: this.state.editJobTitle,
+  //     role_description: this.state.editJobDesc,
+  //     date_deadline: this.state.editJobDeadline,
+  //   };
+  //   axios
+  //     .put(
+  //       `https://samwongdimain.com/modifyjob/${this.props.cookies.get(
+  //         "jobID"
+  //       )}`,
+  //       modifyJob,
+  //       {
+  //         headers: {
+  //           Authorization: this.props.cookies.get("authToken"),
+  //           "Access-Control-Allow-Headers": "Authorization",
+  //           "Content-Type": "application/json;charset=UTF-8",
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
+  // deleteJob = () => {
+  //   axios
+  //     .delete(
+  //       `https://samwongdimain.com/deletejob/${this.props.cookies.get(
+  //         "jobID"
+  //       )}`,
+  //       {
+  //         headers: {
+  //           Authorization: this.props.cookies.get("authToken"),
+  //           "Access-Control-Allow-Headers": "Authorization",
+  //           "Content-Type": "application/json;charset=UTF-8",
+  //         },
+  //       }
+  //     )
+  //     .then((response) => {
+  //       console.log(response);
+  //       alert("Job Deleted");
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
   render() {
     return (
       <div className="myjobs-page-container">
