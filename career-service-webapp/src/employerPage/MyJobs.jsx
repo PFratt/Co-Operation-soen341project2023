@@ -26,6 +26,7 @@ export default class MyJobs extends React.Component {
       addJobView: false,
       editJobView: false,
     };
+    this.getJobList();
   }
 
   getJobList = async () => {

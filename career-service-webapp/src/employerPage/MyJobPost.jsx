@@ -35,7 +35,7 @@ export default function MyJobPost({
       })
       .then((response) => {
         console.log(response);
-        refreshJobs();
+        window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
@@ -43,16 +43,13 @@ export default function MyJobPost({
   };
   const deleteJob = () => {
     axios
-      .delete(
-        `https://sawongdomain.com/deletejob/${parseInt(jobID)}`,
-        {
-          headers: {
-            Authorization: cookies.get("authToken"),
-            "Access-Control-Allow-Headers": "Authorization",
-            "Content-Type": "application/json;charset=UTF-8",
-          },
-        }
-      )
+      .delete(`https://sawongdomain.com/deletejob/${parseInt(jobID)}`, {
+        headers: {
+          Authorization: cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      })
       .then((response) => {
         console.log(response);
         alert("Job Deleted");
