@@ -6,6 +6,7 @@ import JobPosting from "./JobPosting";
 import JobApplication from "./JobApplication";
 import ApplicationStatus from "./ApplicationStatus";
 import CandidateProfile from "./CandidateProfile";
+import axios from "axios";
 
 const fakejoblist = [
   {
@@ -62,13 +63,67 @@ export default class CandidatePage extends React.Component {
       selectedJob: null,
       isApplicationBtnClicked: false,
       showProfilePage: false,
+      jobList: [],
+      employerList: []
     };
     this.jobApplicationBtnClicked = this.jobApplicationBtnClicked.bind(this);
+    this.getJobList();
   }
+
+  async getJobList() {
+    try {
+      const jobResponse = await axios.get('https://sawongdomain.com/jobs', {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Authorization': this.props.cookies.get('authToken'),
+          'Access-Control-Allow-Headers': 'Authorization'
+        }
+      });
+      const applicationResponse = await axios.get('https://sawongdomain.com/applications', {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Authorization': this.props.cookies.get('authToken'),
+          'Access-Control-Allow-Headers': 'Authorization'
+        }
+      });
+      const employersResponse = await axios.get('https://sawongdomain.com/users/employers', {
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+          'Authorization': this.props.cookies.get('authToken'),
+          'Access-Control-Allow-Headers': 'Authorization'
+        }
+      });
+      const jobList = jobResponse.data;
+      const applicationList = applicationResponse.data;
+      const employerList = employersResponse.data;
+
+      const combinedList = jobList.map(job => ({
+        job,
+        matchingApplications: applicationList.filter(application => (
+          application.jobID === job.jobID &&
+          application.userID === parseInt(this.props.cookies.get('userID'))
+        ))
+      }));
+
+      this.setState({ jobList: combinedList, employerList: employerList });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   //test function just to show how it works
   mapfunctiontest = () => {
     console.log("maptest called");
-    return fakejoblist.map(({ jobNum, title, employer, date, description, deadline, status }) => {
+    return this.state.jobList.map(({ job, matchingApplications }) => {
+      let jobNum = job.jobID;
+      let title = job.title;
+      if (!this.state.employerList.find(emp => emp.id === job.employerID)?.name)
+        return null;
+      let employer = this.state.employerList.find(emp => emp.id === job.employerID)?.name;
+      let date = job.date_posted;
+      let description = job.role_description;
+      let deadline = job.date_deadline;
+      let status = matchingApplications.length != 0 ? matchingApplications.status : "none";
       return (
         <tr>
           <td>{jobNum}</td>
@@ -85,6 +140,7 @@ export default class CandidatePage extends React.Component {
       );
     });
   };
+
   jobPosting = (jobNum, title, employer, date, description, deadline, status) => {
     console.log(title);
     return (
@@ -134,21 +190,21 @@ export default class CandidatePage extends React.Component {
         <div className="job-posting-wrapper">
           {this.state.selectedJob
             ? this.jobPosting(
-                this.state.selectedJob.jobNum,
-                this.state.selectedJob.title,
-                this.state.selectedJob.employer,
-                this.state.selectedJob.date,
-                this.state.selectedJob.description,
-                this.state.selectedJob.deadline,
-                this.state.selectedJob.status
-              )
+              this.state.selectedJob.jobNum,
+              this.state.selectedJob.title,
+              this.state.selectedJob.employer,
+              this.state.selectedJob.date,
+              this.state.selectedJob.description,
+              this.state.selectedJob.deadline,
+              this.state.selectedJob.status
+            )
             : null}
         </div>
         <div className="candidate-profile-wrapper">
           {this.state.showProfilePage ? <CandidateProfile profilePageClose={this.profilePageClose} /> : null}
         </div>
-        <div><CandidateProfile/></div>
-          
+        <div><CandidateProfile /></div>
+
       </div>
     );
   }

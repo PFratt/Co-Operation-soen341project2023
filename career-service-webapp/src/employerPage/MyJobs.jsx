@@ -144,6 +144,7 @@ export default class MyJobs extends React.Component {
         console.log(error);
       });
   };
+
   // editJob = () => {
   //   let modifyJob = {
   //     title: this.state.editJobTitle,
@@ -193,6 +194,7 @@ export default class MyJobs extends React.Component {
   //       console.log(error);
   //     });
   // };
+
   render() {
     return (
       <div className="myjobs-page-container">

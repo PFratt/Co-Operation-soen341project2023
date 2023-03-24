@@ -76,7 +76,7 @@ export default class HomePage extends React.Component {
                 <ProtectedRoute user={this.state.candidateAccess}>
                   {" "}
                   {/* brings to main candidate page */}
-                  <CandidatePage />
+                  <CandidatePage cookies={cookies}/>
                 </ProtectedRoute>
               }
             />
