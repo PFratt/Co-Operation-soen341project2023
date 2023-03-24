@@ -155,6 +155,7 @@ export default class CandidatePage extends React.Component {
         hideJobPosting={this.hideJobPosting}
         jobApplicationBtnClicked={this.jobApplicationBtnClicked}
         isApplicationBtnClicked={this.state.isApplicationBtnClicked}
+        cookies={this.props.cookies}
       />
     );
   };
