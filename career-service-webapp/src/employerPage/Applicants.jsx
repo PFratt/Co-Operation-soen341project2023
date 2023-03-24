@@ -100,16 +100,16 @@ export default class Applicants extends React.Component {
 
       const applicationsToMyJobs = applicationsResponse.data.map((application) => {
         const job = jobsResponse.data.find((job) => job.jobID == application.jobID);
-        if(job){
-          return {job, application};
+        if (job) {
+          return { job, application };
         }
         return null;
       }).filter(Boolean);
 
       const applicants = applicationsToMyJobs.map(application => {
         const student = studentListWithProfiles.find(student => student.student.id == application.application.userID);
-        if(student){
-          return {student, application};
+        if (student) {
+          return { student, application };
         }
         return null;
       }).filter(Boolean);
@@ -126,17 +126,20 @@ export default class Applicants extends React.Component {
     console.log("maptest called");
     return this.state.applicants.map(
       (applicant) => {
+        let _id = applicant.application.application._id;
         let status = applicant.application.application.status;
         let userName = applicant.student.student.name;
         let appliedjob = applicant.application.job.title;
         let date = applicant.application.application.date_applied;
+        let jobID = applicant.application.application.jobID;
+        let userID = applicant.application.application.userID;
         return (
           <tr>
             <td>{status}</td>
             <td
               onClick={() => {
                 this.setState({
-                  viewApplicant: { status, userName, appliedjob, date },
+                  viewApplicant: { status, userName, appliedjob, date, _id, jobID, userID },
                 });
               }}
             >
@@ -149,7 +152,7 @@ export default class Applicants extends React.Component {
       }
     );
   };
-  applicantProfile = (status, userName, appliedjob, date) => {
+  applicantProfile = (status, userName, appliedjob, date, _id) => {
     return (
       <ApplicantProfile
         status={status}
@@ -163,9 +166,31 @@ export default class Applicants extends React.Component {
       />
     );
   };
-  interview = () => {
+  interview = (id) => {
+    let modifyapplication = {
+      date_applied: this.state.viewApplicant.date,
+      status: this.state.viewApplicant.status,
+      jobID: this.state.viewApplicant.jobID,
+      useFrID: this.state.viewApplicant.userID
+    }
     this.setState({ applicantStatusColor: " green " });
+    axios
+      .put(`https://sawongdomain.com/updateapplication/${id}`, modifyapplication, {
+        headers: {
+          Authorization: cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
+
   reject = () => {
     this.setState({ applicantStatusColor: " red " });
   };
@@ -193,11 +218,11 @@ export default class Applicants extends React.Component {
           </Table>{" "}
           {this.state.viewApplicant
             ? this.applicantProfile(
-                this.state.viewApplicant.status,
-                this.state.viewApplicant.userName,
-                this.state.viewApplicant.appliedjob,
-                this.state.viewApplicant.date
-              )
+              this.state.viewApplicant.status,
+              this.state.viewApplicant.userName,
+              this.state.viewApplicant.appliedjob,
+              this.state.viewApplicant.date
+            )
             : null}
         </div>
       </div>
