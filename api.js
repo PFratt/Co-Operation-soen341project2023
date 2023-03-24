@@ -598,7 +598,7 @@ console.log('Before connect');
             }
             try {
                 const _id = req.params.id;
-                const result = await applications.deleteOne({ _id: _id });
+                const result = await applications.deleteOne({ _id: new ObjectID(_id) });
                 if (result.deletedCount === 0) {
                     return res.status(404).send({ message: 'Application not found' });
                 }
@@ -624,7 +624,7 @@ console.log('Before connect');
             try {
                 const id = req.params.id;
                 const updates = req.body;
-                const result = await applications.updateOne({ _id: id }, { $set: updates });
+                const result = await applications.updateOne({ _id: new ObjectID(id) }, { $set: updates });
                 if (result.modifiedCount === 0) {
                     return res.status(404).send({ message: 'Application not found' });
                 }
