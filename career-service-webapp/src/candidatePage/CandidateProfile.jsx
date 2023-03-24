@@ -25,12 +25,14 @@ export default class CandidateProfile extends React.Component {
       newField: "",
       jobType: "",
       newJobType: "",
+      description: "*enter CV here*",
+      newDescription: "",
       show1: 'none',
       show2: 'none',
       show3: 'none',
       show4: 'none',
       show5: 'none',
-      show6: 'block'
+      show6: 'none'
 
     };
   }
@@ -53,7 +55,7 @@ readTextBox1 = (userInput1) => {
 saveFirstName(){
     this.setState({firstName: this.state.newFirstName});
     console.log("New name is: ", this.state.firstName);
-    this.setState({show1: 'none'});
+    //this.setState({show1: 'none'});
 }
 
 // Last Name
@@ -74,7 +76,7 @@ readTextBox2 = (userInput2) => {
 saveLastName(){
     this.setState({lastName: this.state.newLastName});
     console.log("New last name is: ", this.state.lastName);
-    this.setState({show2: 'none'});
+    //this.setState({show2: 'none'});
 }
 
 // Email
@@ -94,7 +96,7 @@ readTextBox3 = (userInput3) => {
 
 saveEmail(){
     this.setState({email: this.state.newEmail});
-    this.setState({show3: 'none'});
+    //this.setState({show3: 'none'});
 }
 
 // Date of Birth
@@ -120,7 +122,7 @@ saveDOB(){
     this.setState({DOBY: this.state.newDOBY});
     this.setState({DOBM: this.state.newDOBM});
     this.setState({DOBD: this.state.newDOBD});
-    this.setState({show4: 'none'});
+    //this.setState({show4: 'none'});
 }
 
 // Field of Study
@@ -140,10 +142,10 @@ readTextBox7 = (userInput7) => {
 
 saveField(){
     this.setState({field: this.state.newField});
-    this.setState({show5: 'none'});
+    //this.setState({show5: 'none'});
 }
 
-// Job Type
+// Descriptioon
 showEditBox6(){
     this.setState({show6: 'block'});
 }
@@ -152,13 +154,61 @@ hideEditBox6(){
     this.setState({show6: 'none'});
 }
 
-readTextBox6 = (userInput8) => {
-    this.setState({newJobType: userInput8.target.value});
+readTextBox8 = (userInput8) => {
+    this.setState({newDescription: userInput8.target.value});
 }
 
-saveJobType(){
-    this.setState({jobType: this.state.newJobType});
-    this.setState({show6: 'none'});
+saveDescription(){
+    this.setState({description: this.state.newDescription});
+    //this.setState({show6: 'none'});
+}
+
+showEditBoxes(){
+    this.showEditBox1();
+    this.showEditBox2();
+    this.showEditBox3();
+    this.showEditBox4();
+    this.showEditBox5();
+    this.showEditBox6();
+}
+
+hideEditBoxes(){
+    this.hideEditBox1();
+    this.hideEditBox2();
+    this.hideEditBox3();
+    this.hideEditBox4();
+    this.hideEditBox5();
+    this.hideEditBox6();
+}
+
+saveBoxes(){
+    if (document.getElementById("fiName").value.trim() != ""){
+        this.saveFirstName();
+    }
+
+    if (document.getElementById("laName").value.trim() != ""){
+        this.saveLastName();
+    }
+
+    if (document.getElementById("eMail").value.trim() != ""){
+        this.saveEmail();
+    }
+
+    if (document.getElementById("doB").value.trim() != ""){
+        this.saveDOB();
+    }
+
+    if (document.getElementById("headLine").value.trim() != ""){
+        this.saveField();
+    }
+
+    if (document.getElementById("CV").value.trim() != ""){
+        this.saveDescription();
+    }
+
+
+    this.hideEditBoxes();
+
 }
 
   render() {
@@ -169,65 +219,83 @@ saveJobType(){
 
           Candidate Profile
           <br />
+          <br />
 
           {/* First Name */}
           <div>
-            <button onClick={() => this.showEditBox1()}>Edit</button>
+            {/* <button onClick={() => this.showEditBox1()}>Edit</button> */}
             First Name: {this.state.firstName}
           </div>
 
           <div style={{display: this.state.show1}}>
-              <input type="text" onChange={this.readTextBox1}/><button onClick={() => this.saveFirstName()}>Save</button><button onClick={() => this.hideEditBox1()}>Cancel</button>
+              <input type="text" id="fiName" onChange={this.readTextBox1}/>
+              {/* <button onClick={() => this.saveFirstName()}>Save</button>
+              <button onClick={() => this.hideEditBox1()}>Cancel</button> */}
           </div>
 
           {/* Last Name */}
           <div>
-            <button onClick={() => this.showEditBox2()}>Edit</button>
+            {/* <button onClick={() => this.showEditBox2()}>Edit</button> */}
             Last Name: {this.state.lastName}
           </div>
 
           <div style={{display: this.state.show2}}>
-              <input type="text" onChange={this.readTextBox2}/><button onClick={() => this.saveLastName()}>Save</button><button onClick={() => this.hideEditBox2()}>Cancel</button>
+              <input type="text" id= "laName" onChange={this.readTextBox2}/>
+              {/* <button onClick={() => this.saveLastName()}>Save</button>
+              <button onClick={() => this.hideEditBox2()}>Cancel</button> */}
           </div>
 
           
           {/* Email */}
           <div>
-            <button onClick={() => this.showEditBox3()}>Edit</button>
+            {/* <button onClick={() => this.showEditBox3()}>Edit</button> */}
             E-mail: {this.state.email}
           </div>
 
           <div style={{display: this.state.show3}}>
-              <input type="text" onChange={this.readTextBox3}/><button onClick={() => this.saveEmail()}>Save</button><button onClick={() => this.hideEditBox3()}>Cancel</button>
+              <input type="text" id="eMail" onChange={this.readTextBox3}/>
+              {/* <button onClick={() => this.saveEmail()}>Save</button>
+              <button onClick={() => this.hideEditBox3()}>Cancel</button> */}
           </div>
 
           {/* Date Of Birth */}
           <div>
-            <button onClick={() => this.showEditBox4()}>Edit</button>
+            {/* <button onClick={() => this.showEditBox4()}>Edit</button> */}
             Date of Birth (YYYY-MM-DD): {this.state.DOBY + "-" + this.state.DOBM + "-" + this.state.DOBD}
           </div>
 
           <div style={{display: this.state.show4}}>
-              <input type="number" onChange={this.readTextBox4}/>
-              <input type="number" onChange={this.readTextBox5}/>
-              <input type="number" onChange={this.readTextBox6}/>
-              <button onClick={() => this.saveDOB()}>Save</button><button onClick={() => this.hideEditBox4()}>Cancel</button>
+              <input type="number" id="doB" onChange={this.readTextBox4}/>
+              <input type="number" id="doB" onChange={this.readTextBox5}/>
+              <input type="number" id="doB" onChange={this.readTextBox6}/>
+              {/* <button onClick={() => this.saveDOB()}>Save</button>
+              <button onClick={() => this.hideEditBox4()}>Cancel</button> */}
           </div>
           
-          {/* Field of Study */}
+          {/* Headline */}
           <div>
-            <button onClick={() => this.showEditBox5()}>Edit</button>
-            Field of Study: {this.state.field}
+            {/* <button onClick={() => this.showEditBox5()}>Edit</button> */}
+            Headline: {this.state.field}
           </div>
 
           <div style={{display: this.state.show5}}>
-              <input type="text" onChange={this.readTextBox7}/>
-              <button onClick={() => this.saveField()}>Save</button><button onClick={() => this.hideEditBox5()}>Cancel</button>
+              <input type="text" id="headLine" onChange={this.readTextBox7}/>
+              {/* <button onClick={() => this.saveField()}>Save</button>
+              <button onClick={() => this.hideEditBox5()}>Cancel</button> */}
+          </div>
+
+          {/* Description */}
+          <div>
+            Description: {this.state.description}
+          </div>
+
+          <div style={{display: this.state.show6}}>
+              <textarea type="text" id="CV" onChange={this.readTextBox8}/>
           </div>
 
           {/* Job Type */}
-          <div>
-            {/* <button onClick={() => this.showEditBox6()}>Edit</button> */}
+          {/* <div>
+            <button onClick={() => this.showEditBox6()}>Edit</button> 
             Job Type: {this.state.jobType}
           </div>
 
@@ -238,8 +306,17 @@ saveJobType(){
                 <option value="Part-time">Part-time</option>
                 <option value="Internship">Internship</option>
               </select> 
-              {/* <button onClick={() => this.saveJobType()}>Save</button><button onClick={() => this.hideEditBox6()}>Cancel</button> */}
-          </div>
+              <button onClick={() => this.saveJobType()}>Save</button><button onClick={() => this.hideEditBox6()}>Cancel</button>
+          </div> */}
+
+          <br />
+
+          <button onClick={() => this.showEditBoxes()}>Edit</button>
+          <button onClick={() => this.saveBoxes()}>Save</button>
+          <button onClick={() => this.hideEditBoxes()}>Cancel</button>
+
+
+
           <br />
 
         </div>
