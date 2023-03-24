@@ -147,7 +147,7 @@ console.log('Before connect');
             const accessToken = jwt.sign({ email }, secretKey, { expiresIn: '2h' });
 
             // Send the token to the client
-            res.send({ accessToken, user});
+            res.send({ accessToken, user });
         });
 
         // Add a new user
@@ -173,7 +173,7 @@ console.log('Before connect');
 
             await collection.updateOne(
                 { "Number": "Holder" },
-                { $set: { "userID": parseInt(userID)+1 } }
+                { $set: { "userID": parseInt(userID) + 1 } }
             );
 
             const myObj = {
@@ -197,7 +197,7 @@ console.log('Before connect');
                     console.log("1 document inserted");
                 });
             }
-            res.status(200).send({ accessToken, user: myObj});
+            res.status(200).send({ accessToken, user: myObj });
         });
 
         // Modify an existing user
@@ -450,7 +450,7 @@ console.log('Before connect');
             }
 
             try {
-                const jobsData = await jobs.find({employerID: parseInt(req.params.userID)}).toArray();
+                const jobsData = await jobs.find({ employerID: parseInt(req.params.userID) }).toArray();
                 res.status(200).send(jobsData);
             } catch (error) {
                 console.error(error);
@@ -610,7 +610,7 @@ console.log('Before connect');
         });
 
         // Update an application
-        app.patch('/updateapplication/:id', async (req, res) => {
+        app.put('/updateapplication/:id', async (req, res) => {
             // Verify the token
             console.log(req);
             const token = req.header('Authorization').replace('Bearer ', '');
@@ -624,7 +624,7 @@ console.log('Before connect');
             try {
                 const id = parseInt(req.params.id);
                 const updates = req.body;
-                const result = await applications.updateOne({ _id: new ObjectID(id) }, { $set: updates });
+                const result = await applications.updateOne({ _id: id }, { $set: updates });
                 if (result.modifiedCount === 0) {
                     return res.status(404).send({ message: 'Application not found' });
                 }
@@ -634,6 +634,7 @@ console.log('Before connect');
                 res.status(500).send({ message: 'An error occurred' });
             }
         });
+
 
         // In case need to verify token again.
         app.get('/validate', async (req, res) => {
