@@ -127,6 +127,7 @@ export default class Applicants extends React.Component {
     return this.state.applicants.map(
       (applicant) => {
         let _id = applicant.application.application._id;
+        console.log(_id);
         let status = applicant.application.application.status;
         let userName = applicant.student.student.name;
         let appliedjob = applicant.application.job.title;
@@ -166,18 +167,18 @@ export default class Applicants extends React.Component {
       />
     );
   };
-  interview = (id) => {
+  interview = () => {
     let modifyapplication = {
       date_applied: this.state.viewApplicant.date,
-      status: this.state.viewApplicant.status,
-      jobID: this.state.viewApplicant.jobID,
-      useFrID: this.state.viewApplicant.userID
+      status: "interviewing",
+      jobID: parseInt(this.state.viewApplicant.jobID),
+      userID: parseInt(this.state.viewApplicant.userID)
     }
     this.setState({ applicantStatusColor: " green " });
     axios
-      .put(`https://sawongdomain.com/updateapplication/${id}`, modifyapplication, {
+      .put(`https://sawongdomain.com/updateapplication/${this.state.viewApplicant._id}`, modifyapplication, {
         headers: {
-          Authorization: cookies.get("authToken"),
+          Authorization: this.props.cookies.get("authToken"),
           "Access-Control-Allow-Headers": "Authorization",
           "Content-Type": "application/json;charset=UTF-8",
         },
@@ -193,9 +194,51 @@ export default class Applicants extends React.Component {
 
   reject = () => {
     this.setState({ applicantStatusColor: " red " });
+    let modifyapplication = {
+      date_applied: this.state.viewApplicant.date,
+      status: "rejected",
+      jobID: parseInt(this.state.viewApplicant.jobID),
+      userID: parseInt(this.state.viewApplicant.userID)
+    }
+    axios
+      .put(`https://sawongdomain.com/updateapplication/${this.state.viewApplicant._id}`, modifyapplication, {
+        headers: {
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   clear = () => {
     this.setState({ applicantStatusColor: "" });
+    let modifyapplication = {
+      date_applied: this.state.viewApplicant.date,
+      status: "accepted",
+      jobID: parseInt(this.state.viewApplicant.jobID),
+      userID: parseInt(this.state.viewApplicant.userID)
+    }
+    axios
+      .put(`https://sawongdomain.com/updateapplication/${this.state.viewApplicant._id}`, modifyapplication, {
+        headers: {
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+      })
+      .then((response) => {
+        console.log(response);
+        window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
   applicantStatusColor;
   closeApplicantView = () => {
