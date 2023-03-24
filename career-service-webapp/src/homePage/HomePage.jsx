@@ -53,6 +53,7 @@ export default class HomePage extends React.Component {
   logout = () => {
     cookies.remove("authToken");
     cookies.remove("userType");
+    cookies.remove("userID");
     window.location = "./";
   };
   render() {
@@ -123,7 +124,7 @@ const ProtectedRoute = ({ user, redirectPath = "/", children }) => {
   if (!user) {
     cookies.remove("authToken");
     cookies.remove("userType");
-    
+    cookies.remove("userID");
     window.location = "./";
     return;
   }

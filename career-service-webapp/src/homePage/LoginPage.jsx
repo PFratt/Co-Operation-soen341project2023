@@ -63,12 +63,17 @@ export default class LoginPage extends React.Component {
           alert("Try Visiting and Allowing sawongdomain.com in your browser");
           window.open("https://sawongdomain.com", "_blank", "noreferrer");
         }
+        if (error.code === "ERR_BAD_REQUEST") {
+          alert(error.response.data.message);
+        }
       });
   };
   validEmail = () => {
     let comCheck = this.state.signupEmail.slice(-4);
+    let caCheck = this.state.signupEmail.slice(-3);
+    let emailEnd = comCheck === ".com" || caCheck === ".ca" ? true : false;
     console.log(comCheck);
-    if (this.state.signupEmail.includes("@") && comCheck === ".com") {
+    if (this.state.signupEmail.includes("@") && emailEnd) {
       return true;
     } else return false;
   };
@@ -92,6 +97,13 @@ export default class LoginPage extends React.Component {
         })
         .catch(function (error) {
           console.log(error.code);
+          if (error.code === "ERR_NETWORK") {
+            alert("Try Visiting and Allowing sawongdomain.com in your browser");
+            window.open("https://sawongdomain.com", "_blank", "noreferrer");
+          }
+          if (error.code === "ERR_BAD_REQUEST") {
+            alert(error.response.data.message);
+          }
         });
     } else {
       alert("enter valid email");
