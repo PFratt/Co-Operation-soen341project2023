@@ -168,7 +168,7 @@ console.log('Before connect');
                 userId = parseInt(numberholder.userID, 10);
             }
 
-            const userID = userId;
+            const userID = parseInt(userId);
             console.log(userID);
 
             await collection.updateOne(
@@ -181,7 +181,7 @@ console.log('Before connect');
                 email: email,
                 password: password,
                 usertype: usertype,
-                id: userID
+                id: parseInt(userID)
             };
 
             // Generate a JWT
@@ -221,12 +221,12 @@ console.log('Before connect');
 
             try {
                 // Check if the user exists in the database
-                const user = await collection.findOne({ id: id });
+                const user = await collection.findOne({ id: parseInt(id) });
                 if (!user) {
                     return res.status(404).send("User not found.");
                 } else {
                     // Update the user in the database
-                    await collection.updateOne({ id: id }, { $set: { name: name, email: email, password: password, usertype: usertype } });
+                    await collection.updateOne({ id: parseInt(id) }, { $set: { name: name, email: email, password: password, usertype: usertype } });
                     res.status(200).send({ message: 'User updated successfully' });
                 }
             } catch (error) {
@@ -251,12 +251,12 @@ console.log('Before connect');
 
             try {
                 // Check if the user exists in the database
-                const user = await collection.findOne({ id: id });
+                const user = await collection.findOne({ id: parseInt(id) });
                 if (!user) {
                     return res.status(404).send("User not found.");
                 } else {
                     // Delete the user from the database
-                    await collection.deleteOne({ id: id });
+                    await collection.deleteOne({ id: parseInt(id) });
                     res.status(200).send({ message: 'User deleted successfully' });
                 }
             } catch (error) {
@@ -282,12 +282,12 @@ console.log('Before connect');
             }
 
             const myObj = {
-                userID: userID,
+                userID: parseInt(userID),
                 headline: headline,
                 description: description
             };
 
-            const profile = await profiles.findOne({ userID: userID });
+            const profile = await profiles.findOne({ userID: parseInt(userID) });
             if (profile) {
                 return res.status(406).send("User already has a profile.");
             } else {
@@ -389,7 +389,7 @@ console.log('Before connect');
                 jobId = parseInt(numberholder.jobID, 10);
             }
 
-            const jobID = jobId;
+            const jobID = parseInt(jobId);
             console.log(jobID);
 
             await jobs.updateOne(
@@ -398,12 +398,12 @@ console.log('Before connect');
             );
 
             const myObj = {
-                employerID: employerID,
+                employerID: parseInt(employerID),
                 title: title,
                 role_description: role_description,
                 date_posted: date_posted,
                 date_deadline: date_deadline,
-                jobID: jobID
+                jobID: parseInt(jobID)
             };
 
             // Insert new job posting in database.
@@ -513,7 +513,7 @@ console.log('Before connect');
                 const result = await jobs.updateOne({ jobID: jobID },
                     {
                         $set: {
-                            employerID: employerID,
+                            employerID: parseInt(employerID),
                             title: title,
                             role_description: role_description,
                             date_posted: date_posted,
@@ -549,8 +549,8 @@ console.log('Before connect');
             const myObj = {
                 date_applied: date_applied,
                 status: status,
-                jobID: jobID,
-                userID: userID
+                jobID: parseInt(jobID),
+                userID: parseInt(userID)
             };
 
             // Insert new job posting in database.
@@ -597,8 +597,8 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
             try {
-                const id = parseInt(req.params.id);
-                const result = await applications.deleteOne({ _id: new ObjectID(id) });
+                const _id = parseInt(req.params.id);
+                const result = await applications.deleteOne({ _id: parseInt(_id) });
                 if (result.deletedCount === 0) {
                     return res.status(404).send({ message: 'Application not found' });
                 }
