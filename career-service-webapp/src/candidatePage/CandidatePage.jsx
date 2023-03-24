@@ -113,14 +113,13 @@ export default class CandidatePage extends React.Component {
     }
   }
 
-  updateFunction(){
-    this.setState({update: !this.state.update});
-
+  updateFunction() {
+    this.setState({ update: !this.state.update });
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.update !== prevState.update) {
-      this.getJobList();
+      window.location.reload();
     }
   }
 
@@ -150,6 +149,9 @@ export default class CandidatePage extends React.Component {
           </td>
           <td>{employer}</td>
           <td>{date}</td>
+          <td>
+            {status == "pending" ? <div style={{width:"100%", backgroundColor:"#56c2f0"}}>Pending</div> : null}
+          </td>
         </tr>
       );
     });
