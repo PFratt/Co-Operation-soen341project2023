@@ -42,10 +42,10 @@ export default function MyJobPost({
   const deleteJob = () => {
     axios
       .delete(
-        `https://sawongdomain.com/deletejob/${this.props.cookies.get("jobID")}`,
+        `https://sawongdomain.com/deletejob/${parseInt(jobID)}`,
         {
           headers: {
-            Authorization: this.props.cookies.get("authToken"),
+            Authorization: cookies.get("authToken"),
             "Access-Control-Allow-Headers": "Authorization",
             "Content-Type": "application/json;charset=UTF-8",
           },
@@ -54,6 +54,7 @@ export default function MyJobPost({
       .then((response) => {
         console.log(response);
         alert("Job Deleted");
+        window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
