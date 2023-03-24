@@ -11,6 +11,7 @@ export default function MyJobPost({
   date_deadline,
   hideJob,
   cookies,
+  refreshJobs,
 }) {
   const [Title, setTitle] = useState(title);
   const [RoleDescription, setRoleDescription] = useState(role_description);
@@ -23,7 +24,7 @@ export default function MyJobPost({
       date_posted: date_posted,
       date_deadline: DateDeadline,
     };
-    console.log(modifyJob);
+    console.log(jobID);
     axios
       .put(`https://sawongdomain.com/modifyjob/${parseInt(jobID)}`, modifyJob, {
         headers: {
@@ -34,6 +35,7 @@ export default function MyJobPost({
       })
       .then((response) => {
         console.log(response);
+        refreshJobs();
       })
       .catch(function (error) {
         console.log(error);

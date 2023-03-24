@@ -26,11 +26,10 @@ export default class MyJobs extends React.Component {
       addJobView: false,
       editJobView: false,
     };
-    this.getJobList();
   }
 
   getJobList = async () => {
-    console.log("Request");
+    console.log(this.props.cookies.get("userID"));
     axios
       .get(
         `https://sawongdomain.com/jobs/${this.props.cookies.get("userID")}`,
@@ -43,8 +42,8 @@ export default class MyJobs extends React.Component {
         }
       )
       .then((response) => {
-        console.log(response.data.length == 0);
         this.setState({ jobList: response.data });
+        console.log(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -56,7 +55,7 @@ export default class MyJobs extends React.Component {
     if (this.state.jobList.length == 0) {
       return (
         <tr>
-          <td align="center" colspan="5">
+          <td align="center" colSpan="5">
             You have no job postings yet.
           </td>
         </tr>
@@ -100,6 +99,7 @@ export default class MyJobs extends React.Component {
         date_deadline={date_deadline}
         hideJob={this.hideJob}
         cookies={this.props.cookies}
+        refreshJobs={this.getJobList}
       ></MyJobPost>
     );
   };
@@ -137,6 +137,7 @@ export default class MyJobs extends React.Component {
       })
       .then((response) => {
         console.log(response);
+        this.getJobList();
       })
       .catch(function (error) {
         console.log(error);
@@ -201,6 +202,13 @@ export default class MyJobs extends React.Component {
             }}
           >
             Add Job
+          </button>
+          <button
+            onClick={() => {
+              this.getJobList();
+            }}
+          >
+            get listJob
           </button>
           <Table className="myjobs-table" striped bordered hover>
             <thead>
