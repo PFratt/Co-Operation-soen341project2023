@@ -664,6 +664,7 @@ console.log('Before connect');
         https.createServer(options, app).listen(5000, () => {
             console.log('Server listening on port 5000 (HTTPS)');
         });
+
     } catch (err) {
         console.error(err);
         process.exit(1);
@@ -671,7 +672,7 @@ console.log('Before connect');
 })();
 console.log('After connect');
 
-
+module.exports = app;
 
 
 

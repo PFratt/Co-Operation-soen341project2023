@@ -1,84 +1,105 @@
 import * as React from "react";
 import axios from "axios";
 import { Icon } from "@fluentui/react/lib/Icon";
+import "./css/Home.css";
 
 export default class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userType: "",
+      usertype: "",
       candidateButton: "",
       employerButton: "",
       adminButton: "",
+      loginEmail: "",
+      loginPassword: "",
+      signupUsername: "",
+      signupEmail: "",
+      signupPassword: "",
+      loginToggle: "true",
     };
   }
   redirect = (response) => {
     this.props.cookies.set("authToken", response.data.accessToken, {
       maxAge: 3600,
     });
-    this.props.cookies.set("userType", this.state.userType, { maxAge: 3600 });
+    this.props.cookies.set("userID", response.data.user.id, {
+      maxAge: 3600,
+    });
+    this.props.cookies.set("userType", this.state.usertype, { maxAge: 3600 });
     window.location = "./";
   };
-  login = () => {
-    let inputEmail = document.getElementById("loginUser").value;
-    let inputPassword = document.getElementById("loginPassword").value;
+  handleInputChange = (event) => {
+    event.preventDefault();
+    const target = event.target;
+    this.setState({
+      [target.name]: target.value,
+    });
+  };
+  login = (event) => {
+    event.preventDefault();
 
     let loginInfo = {
-      email: inputEmail,
-      password: inputPassword,
-      userType: this.state.userType,
+      email: this.state.loginEmail,
+      password: this.state.loginPassword,
+      usertype: this.state.usertype,
     };
-    // let testLoginInfo = {
-    //   email: "qianywang25@gmail.com",
-    //   password: "abc123",
-    //   userType: "student",
-    // };
+    console.log(loginInfo);
+
     axios
-      .post("http://sawongdomain.com/login", loginInfo, {
+      .post("https://sawongdomain.com/login", loginInfo, {
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
         },
       })
       .then((response) => {
         console.log("login api response");
+        console.log(response);
         this.redirect(response);
       })
       .catch(function (error) {
         console.log(error);
+        if (error.code === "ERR_NETWORK") {
+          alert("Try Visiting and Allowing sawongdomain.com in your browser");
+          window.open("https://sawongdomain.com", "_blank", "noreferrer");
+        }
       });
   };
-  signUp = () => {
-    let username = document.getElementById("signupUser").value;
-    let email = document.getElementById("signupEmail").value;
-    let password = document.getElementById("signupPassword").value;
-    let signupInfo = {
-      name: username,
-      email: email,
-      password: password,
-      userType: this.state.userType,
-    };
-    // let testSignupInfo = {
-    //   name: "qian",
-    //   email: "qianywang25@gmail.com",
-    //   password: "abc123",
-    //   userType: "student",
-    // };
-    axios
-      .post("http://sawongdomain.com/signup", signupInfo, {
-        headers: {
-          "Content-Type": "application/json;charset=UTF-8",
-        },
-      })
-      .then((response) => {
-        this.redirect(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+  validEmail = () => {
+    let comCheck = this.state.signupEmail.slice(-4);
+    console.log(comCheck);
+    if (this.state.signupEmail.includes("@") && comCheck === ".com") {
+      return true;
+    } else return false;
+  };
+  signUp = (event) => {
+    event.preventDefault();
+    if (this.validEmail()) {
+      let signupInfo = {
+        name: this.state.signupUsername,
+        email: this.state.signupEmail,
+        password: this.state.signupPassword,
+        usertype: this.state.usertype,
+      };
+      axios
+        .post("https://sawongdomain.com/signup", signupInfo, {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+        })
+        .then((response) => {
+          this.redirect(response);
+        })
+        .catch(function (error) {
+          console.log(error.code);
+        });
+    } else {
+      alert("enter valid email");
+    }
   };
   selectUser = (name) => {
     this.setState({
-      userType: name,
+      usertype: name,
       candidateButton: "",
       employerButton: "",
       adminButton: "",
@@ -91,65 +112,108 @@ export default class LoginPage extends React.Component {
 
     if (name === "admin") this.setState({ adminButton: "selected-user-type" });
   };
+  checkDisplayLogin = () => {
+    if (
+      this.state.employerButton != "" ||
+      this.state.candidateButton != "" ||
+      this.state.adminButton != ""
+    ) {
+      return "login-true";
+    } else return "login-false";
+  };
+  toggleLogin = () => {
+    this.setState({ loginToggle: !this.state.loginToggle });
+  };
   render() {
+    let allowLoginSignup = this.checkDisplayLogin();
+
     return (
       <div className="login-page-container">
-        <div className="login-wrapper">
-          Login
-          <UserTypeButtons
-            candidateButton={this.state.candidateButton}
-            employerButton={this.state.employerButton}
-            adminButton={this.state.adminButton}
-            selectUser={this.selectUser}
-          />
-          <input
-            id="loginUser"
-            className="login-input"
-            placeholder={"User Email"}
-          />
-          <br></br>
-          <input
-            id="loginPassword"
-            className="login-input"
-            type="password"
-            placeholder={"Password"}
-          />
-          <br></br>
-          <button className="login-button" onClick={this.login}>
-            Login
-          </button>
-        </div>
-        <div className="signup-wrapper">
-          Signup
-          <UserTypeButtons
-            candidateButton={this.state.candidateButton}
-            employerButton={this.state.employerButton}
-            adminButton={this.state.adminButton}
-            selectUser={this.selectUser}
-          />
-          <input
-            id="signupUser"
-            className="login-input"
-            placeholder={"Username"}
-          />
-          <br></br>
-          <input
-            id="signupEmail"
-            className="login-input"
-            placeholder={"Email"}
-          />
-          <br></br>
-          <input
-            id="signupPassword"
-            className="login-input"
-            type="password"
-            placeholder={"Password"}
-          />
-          <br></br>
-          <button className="login-button" onClick={this.signUp}>
-            Sign up
-          </button>
-        </div>
+        <label className="toggle">
+          <input type="checkbox" />
+          <span className="slider"></span>
+          <span
+            class="labels"
+            onClick={this.toggleLogin}
+            data-on="Signup"
+            data-off="Login"
+          ></span>
+        </label>
+        {this.state.loginToggle ? (
+          <div className="login-wrapper">
+            <UserTypeButtons
+              candidateButton={this.state.candidateButton}
+              employerButton={this.state.employerButton}
+              adminButton={this.state.adminButton}
+              selectUser={this.selectUser}
+            />
+            <div className={allowLoginSignup}>
+              <form onSubmit={this.login}>
+                <input
+                  name="loginEmail"
+                  className="login-input"
+                  placeholder={"User Email"}
+                  value={this.state.loginEmail}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <input
+                  name="loginPassword"
+                  className="login-input"
+                  type="password"
+                  placeholder={"Password"}
+                  value={this.state.loginPassword}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <button className="login-button button-9 login" type="submit">
+                  Login
+                </button>
+              </form>
+            </div>
+          </div>
+        ) : (
+          <div className="signup-wrapper">
+            <UserTypeButtons
+              candidateButton={this.state.candidateButton}
+              employerButton={this.state.employerButton}
+              adminButton={this.state.adminButton}
+              selectUser={this.selectUser}
+            />
+            <div className={allowLoginSignup}>
+              <form onSubmit={this.signUp}>
+                <input
+                  name="signupUsername"
+                  className="login-input"
+                  placeholder={"Full Name"}
+                  value={this.state.signupUsername}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <input
+                  name="signupEmail"
+                  className="login-input"
+                  placeholder={"Email"}
+                  value={this.state.signupEmail}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <input
+                  name="signupPassword"
+                  className="login-input"
+                  type="password"
+                  placeholder={"Password"}
+                  value={this.state.signupPassword}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <button className="login-button button-9 login" type="submit">
+                  Sign up
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -163,7 +227,7 @@ const UserTypeButtons = ({
   return (
     <div className="user-type-wrapper">
       <button
-        className={candidateButton}
+        className={candidateButton + " button-9 usertype"}
         onClick={() => {
           selectUser("student");
         }}
@@ -172,7 +236,7 @@ const UserTypeButtons = ({
         Candidate
       </button>
       <button
-        className={employerButton}
+        className={employerButton + " button-9 usertype"}
         onClick={() => {
           selectUser("employer");
         }}
@@ -181,7 +245,7 @@ const UserTypeButtons = ({
         Employer
       </button>
       <button
-        className={adminButton}
+        className={adminButton + " button-9 usertype"}
         onClick={() => {
           selectUser("admin");
         }}

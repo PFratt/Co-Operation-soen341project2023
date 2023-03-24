@@ -3,6 +3,7 @@ import { Icon } from "@fluentui/react/lib/Icon";
 
 import { Table } from "react-bootstrap";
 import ApplicantProfile from "./ApplicantProfile";
+import "./css/Employer.css";
 const fakeApplications = [
   {
     applicationNum: "1",
@@ -112,7 +113,7 @@ export default class Applicants extends React.Component {
                 <th>Date</th>
               </tr>
             </thead>
-            <tbody>{this.mapfunctiontest()}</tbody>
+            <tbody className="table-body">{this.mapfunctiontest()}</tbody>
           </Table>{" "}
           {this.state.viewApplicant
             ? this.applicantProfile(
