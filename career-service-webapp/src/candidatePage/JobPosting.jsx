@@ -15,7 +15,9 @@ export default function JobPosting({
   jobApplicationBtnClicked,
   isApplicationBtnClicked,
   cookies,
+  refresh,
 }) {
+
   return (
 
     <div className='JobPostingComponent' >
@@ -29,7 +31,7 @@ export default function JobPosting({
       <button style={{ backgroundColor: isApplicationBtnClicked ? "lightgray" : "#4295e3" }} onClick={jobApplicationBtnClicked}>
         <b>{isApplicationBtnClicked ? "Hide Job Application": "Job Application"}</b>
       </button>
-      {isApplicationBtnClicked ? <JobApplication cookies={cookies} status={status} /> : null}
+      {isApplicationBtnClicked ? <JobApplication cookies={cookies} refresh={refresh} jobID={jobNum} status={status} /> : null}
     </div>
   );
 }

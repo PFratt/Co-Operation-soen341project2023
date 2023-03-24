@@ -64,9 +64,11 @@ export default class CandidatePage extends React.Component {
       isApplicationBtnClicked: false,
       showProfilePage: false,
       jobList: [],
-      employerList: []
+      employerList: [],
+      update: false
     };
     this.jobApplicationBtnClicked = this.jobApplicationBtnClicked.bind(this);
+    this.updateFunction = this.updateFunction.bind(this);
     this.getJobList();
   }
 
@@ -111,6 +113,17 @@ export default class CandidatePage extends React.Component {
     }
   }
 
+  updateFunction(){
+    this.setState({update: !this.state.update});
+
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.update !== prevState.update) {
+      this.getJobList();
+    }
+  }
+
   //test function just to show how it works
   mapfunctiontest = () => {
     console.log("maptest called");
@@ -123,7 +136,8 @@ export default class CandidatePage extends React.Component {
       let date = job.date_posted;
       let description = job.role_description;
       let deadline = job.date_deadline;
-      let status = matchingApplications.length != 0 ? matchingApplications.status : "none";
+      let status = matchingApplications.filter(arr => arr.length !== 0).length != 0 ? matchingApplications[0].status : "none";
+      console.log(status);
       return (
         <tr>
           <td>{jobNum}</td>
@@ -156,6 +170,7 @@ export default class CandidatePage extends React.Component {
         jobApplicationBtnClicked={this.jobApplicationBtnClicked}
         isApplicationBtnClicked={this.state.isApplicationBtnClicked}
         cookies={this.props.cookies}
+        refresh={this.updateFunction}
       />
     );
   };
@@ -189,7 +204,7 @@ export default class CandidatePage extends React.Component {
           </Table>{" "}
         </div>
         <div className="job-posting-wrapper">
-          {this.state.selectedJob
+          {this.state.selectedJob || this.state.update
             ? this.jobPosting(
               this.state.selectedJob.jobNum,
               this.state.selectedJob.title,

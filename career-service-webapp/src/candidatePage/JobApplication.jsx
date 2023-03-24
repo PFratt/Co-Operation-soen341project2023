@@ -11,10 +11,15 @@ export default class JobApplication extends React.Component {
   }
 
   sendApplication = () => {
+    console.log(this.props);
+    const date = new Date();
+    let year = date.getFullYear();
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
     let newApplication = {
-      date_applied: "12",
+      date_applied: `${year}-${month}-${day}`,
       status: "pending",
-      jobID: this.props.cookies.get("JobID"),
+      jobID: this.props.jobID,
       userID: this.props.cookies.get("userID"),
     };
     axios
@@ -32,22 +37,21 @@ export default class JobApplication extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
-      
+      this.props.refresh();
     console.log("TESTING");
   };
   
   render() {
-    const { status } = this.props;
     return (
       <div className='JobApplicationComponent'>
           <h4>Application:</h4>
           <p>
-            Status: <ApplicationStatus statusValue={status}/>
+            Status: <ApplicationStatus statusValue={this.props.status}/>
           </p>
           <p>Name: Denis</p>
           <p>Resume: RandomResume.pdf</p>
           <p>Cover Letter: CoverLetter.pdf</p>
-          {status === "none" ? <button onClick={this.sendApplication}>Apply</button> : null}
+          {this.props.status == "none" ? <button onClick={this.sendApplication}>Apply</button> : null}
       </div>
     )
   }
