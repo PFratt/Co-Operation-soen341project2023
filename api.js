@@ -597,8 +597,8 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
             try {
-                const _id = parseInt(req.params.id);
-                const result = await applications.deleteOne({ _id: parseInt(_id) });
+                const _id = req.params.id;
+                const result = await applications.deleteOne({ _id: _id });
                 if (result.deletedCount === 0) {
                     return res.status(404).send({ message: 'Application not found' });
                 }
@@ -622,7 +622,7 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
             try {
-                const id = parseInt(req.params.id);
+                const id = req.params.id;
                 const updates = req.body;
                 const result = await applications.updateOne({ _id: id }, { $set: updates });
                 if (result.modifiedCount === 0) {
