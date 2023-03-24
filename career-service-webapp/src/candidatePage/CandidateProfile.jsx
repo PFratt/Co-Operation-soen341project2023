@@ -2,6 +2,7 @@ import * as React from "react";
 import { Table } from "react-bootstrap";
 import { Icon } from "@fluentui/react/lib/Icon";
 import "./css/Candidate.css";
+import axios from "axios";
 
 export default class CandidateProfile extends React.Component {
   constructor(props) {
@@ -9,15 +10,15 @@ export default class CandidateProfile extends React.Component {
     this.state = {
       showMenu: true,
       selectedJob: null,
-      firstName: "Wells",
+      firstName: "Alta",
       newFirstName: "",
-      lastName: "Wishing",
+      lastName: "Sheikh",
       newLastName: "",
       email: "farewells@gmail.com",
       newEmail: "",
-      DOBY: "9999",
-      DOBM: "88",
-      DOBD: "77",
+      DOBY: "2002",
+      DOBM: "08",
+      DOBD: "29",
       newDOBY: "",
       newDOBM: "",
       newDOBD: "",
@@ -36,6 +37,22 @@ export default class CandidateProfile extends React.Component {
 
     };
   }
+
+test(){
+
+    let loginInfo = {
+        email: "altacandidate@gmail.com",
+        password: "abc123",
+        usertype: "student",
+    };
+    console.log(loginInfo);
+    axios.get("https://sawongdomain.com/profiles", loginInfo)
+    .then(res => {
+        console.log(res);
+    }).catch(err => {
+        console.log(err);
+    })
+}
 
 // First Name
 showEditBox1(){
@@ -314,6 +331,8 @@ saveBoxes(){
           <button onClick={() => this.showEditBoxes()}>Edit</button>
           <button onClick={() => this.saveBoxes()}>Save</button>
           <button onClick={() => this.hideEditBoxes()}>Cancel</button>
+
+          <button onClick={() => this.test()}>api get</button>
 
 
 
