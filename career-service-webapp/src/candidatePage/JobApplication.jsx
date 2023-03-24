@@ -11,6 +11,7 @@ export default class JobApplication extends React.Component {
   }
 
   sendApplication = () => {
+    document.getElementById("ApplyBtn").disabled = true;
     console.log(this.props);
     const date = new Date();
     let year = date.getFullYear();
@@ -33,11 +34,12 @@ export default class JobApplication extends React.Component {
 
       .then((response) => {
         console.log(response);
+        window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
       });
-      this.props.refresh();
+      //this.props.refresh();
     console.log("TESTING");
   };
   
@@ -51,7 +53,7 @@ export default class JobApplication extends React.Component {
           <p>Name: Denis</p>
           <p>Resume: RandomResume.pdf</p>
           <p>Cover Letter: CoverLetter.pdf</p>
-          {this.props.status == "none" ? <button onClick={this.sendApplication}>Apply</button> : null}
+          {this.props.status == "none" ? <button id="ApplyBtn" onClick={this.sendApplication}>Apply</button> : null}
       </div>
     )
   }
