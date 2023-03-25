@@ -16,10 +16,14 @@ export default class LoginPage extends React.Component {
       signupUsername: "",
       signupEmail: "",
       signupPassword: "",
+      loginToggle: "true",
     };
   }
   redirect = (response) => {
     this.props.cookies.set("authToken", response.data.accessToken, {
+      maxAge: 3600,
+    });
+    this.props.cookies.set("userID", response.data.user.id, {
       maxAge: 3600,
     });
     this.props.cookies.set("userType", this.state.usertype, { maxAge: 3600 });
@@ -50,6 +54,7 @@ export default class LoginPage extends React.Component {
       })
       .then((response) => {
         console.log("login api response");
+        console.log(response);
         this.redirect(response);
       })
       .catch(function (error) {
@@ -58,12 +63,17 @@ export default class LoginPage extends React.Component {
           alert("Try Visiting and Allowing sawongdomain.com in your browser");
           window.open("https://sawongdomain.com", "_blank", "noreferrer");
         }
+        if (error.code === "ERR_BAD_REQUEST") {
+          alert(error.response.data.message);
+        }
       });
   };
   validEmail = () => {
     let comCheck = this.state.signupEmail.slice(-4);
+    let caCheck = this.state.signupEmail.slice(-3);
+    let emailEnd = comCheck === ".com" || caCheck === ".ca" ? true : false;
     console.log(comCheck);
-    if (this.state.signupEmail.includes("@") && comCheck === ".com") {
+    if (this.state.signupEmail.includes("@") && emailEnd) {
       return true;
     } else return false;
   };
@@ -87,6 +97,13 @@ export default class LoginPage extends React.Component {
         })
         .catch(function (error) {
           console.log(error.code);
+          if (error.code === "ERR_NETWORK") {
+            alert("Try Visiting and Allowing sawongdomain.com in your browser");
+            window.open("https://sawongdomain.com", "_blank", "noreferrer");
+          }
+          if (error.code === "ERR_BAD_REQUEST") {
+            alert(error.response.data.message);
+          }
         });
     } else {
       alert("enter valid email");
@@ -116,85 +133,99 @@ export default class LoginPage extends React.Component {
       return "login-true";
     } else return "login-false";
   };
+  toggleLogin = () => {
+    this.setState({ loginToggle: !this.state.loginToggle });
+  };
   render() {
     let allowLoginSignup = this.checkDisplayLogin();
 
     return (
       <div className="login-page-container">
-        <div className="login-wrapper">
-          Login
-          <UserTypeButtons
-            candidateButton={this.state.candidateButton}
-            employerButton={this.state.employerButton}
-            adminButton={this.state.adminButton}
-            selectUser={this.selectUser}
-          />
-          <div className={allowLoginSignup}>
-            <form onSubmit={this.login}>
-              <input
-                name="loginEmail"
-                className="login-input"
-                placeholder={"User Email"}
-                value={this.state.loginEmail}
-                onChange={this.handleInputChange}
-              />
-              <br></br>
-              <input
-                name="loginPassword"
-                className="login-input"
-                type="password"
-                placeholder={"Password"}
-                value={this.state.loginPassword}
-                onChange={this.handleInputChange}
-              />
-              <br></br>
-              <button className="login-button" type="submit">
-                Login
-              </button>
-            </form>
+        <label className="toggle">
+          <input type="checkbox" />
+          <span className="slider"></span>
+          <span
+            class="labels"
+            onClick={this.toggleLogin}
+            data-on="Signup"
+            data-off="Login"
+          ></span>
+        </label>
+        {this.state.loginToggle ? (
+          <div className="login-wrapper">
+            <UserTypeButtons
+              candidateButton={this.state.candidateButton}
+              employerButton={this.state.employerButton}
+              adminButton={this.state.adminButton}
+              selectUser={this.selectUser}
+            />
+            <div className={allowLoginSignup}>
+              <form onSubmit={this.login}>
+                <input
+                  name="loginEmail"
+                  className="login-input"
+                  placeholder={"User Email"}
+                  value={this.state.loginEmail}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <input
+                  name="loginPassword"
+                  className="login-input"
+                  type="password"
+                  placeholder={"Password"}
+                  value={this.state.loginPassword}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <button className="login-button button-9 login" type="submit">
+                  Login
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
-        <div className="signup-wrapper">
-          Signup
-          <UserTypeButtons
-            candidateButton={this.state.candidateButton}
-            employerButton={this.state.employerButton}
-            adminButton={this.state.adminButton}
-            selectUser={this.selectUser}
-          />
-          <div className={allowLoginSignup}>
-            <form onSubmit={this.signUp}>
-              <input
-                name="signupUsername"
-                className="login-input"
-                placeholder={"Full Name"}
-                value={this.state.signupUsername}
-                onChange={this.handleInputChange}
-              />
-              <br></br>
-              <input
-                name="signupEmail"
-                className="login-input"
-                placeholder={"Email"}
-                value={this.state.signupEmail}
-                onChange={this.handleInputChange}
-              />
-              <br></br>
-              <input
-                name="signupPassword"
-                className="login-input"
-                type="password"
-                placeholder={"Password"}
-                value={this.state.signupPassword}
-                onChange={this.handleInputChange}
-              />
-              <br></br>
-              <button className="login-button" type="submit">
-                Sign up
-              </button>
-            </form>
+        ) : (
+          <div className="signup-wrapper">
+            <UserTypeButtons
+              candidateButton={this.state.candidateButton}
+              employerButton={this.state.employerButton}
+              adminButton={this.state.adminButton}
+              selectUser={this.selectUser}
+            />
+            <div className={allowLoginSignup}>
+              <form onSubmit={this.signUp}>
+                <input
+                  name="signupUsername"
+                  className="login-input"
+                  placeholder={"Full Name"}
+                  value={this.state.signupUsername}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <input
+                  name="signupEmail"
+                  className="login-input"
+                  placeholder={"Email"}
+                  value={this.state.signupEmail}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <input
+                  name="signupPassword"
+                  className="login-input"
+                  type="password"
+                  placeholder={"Password"}
+                  value={this.state.signupPassword}
+                  onChange={this.handleInputChange}
+                />
+                <br></br>
+                <button className="login-button button-9 login" type="submit">
+                  Sign up
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
@@ -208,7 +239,7 @@ const UserTypeButtons = ({
   return (
     <div className="user-type-wrapper">
       <button
-        className={candidateButton}
+        className={candidateButton + " button-9 usertype"}
         onClick={() => {
           selectUser("student");
         }}
@@ -217,7 +248,7 @@ const UserTypeButtons = ({
         Candidate
       </button>
       <button
-        className={employerButton}
+        className={employerButton + " button-9 usertype"}
         onClick={() => {
           selectUser("employer");
         }}
@@ -226,7 +257,7 @@ const UserTypeButtons = ({
         Employer
       </button>
       <button
-        className={adminButton}
+        className={adminButton + " button-9 usertype"}
         onClick={() => {
           selectUser("admin");
         }}

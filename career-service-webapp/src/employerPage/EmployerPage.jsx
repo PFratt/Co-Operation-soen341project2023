@@ -16,18 +16,22 @@ export default class EmployerPage extends React.Component {
   render() {
     return (
       <div className="employer-page-container">
-        employer page maybe search bar here?<br></br>
-        <a href="./#/employer/applicants" className=" test-link">
-          <button> Particular applicants Job View</button>
-        </a>
-        <br></br>
-        <a href="./#/employer/" className=" test-link">
-          <button>My Job List view </button>
-        </a>
-        <a href="./#/employer/all-candidates/" className=" test-link">
-          <button>All Candidates</button>
-        </a>
-        <br></br>
+        <div className="employer-navbar">
+          <a href="./#/employer/applicants" className=" test-link">
+            <button className="employer-options button-9">
+              {" "}
+              My Applicants
+            </button>
+          </a>
+          <a href="./#/employer/" className=" test-link">
+            <button className="employer-options button-9">My Jobs </button>
+          </a>
+          <a href="./#/employer/all-candidates/" className=" test-link">
+            <button className="employer-options button-9">
+              Candidate Browsing
+            </button>
+          </a>
+        </div>
         <Routes>
           <Route path={"/"} element={<MyJobs cookies={this.props.cookies} />} />
           <Route

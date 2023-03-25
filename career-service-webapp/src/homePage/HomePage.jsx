@@ -53,6 +53,7 @@ export default class HomePage extends React.Component {
   logout = () => {
     cookies.remove("authToken");
     cookies.remove("userType");
+    cookies.remove("userID");
     window.location = "./";
   };
   render() {
@@ -75,7 +76,7 @@ export default class HomePage extends React.Component {
                 <ProtectedRoute user={this.state.candidateAccess}>
                   {" "}
                   {/* brings to main candidate page */}
-                  <CandidatePage />
+                  <CandidatePage cookies={cookies}/>
                 </ProtectedRoute>
               }
             />
@@ -110,7 +111,10 @@ export default class HomePage extends React.Component {
 const TempLinkAccess = ({ logout }) => {
   return (
     <div className="menu">
-      <button onClick={logout}> logout</button>
+      <button className="button-9 logout" onClick={logout}>
+        {" "}
+        logout
+      </button>
     </div>
   );
 };
@@ -120,6 +124,7 @@ const ProtectedRoute = ({ user, redirectPath = "/", children }) => {
   if (!user) {
     cookies.remove("authToken");
     cookies.remove("userType");
+    cookies.remove("userID");
     window.location = "./";
     return;
   }
