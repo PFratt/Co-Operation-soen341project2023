@@ -11,6 +11,7 @@ export default function JobPosting({
   description,
   deadline,
   status,
+  date_applied,
   hideJobPosting,
   jobApplicationBtnClicked,
   isApplicationBtnClicked,
@@ -31,7 +32,7 @@ export default function JobPosting({
       <button style={{ backgroundColor: isApplicationBtnClicked ? "lightgray" : "#4295e3" }} onClick={jobApplicationBtnClicked}>
         <b>{isApplicationBtnClicked ? "Hide Job Application": "Job Application"}</b>
       </button>
-      {isApplicationBtnClicked ? <JobApplication cookies={cookies} refresh={refresh} jobID={jobNum} status={status} /> : null}
+      {isApplicationBtnClicked ? <JobApplication cookies={cookies} refresh={refresh} date_applied={date_applied} jobID={jobNum} status={status} /> : null}
     </div>
   );
 }
