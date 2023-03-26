@@ -541,12 +541,31 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
 
+            const numberholder = await applications.findOne({ "Number": "Holder" });
+            console.log(numberholder);
+
+            let userId = 0;
+            if (typeof numberholder.id === "number") {
+                userId = numberholder.id;
+            } else if (typeof numberholder.id === "string") {
+                userId = parseInt(numberholder.id, 10);
+            }
+
+            const id = parseInt(userId);
+            console.log(id);
+
+            await collection.updateOne(
+                { "Number": "Holder" },
+                { $set: { "id": parseInt(id) + 1 } }
+            );
+
             // Retrieve the user's credentials from the request body
             console.log(req.url);
             console.log(req.body);
             const { date_applied, status, jobID, userID } = req.body;
 
             const myObj = {
+                id: parseInt(id),
                 date_applied: date_applied,
                 status: status,
                 jobID: parseInt(jobID),
@@ -597,8 +616,8 @@ console.log('Before connect');
                 return res.status(401).send({ message: 'Invalid token' });
             }
             try {
-                const _id = req.params.id;
-                const result = await applications.deleteOne({ _id: new ObjectID(_id) });
+                const id = req.params.id;
+                const result = await applications.deleteOne({ id: parseInt(id) });
                 if (result.deletedCount === 0) {
                     return res.status(404).send({ message: 'Application not found' });
                 }
@@ -624,7 +643,7 @@ console.log('Before connect');
             try {
                 const id = req.params.id;
                 const updates = req.body;
-                const result = await applications.updateOne({ _id: new ObjectID(id) }, { $set: updates });
+                const result = await applications.updateOne({ id: parseInt(id) }, { $set: updates });
                 if (result.modifiedCount === 0) {
                     return res.status(404).send({ message: 'Application not found' });
                 }
