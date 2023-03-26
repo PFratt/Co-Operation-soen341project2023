@@ -256,7 +256,9 @@ export default class CandidatePage extends React.Component {
             : null}
         </div>
         <div className="candidate-profile-wrapper">
-          {this.state.showProfilePage ? <CandidateProfile /> : null}
+          {this.state.showProfilePage ? (
+            <CandidateProfile cookies={this.props.cookies} />
+          ) : null}
         </div>
       </div>
     );
