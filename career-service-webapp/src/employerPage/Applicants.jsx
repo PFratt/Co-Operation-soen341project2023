@@ -170,7 +170,7 @@ export default class Applicants extends React.Component {
   interview = () => {
     let modifyapplication = {
       date_applied: this.state.viewApplicant.date,
-      status: "interviewing",
+      status: "interview",
       jobID: parseInt(this.state.viewApplicant.jobID),
       userID: parseInt(this.state.viewApplicant.userID)
     }
