@@ -13,6 +13,15 @@ export default class EmployerPage extends React.Component {
     };
   }
 
+  refresh = () => {
+    console.log("before");
+    window.setTimeout(function () {
+      window.location.assign("./#/employer/applicants");
+      console.log("after");
+    }, 100);
+    window.location.reload();
+  }
+
   render() {
     return (
       <div className="employer-page-container">
@@ -35,8 +44,9 @@ export default class EmployerPage extends React.Component {
         <Routes>
           <Route path={"/"} element={<MyJobs cookies={this.props.cookies} />} />
           <Route
+            key={Math.random()}
             path={"/applicants"}
-            element={<Applicants cookies={this.props.cookies} />}
+            element={<Applicants refresh={this.refresh} cookies={this.props.cookies} />}
           />
           <Route
             path={"/all-candidates"}

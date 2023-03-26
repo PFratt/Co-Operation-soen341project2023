@@ -21,6 +21,7 @@ export default function ApplicantProfile({
       <button onClick={interview}> Interview</button>
       <button onClick={reject}>Reject </button>
       <button onClick={clear}>Accept </button>
+      <a href="./#/employer/applicants">Refresh</a>
     </div>
   );
 }

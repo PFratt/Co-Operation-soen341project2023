@@ -48,7 +48,8 @@ export default class Applicants extends React.Component {
     this.state = {
       viewApplicant: null,
       applicantStatusColor: "",
-      applicants: []
+      applicants: [],
+      refresh: 0
     };
     this.getApplicantsList();
   }
@@ -122,11 +123,16 @@ export default class Applicants extends React.Component {
     }
   };
 
+  getRandomInt() {
+    return Math.floor(Math.random() * (999999999 - 1 + 1)) + 1;
+  }
+  
+
   mapfunctiontest = () => {
     console.log("maptest called");
     return this.state.applicants.map(
       (applicant) => {
-        let _id = applicant.application.application._id;
+        let _id = applicant.application.application.id;
         console.log(_id);
         let status = applicant.application.application.status;
         let userName = applicant.student.student.name;
@@ -185,7 +191,9 @@ export default class Applicants extends React.Component {
       })
       .then((response) => {
         console.log(response);
-        window.location.reload();
+        this.setState({refresh: this.getRandomInt()});
+        console.log(this.state.refresh);
+        this.getApplicantsList();
       })
       .catch(function (error) {
         console.log(error);
@@ -210,7 +218,8 @@ export default class Applicants extends React.Component {
       })
       .then((response) => {
         console.log(response);
-        window.location.reload();
+        this.setState({refresh: this.getRandomInt()});
+        this.getApplicantsList();
       })
       .catch(function (error) {
         console.log(error);
@@ -234,7 +243,8 @@ export default class Applicants extends React.Component {
       })
       .then((response) => {
         console.log(response);
-        window.location.reload();
+        this.setState({refresh: this.getRandomInt()});
+        this.getApplicantsList();
       })
       .catch(function (error) {
         console.log(error);
@@ -248,7 +258,7 @@ export default class Applicants extends React.Component {
     return (
       <div className="applicants-page-container">
         <div className="applicant-list-wrapper">
-          <Table className="job-list-table" striped bordered hover>
+          <Table className="job-list-table" key={this.state.refresh} striped bordered hover>
             <thead>
               <tr>
                 <th>Status</th>
