@@ -2,6 +2,27 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const request = require('supertest');
 const app = request("https://sawongdomain.com");
 
+// let student = {
+//     name: "testCandidate",
+//     email: "testCandidate@gmail.com",
+//     password: "test",
+//     usertype: "student",
+//   };
+
+// let employer = {
+//     name: "testEmployer",
+//     email: "testEmployer@gmail.com",
+//     password: "test",
+//     usertype: "employer",
+//   };
+
+// let admin = {
+//     name: "testAdmin",
+//     email: "testAdmin@gmail.com",
+//     password: "test",
+//     usertype: "admin",
+//   };
+
 describe('API test suite', () => 
 {
     it('testing /testget', async() => 

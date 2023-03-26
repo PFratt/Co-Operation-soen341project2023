@@ -53,6 +53,7 @@ export default class HomePage extends React.Component {
   logout = () => {
     cookies.remove("authToken");
     cookies.remove("userType");
+    cookies.remove("userID");
     window.location = "./";
   };
   render() {
@@ -75,7 +76,7 @@ export default class HomePage extends React.Component {
                 <ProtectedRoute user={this.state.candidateAccess}>
                   {" "}
                   {/* brings to main candidate page */}
-                  <CandidatePage />
+                  <CandidatePage cookies={cookies}/>
                 </ProtectedRoute>
               }
             />
@@ -123,6 +124,7 @@ const ProtectedRoute = ({ user, redirectPath = "/", children }) => {
   if (!user) {
     cookies.remove("authToken");
     cookies.remove("userType");
+    cookies.remove("userID");
     window.location = "./";
     return;
   }
