@@ -150,7 +150,7 @@ export default class CandidatePage extends React.Component {
           <td>{employer}</td>
           <td>{date}</td>
           <td>
-            {status == "pending" ? <div style={{width:"100%", backgroundColor:"#56c2f0"}}>Pending</div> : null}
+            {status != "none" ? <ApplicationStatus statusValue={status}></ApplicationStatus> : null}
           </td>
         </tr>
       );
