@@ -50,10 +50,8 @@ export default class JobApplication extends React.Component {
           <p>
             Status: <ApplicationStatus statusValue={this.props.status}/>
           </p>
-          <p>Name: Denis</p>
-          <p>Resume: RandomResume.pdf</p>
-          <p>Cover Letter: CoverLetter.pdf</p>
-          {this.props.status == "none" ? <button id="ApplyBtn" onClick={this.sendApplication}>Apply</button> : null}
+          {this.props.status == "none" ? <button id="ApplyBtn" onClick={this.sendApplication}>Apply</button> : <div><p>Date Applied: {this.props.date_applied}</p>
+          <p>Sent employer complete profile</p></div>}
       </div>
     )
   }
