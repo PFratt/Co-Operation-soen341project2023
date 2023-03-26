@@ -18,7 +18,7 @@ app.use((req, response, next) => {
     response.setHeader("Access-Control-Allow-Credentials", "true");
     response.setHeader(
         "Access-Control-Allow-Methods",
-        "GET,HEAD,OPTIONS,POST,PUT,DELETE"
+        "GET,HEAD,OPTIONS,POST,PUT,DELETE,PATCH"
     );
     response.setHeader(
         "Access-Control-Allow-Headers",
@@ -556,7 +556,7 @@ console.log('Before connect');
 
             await collection.updateOne(
                 { "Number": "Holder" },
-                { $set: { "id": parseInt(id) + 1 } }
+                { $set: { id: parseInt(id) + 1 } }
             );
 
             // Retrieve the user's credentials from the request body
