@@ -16,7 +16,7 @@ export default function ApplicationStatus({statusValue}) {
     }
 
   return (
-    <span style={{ backgroundColor: bgColor }}>
+    <span className="ApplicationStatusComponent" style={{ backgroundColor: bgColor }}>
         {statusValue}
     </span>
   )
