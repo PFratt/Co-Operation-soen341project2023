@@ -292,7 +292,7 @@ console.log('Before connect');
                 return res.status(406).send("User already has a profile.");
             } else {
                 // Insert new job posting in database.
-                await jobs.insertOne(myObj, function (err, res) {
+                await profiles.insertOne(myObj, function (err, res) {
                     if (err) throw err;
                     console.log("1 document inserted");
                 });
