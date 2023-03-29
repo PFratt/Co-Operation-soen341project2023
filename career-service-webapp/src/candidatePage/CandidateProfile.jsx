@@ -331,7 +331,6 @@ export default class CandidateProfile extends React.Component {
           if (this.state.profileExists == true){
             this.setState({ headline: this.state.profiles[i].headline });
             this.setState({ description: this.state.profiles[i].description });
-            console.log("THIS IF RAN /////////////////////////")
           }
         },1)
       }
@@ -339,10 +338,12 @@ export default class CandidateProfile extends React.Component {
   };
 
   componentDidMount() {
-    if(this.state.profileExists != false){
-      this.showEditBoxes();
-      //displays big red box saying you need a profile to apply and have employers see you.
-    }
+    setTimeout(() => {
+      if(this.state.profileExists == false){
+        this.showEditBoxes();
+        //displays big red box saying you need a profile to apply and have employers see you.
+      }
+    },2000)
   }
 
   getNameAPI = () => {
