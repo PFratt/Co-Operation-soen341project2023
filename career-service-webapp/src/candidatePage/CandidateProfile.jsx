@@ -42,7 +42,7 @@ export default class CandidateProfile extends React.Component {
     setTimeout(() => {
       this.check();
       this.getNameAPI();
-    },1000)
+    },150)
 
   }
 
