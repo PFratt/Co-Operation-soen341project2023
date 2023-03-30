@@ -146,27 +146,19 @@ export default class CandidatePage extends React.Component {
       let date = job.date_posted;
       let description = job.role_description;
       let deadline = job.date_deadline;
-      let status =
-        matchingApplications.filter((arr) => arr.length !== 0).length != 0
-          ? matchingApplications[0].status
-          : "none";
+
+      let status = matchingApplications.filter(arr => arr.length !== 0).length != 0 ? matchingApplications[0].status : "none";
+      let date_applied = matchingApplications.filter(arr => arr.length !== 0).length != 0 ? matchingApplications[0].date_applied : null;
+
       console.log(status);
       return (
         <tr>
           <td>{jobNum}</td>
           <td
             onClick={() => {
-              this.setState({
-                selectedJob: {
-                  jobNum,
-                  title,
-                  employer,
-                  date,
-                  description,
-                  deadline,
-                  status,
-                },
-              });
+
+              this.setState({ selectedJob: { jobNum, title, employer, date, description, deadline, status, date_applied } });
+
             }}
           >
             {title}
@@ -174,26 +166,16 @@ export default class CandidatePage extends React.Component {
           <td>{employer}</td>
           <td>{date}</td>
           <td>
-            {status == "pending" ? (
-              <div style={{ width: "100%", backgroundColor: "#56c2f0" }}>
-                Pending
-              </div>
-            ) : null}
+
+            {status != "none" ? <ApplicationStatus statusValue={status}></ApplicationStatus> : null}
           </td>
         </tr>
       );
     });
   };
 
-  jobPosting = (
-    jobNum,
-    title,
-    employer,
-    date,
-    description,
-    deadline,
-    status
-  ) => {
+  jobPosting = (jobNum, title, employer, date, description, deadline, status, date_applied) => {
+
     console.log(title);
     return (
       <JobPosting
@@ -204,6 +186,7 @@ export default class CandidatePage extends React.Component {
         description={description}
         deadline={deadline}
         status={status}
+        date_applied={date_applied}
         hideJobPosting={this.hideJobPosting}
         jobApplicationBtnClicked={this.jobApplicationBtnClicked}
         isApplicationBtnClicked={this.state.isApplicationBtnClicked}
@@ -245,14 +228,16 @@ export default class CandidatePage extends React.Component {
         <div className="job-posting-wrapper">
           {this.state.selectedJob || this.state.update
             ? this.jobPosting(
-                this.state.selectedJob.jobNum,
-                this.state.selectedJob.title,
-                this.state.selectedJob.employer,
-                this.state.selectedJob.date,
-                this.state.selectedJob.description,
-                this.state.selectedJob.deadline,
-                this.state.selectedJob.status
-              )
+
+              this.state.selectedJob.jobNum,
+              this.state.selectedJob.title,
+              this.state.selectedJob.employer,
+              this.state.selectedJob.date,
+              this.state.selectedJob.description,
+              this.state.selectedJob.deadline,
+              this.state.selectedJob.status,
+              this.state.selectedJob.date_applied
+            )
             : null}
         </div>
         <div className="candidate-profile-wrapper">

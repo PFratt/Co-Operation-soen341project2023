@@ -20,7 +20,7 @@ export default function ApplicantProfile({
       <p>Date: {date}</p>
       <button onClick={interview}> Interview</button>
       <button onClick={reject}>Reject </button>
-      <button onClick={clear}>Clear </button>
+      <button onClick={clear}>Accept </button>
     </div>
   );
 }
