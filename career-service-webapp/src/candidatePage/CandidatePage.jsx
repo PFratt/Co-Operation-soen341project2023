@@ -65,7 +65,7 @@ export default class CandidatePage extends React.Component {
       showProfilePage: false,
       jobList: [],
       employerList: [],
-      update: false
+      update: false,
     };
     this.jobApplicationBtnClicked = this.jobApplicationBtnClicked.bind(this);
     this.updateFunction = this.updateFunction.bind(this);
@@ -74,37 +74,44 @@ export default class CandidatePage extends React.Component {
 
   async getJobList() {
     try {
-      const jobResponse = await axios.get('https://sawongdomain.com/jobs', {
+      const jobResponse = await axios.get("https://sawongdomain.com/jobs", {
         headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Authorization': this.props.cookies.get('authToken'),
-          'Access-Control-Allow-Headers': 'Authorization'
-        }
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+        },
       });
-      const applicationResponse = await axios.get('https://sawongdomain.com/applications', {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Authorization': this.props.cookies.get('authToken'),
-          'Access-Control-Allow-Headers': 'Authorization'
+      const applicationResponse = await axios.get(
+        "https://sawongdomain.com/applications",
+        {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
         }
-      });
-      const employersResponse = await axios.get('https://sawongdomain.com/users/employers', {
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Authorization': this.props.cookies.get('authToken'),
-          'Access-Control-Allow-Headers': 'Authorization'
+      );
+      const employersResponse = await axios.get(
+        "https://sawongdomain.com/users/employers",
+        {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
         }
-      });
+      );
       const jobList = jobResponse.data;
       const applicationList = applicationResponse.data;
       const employerList = employersResponse.data;
 
-      const combinedList = jobList.map(job => ({
+      const combinedList = jobList.map((job) => ({
         job,
-        matchingApplications: applicationList.filter(application => (
-          application.jobID === job.jobID &&
-          application.userID === parseInt(this.props.cookies.get('userID'))
-        ))
+        matchingApplications: applicationList.filter(
+          (application) =>
+            application.jobID === job.jobID &&
+            application.userID === parseInt(this.props.cookies.get("userID"))
+        ),
       }));
 
       this.setState({ jobList: combinedList, employerList: employerList });
@@ -129,21 +136,29 @@ export default class CandidatePage extends React.Component {
     return this.state.jobList.map(({ job, matchingApplications }) => {
       let jobNum = job.jobID;
       let title = job.title;
-      if (!this.state.employerList.find(emp => emp.id === job.employerID)?.name)
+      if (
+        !this.state.employerList.find((emp) => emp.id === job.employerID)?.name
+      )
         return null;
-      let employer = this.state.employerList.find(emp => emp.id === job.employerID)?.name;
+      let employer = this.state.employerList.find(
+        (emp) => emp.id === job.employerID
+      )?.name;
       let date = job.date_posted;
       let description = job.role_description;
       let deadline = job.date_deadline;
+
       let status = matchingApplications.filter(arr => arr.length !== 0).length != 0 ? matchingApplications[0].status : "none";
       let date_applied = matchingApplications.filter(arr => arr.length !== 0).length != 0 ? matchingApplications[0].date_applied : null;
+
       console.log(status);
       return (
         <tr>
           <td>{jobNum}</td>
           <td
             onClick={() => {
+
               this.setState({ selectedJob: { jobNum, title, employer, date, description, deadline, status, date_applied } });
+
             }}
           >
             {title}
@@ -151,6 +166,7 @@ export default class CandidatePage extends React.Component {
           <td>{employer}</td>
           <td>{date}</td>
           <td>
+
             {status != "none" ? <ApplicationStatus statusValue={status}></ApplicationStatus> : null}
           </td>
         </tr>
@@ -159,6 +175,7 @@ export default class CandidatePage extends React.Component {
   };
 
   jobPosting = (jobNum, title, employer, date, description, deadline, status, date_applied) => {
+
     console.log(title);
     return (
       <JobPosting
@@ -182,19 +199,20 @@ export default class CandidatePage extends React.Component {
     this.setState({ selectedJob: null });
   };
   jobApplicationBtnClicked = () => {
-    this.setState({ isApplicationBtnClicked: !this.state.isApplicationBtnClicked })
+    this.setState({
+      isApplicationBtnClicked: !this.state.isApplicationBtnClicked,
+    });
   };
-  profilePageClose = () => {
-    this.setState({ showProfilePage: false })
-  };
-  profilePageOpen = () => {
-    this.setState({ showProfilePage: true })
+  profilePageToggle = () => {
+    this.setState({ showProfilePage: !this.state.showProfilePage });
   };
   render() {
     return (
       <div className="candidate-page-container">
         <div className="job-list-wrapper">
-          <button onClick={this.profilePageOpen} className="ViewProfileBtn">View Profile</button>
+          <button onClick={this.profilePageToggle} className="ViewProfileBtn">
+            View Profile
+          </button>
           <Table className="job-list-table" striped bordered hover>
             <thead>
               <tr>
@@ -210,6 +228,7 @@ export default class CandidatePage extends React.Component {
         <div className="job-posting-wrapper">
           {this.state.selectedJob || this.state.update
             ? this.jobPosting(
+
               this.state.selectedJob.jobNum,
               this.state.selectedJob.title,
               this.state.selectedJob.employer,
@@ -222,10 +241,10 @@ export default class CandidatePage extends React.Component {
             : null}
         </div>
         <div className="candidate-profile-wrapper">
-          {this.state.showProfilePage ? <CandidateProfile profilePageClose={this.profilePageClose} /> : null}
+          {this.state.showProfilePage ? (
+            <CandidateProfile cookies={this.props.cookies} />
+          ) : null}
         </div>
-        <div><CandidateProfile /></div>
-
       </div>
     );
   }

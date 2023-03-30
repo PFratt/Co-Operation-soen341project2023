@@ -2,6 +2,7 @@ import * as React from "react";
 import { Table } from "react-bootstrap";
 import { Icon } from "@fluentui/react/lib/Icon";
 import "./css/Candidate.css";
+import axios from "axios";
 
 export default class CandidateProfile extends React.Component {
   constructor(props) {
@@ -9,316 +10,420 @@ export default class CandidateProfile extends React.Component {
     this.state = {
       showMenu: true,
       selectedJob: null,
-      firstName: "Wells",
-      newFirstName: "",
-      lastName: "Wishing",
+      name: "",
+      newName: "",
+      lastName: "",
       newLastName: "",
-      email: "farewells@gmail.com",
+      email: "",
       newEmail: "",
-      DOBY: "9999",
-      DOBM: "88",
-      DOBD: "77",
-      newDOBY: "",
-      newDOBM: "",
-      newDOBD: "",
-      field: "Software Engineering",
-      newField: "",
-      jobType: "",
-      newJobType: "",
-      description: "*enter CV here*",
+      headline: "",
+      newHeadline: "",
+      description: "",
       newDescription: "",
-      show1: 'none',
-      show2: 'none',
-      show3: 'none',
-      show4: 'none',
-      show5: 'none',
-      show6: 'none'
+      showName: "none",
+      showLast: "none",
+      showEmail: "none",
+      showHeadline: "none",
+      showDescription: "none",
+      isEdit: false,
 
+      profiles: [],
+      profilesCollected: false,
+      users: [],
+      usersCollected: false,
+      profileExists: false,
     };
+
+    setTimeout(() => {
+      this.getAPI();
+      this.getUsersAPI();
+    })
+
+    setTimeout(() => {
+      this.check();
+      this.getNameAPI();
+    },150)
+
   }
 
-// First Name
-showEditBox1(){
-    this.setState({show1: 'block'});
-}
+  // First Name
+  showEditBoxName() {
+    this.setState({ showName: "block" });
+  }
 
-hideEditBox1(){
-    this.setState({show1: 'none'});
-}
+  hideEditBoxName() {
+    this.setState({ showName: "none" });
+  }
 
-readTextBox1 = (userInput1) => {
-    this.setState({newFirstName: userInput1.target.value});
-    console.log(userInput1.target.value);
-    console.log(this.state.newFirstName);
-}
+  readTextBoxName = (userInputName) => {
+    this.setState({ newName: userInputName.target.value });
+    //console.log(userInputName.target.value);
+    //console.log(this.state.newName);
+  };
 
-saveFirstName(){
-    this.setState({firstName: this.state.newFirstName});
-    console.log("New name is: ", this.state.firstName);
-    //this.setState({show1: 'none'});
-}
+  saveName() {
+    this.setState({ name: this.state.newName });
+    //console.log("New name is: ", this.state.name);
+    //this.setState({showName: 'none'});
+  }
 
-// Last Name
-showEditBox2(){
-    this.setState({show2: 'block'});
-}
+  // Last Name
+  showEditBoxLast() {
+    this.setState({ showLast: "block" });
+  }
 
-hideEditBox2(){
-    this.setState({show2: 'none'});
-}
+  hideEditBoxLast() {
+    this.setState({ showLast: "none" });
+  }
 
-readTextBox2 = (userInput2) => {
-    this.setState({newLastName: userInput2.target.value});
-    console.log(userInput2.target.value);
-    console.log(this.state.newLastName);
-}
+  readTextBoxLast = (userInputLast) => {
+    this.setState({ newLastName: userInputLast.target.value });
+    //console.log(userInputLast.target.value);
+    //console.log(this.state.newLastName);
+  };
 
-saveLastName(){
-    this.setState({lastName: this.state.newLastName});
-    console.log("New last name is: ", this.state.lastName);
-    //this.setState({show2: 'none'});
-}
+  saveLastName() {
+    this.setState({ lastName: this.state.newLastName });
+    //console.log("New last name is: ", this.state.lastName);
+    //this.setState({showLast: 'none'});
+  }
 
-// Email
-showEditBox3(){
-    this.setState({show3: 'block'});
-}
+  // Email
+  showEditBoxEmail() {
+    this.setState({ showEmail: "block" });
+  }
 
-hideEditBox3(){
-    this.setState({show3: 'none'});
-}
+  hideEditBoxEmail() {
+    this.setState({ showEmail: "none" });
+  }
 
-readTextBox3 = (userInput3) => {
-    this.setState({newEmail: userInput3.target.value});
-    console.log(userInput3.target.value);
-    console.log(this.state.newEmail);
-}
+  readTextBoxEmail = (userInputEmail) => {
+    this.setState({ newEmail: userInputEmail.target.value });
+    //console.log(userInputEmail.target.value);
+    //console.log(this.state.newEmail);
+  };
 
-saveEmail(){
-    this.setState({email: this.state.newEmail});
-    //this.setState({show3: 'none'});
-}
+  saveEmail() {
+    this.setState({ email: this.state.newEmail });
+    //this.setState({showEmail: 'none'});
+  }
 
-// Date of Birth
-showEditBox4(){
-    this.setState({show4: 'block'});
-}
+  // Headline
+  showEditBoxHeadline() {
+    this.setState({ showHeadline: "block" });
+  }
 
-hideEditBox4(){
-    this.setState({show4: 'none'});
-}
+  hideEditBoxHeadline() {
+    this.setState({ showHeadline: "none" });
+  }
 
-readTextBox4 = (userInput4) => {
-    this.setState({newDOBY: userInput4.target.value});
-}
-readTextBox5 = (userInput5) => {
-    this.setState({newDOBM: userInput5.target.value});
-}
-readTextBox6 = (userInput6) => {
-    this.setState({newDOBD: userInput6.target.value});
-}
+  readTextBoxHeadline = (userInputHeadline) => {
+    this.setState({ newHeadline: userInputHeadline.target.value });
+    //console.log(userInputHeadline.target.value);
+    //console.log(this.state.newHeadline);
+  };
 
-saveDOB(){
-    this.setState({DOBY: this.state.newDOBY});
-    this.setState({DOBM: this.state.newDOBM});
-    this.setState({DOBD: this.state.newDOBD});
-    //this.setState({show4: 'none'});
-}
+  saveHeadline  () {
+    this.setState({ headline: this.state.newHeadline });
+    //this.setState({showHeadline: 'none'});
+  }
 
-// Field of Study
-showEditBox5(){
-    this.setState({show5: 'block'});
-}
+  // Descriptioon
+  showEditBoxDescription() {
+    this.setState({ showDescription: "block" });
+  }
 
-hideEditBox5(){
-    this.setState({show5: 'none'});
-}
+  hideEditBoxDescription() {
+    this.setState({ showDescription: "none" });
+  }
 
-readTextBox7 = (userInput7) => {
-    this.setState({newField: userInput7.target.value});
-    console.log(userInput7.target.value);
-    console.log(this.state.newField);
-}
+  readTextBoxDescription = (userInputDescription) => {
+    this.setState({ newDescription: userInputDescription.target.value });
+    //console.log(userInputDescription.target.value);
+    //console.log(this.state.newDescription);
+  };
 
-saveField(){
-    this.setState({field: this.state.newField});
-    //this.setState({show5: 'none'});
-}
-
-// Descriptioon
-showEditBox6(){
-    this.setState({show6: 'block'});
-}
-
-hideEditBox6(){
-    this.setState({show6: 'none'});
-}
-
-readTextBox8 = (userInput8) => {
-    this.setState({newDescription: userInput8.target.value});
-}
-
-saveDescription(){
-    this.setState({description: this.state.newDescription});
+  saveDescription() {
+    this.setState({ description: this.state.newDescription });
     //this.setState({show6: 'none'});
-}
+  }
 
-showEditBoxes(){
-    this.showEditBox1();
-    this.showEditBox2();
-    this.showEditBox3();
-    this.showEditBox4();
-    this.showEditBox5();
-    this.showEditBox6();
-}
+  showEditBoxes() {
+    //this.showEditBoxName();
+    //this.showEditBoxLast();
+    //this.showEditBoxEmail();
+    this.showEditBoxHeadline();
+    this.showEditBoxDescription();
+    this.setState({ isEdit: true });
+  }
 
-hideEditBoxes(){
-    this.hideEditBox1();
-    this.hideEditBox2();
-    this.hideEditBox3();
-    this.hideEditBox4();
-    this.hideEditBox5();
-    this.hideEditBox6();
-}
+  hideEditBoxes() {
+    this.hideEditBoxName();
+    this.hideEditBoxLast();
+    this.hideEditBoxEmail();
+    this.hideEditBoxHeadline();
+    this.hideEditBoxDescription();
+    this.setState({ isEdit: false });
+  }
 
-saveBoxes(){
-    if (document.getElementById("fiName").value.trim() != ""){
-        this.saveFirstName();
+  saveBoxes() {
+    // if (document.getElementById("fullName").value.trim() != "") {
+    //   this.saveName();
+    // }
+
+    // if (document.getElementById("eMail").value.trim() != "") {
+    //   this.saveEmail();
+    // }
+
+    if (document.getElementById("headLine").value.trim() != "") {
+      this.saveHeadline();
     }
 
-    if (document.getElementById("laName").value.trim() != ""){
-        this.saveLastName();
+    if (document.getElementById("CV").value.trim() != "") {
+      this.saveDescription();
     }
-
-    if (document.getElementById("eMail").value.trim() != ""){
-        this.saveEmail();
-    }
-
-    if (document.getElementById("doB").value.trim() != ""){
-        this.saveDOB();
-    }
-
-    if (document.getElementById("headLine").value.trim() != ""){
-        this.saveField();
-    }
-
-    if (document.getElementById("CV").value.trim() != ""){
-        this.saveDescription();
-    }
-
+    
+    setTimeout(() => {
+      console.log("NEW SAVED HEADLINE IS : ");
+      console.log(this.state.headline);
+      console.log("NEW SAVED DESCRIPTION IS : " + this.state.description);
+    },500)
 
     this.hideEditBoxes();
 
-}
+    console.log("Boxes Saved")
+  }
+
+  editAPI = () => {
+    let data = {
+      //userID: this.props.cookies.get("userID"),
+      headline: this.state.headline,
+      description: this.state.description
+    };
+    axios
+      .patch(
+        `https://sawongdomain.com/modifyprofile/${this.props.cookies.get("userID")}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  editAPIButton = () => {
+    this.saveBoxes();
+    setTimeout(() => {
+      this.editAPI();
+    },1)
+    this.setState({ isEdit: false });
+  }
+
+  sendAPI = () => {
+    console.log("sendAPI was called")
+    let data = {
+      userID: this.props.cookies.get("userID"),
+      headline: this.state.headline,
+      description: this.state.description
+    };
+    axios
+      .post(
+        `https://sawongdomain.com/addprofile`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        this.setState({ profileExists: true });
+        setTimeout(() => {
+          window.location.reload();
+        },500)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  createProfile = () => {
+    this.saveBoxes();
+    setTimeout(() => {
+      this.sendAPI();
+    },500)
+  }
+
+  getAPI = () => {
+    //ask sam
+    axios
+      .get(`https://sawongdomain.com/profiles/`, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        this.setState({ profiles: response.data });
+        this.setState({ profilesCollected: true });
+        //console.log("getAPI() has ran TEST")
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  getUsersAPI = () => {
+    //ask sam
+    axios
+      .get(`https://sawongdomain.com/users/`, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        this.setState({ users: response.data });
+        this.setState({ usersCollected: true });
+        //console.log("getUsersAPI() has ran TEST")
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  check = () => {
+    console.log("check");
+    //this for loop displays target user
+    for(let x = 0; x < this.state.users.length; x++){
+      if(parseInt(this.state.users[x]) == parseInt(this.props.cookies.get("userID"))){
+        console.log("this is the target user");
+        console.log(this.state.users[x]);
+        break;
+      }
+    }
+
+    for (let i = 0; i < this.state.profiles.length; i++) {
+      console.log("for loop")
+      if (parseInt(this.state.profiles[i].userID) == parseInt(this.props.cookies.get("userID"))){
+        console.log("this is the target user's profile");
+        console.log(this.state.profiles[i]);
+        this.setState({ profileExists: true });
+        
+        setTimeout(() => {
+          if (this.state.profileExists == true){
+            this.setState({ headline: this.state.profiles[i].headline });
+            this.setState({ description: this.state.profiles[i].description });
+          }
+        },1)
+      }
+    }
+  };
+
+  componentDidMount() {
+    setTimeout(() => {
+      if(this.state.profileExists == false){
+        this.showEditBoxes();
+        //displays big red box saying you need a profile to apply and have employers see you.
+      }
+    },2000)
+  }
+
+  getNameAPI = () => {
+    //console.log("getNameAPI() ran")
+    for(let i = 0; i < this.state.users.length; i++){
+      //console.log("for getNameAPI ran")
+      if(parseInt(this.state.users[i].id) == parseInt(this.props.cookies.get("userID"))){
+        console.log("TESTING This is the name and email of the user signed in:");
+        console.log(this.state.users[i].name);
+        console.log(this.state.users[i].email);
+        this.setState({ name: this.state.users[i].name });
+        this.setState({ email: this.state.users[i].email });
+        break;
+      }
+    }
+  }
 
   render() {
     return (
-      <div className="candidate-profile-container" style={{backgroundColor: 'grey', maxWidth: 400, textAlign: 'left', padding: 20, marginTop: 30}}>
+      <div
+        className="candidate-profile-container"
+        style={{
+          backgroundColor: "grey",
+          maxWidth: 400,
+          textAlign: "left",
+          padding: 20,
+          marginTop: 30,
+        }}
+      >
+        {console.log(this.state.profileExists)}
         <div className="candidate-profile-wrapper">
-          <br />
-
+          {this.state.profileExists ? null : 
+            <p style={{borderWidth: 3, borderColor: 'red', color: 'red'}}>!IMPORTANT! <br/> Please Create your Candidate Profile below before proceeding.</p>}
           Candidate Profile
           <br />
+
           <br />
-
-          {/* First Name */}
+          {/* Full Name */}
           <div>
-            {/* <button onClick={() => this.showEditBox1()}>Edit</button> */}
-            First Name: {this.state.firstName}
+            Full Name: {this.state.name}
+          </div>
+          <div style={{ display: this.state.showName }}>
+            <input type="text" id="fullName" onChange={this.readTextBoxName} />
           </div>
 
-          <div style={{display: this.state.show1}}>
-              <input type="text" id="fiName" onChange={this.readTextBox1}/>
-              {/* <button onClick={() => this.saveFirstName()}>Save</button>
-              <button onClick={() => this.hideEditBox1()}>Cancel</button> */}
-          </div>
-
-          {/* Last Name */}
-          <div>
-            {/* <button onClick={() => this.showEditBox2()}>Edit</button> */}
-            Last Name: {this.state.lastName}
-          </div>
-
-          <div style={{display: this.state.show2}}>
-              <input type="text" id= "laName" onChange={this.readTextBox2}/>
-              {/* <button onClick={() => this.saveLastName()}>Save</button>
-              <button onClick={() => this.hideEditBox2()}>Cancel</button> */}
-          </div>
-
-          
+          <br />
           {/* Email */}
           <div>
-            {/* <button onClick={() => this.showEditBox3()}>Edit</button> */}
             E-mail: {this.state.email}
           </div>
-
-          <div style={{display: this.state.show3}}>
-              <input type="text" id="eMail" onChange={this.readTextBox3}/>
-              {/* <button onClick={() => this.saveEmail()}>Save</button>
-              <button onClick={() => this.hideEditBox3()}>Cancel</button> */}
-          </div>
-
-          {/* Date Of Birth */}
-          <div>
-            {/* <button onClick={() => this.showEditBox4()}>Edit</button> */}
-            Date of Birth (YYYY-MM-DD): {this.state.DOBY + "-" + this.state.DOBM + "-" + this.state.DOBD}
-          </div>
-
-          <div style={{display: this.state.show4}}>
-              <input type="number" id="doB" onChange={this.readTextBox4}/>
-              <input type="number" id="doB" onChange={this.readTextBox5}/>
-              <input type="number" id="doB" onChange={this.readTextBox6}/>
-              {/* <button onClick={() => this.saveDOB()}>Save</button>
-              <button onClick={() => this.hideEditBox4()}>Cancel</button> */}
+          <div style={{ display: this.state.showEmail }}>
+            <input type="text" id="eMail" onChange={this.readTextBoxEmail} />
           </div>
           
+          <br />
           {/* Headline */}
           <div>
-            {/* <button onClick={() => this.showEditBox5()}>Edit</button> */}
-            Headline: {this.state.field}
+            Headline: {this.state.headline}
+          </div>
+          <div style={{ display: this.state.showHeadline }}>
+            <input type="text" id="headLine" onChange={this.readTextBoxHeadline} />
           </div>
 
-          <div style={{display: this.state.show5}}>
-              <input type="text" id="headLine" onChange={this.readTextBox7}/>
-              {/* <button onClick={() => this.saveField()}>Save</button>
-              <button onClick={() => this.hideEditBox5()}>Cancel</button> */}
-          </div>
-
+          <br />
           {/* Description */}
-          <div>
-            Description: {this.state.description}
+          <div>Description: {this.state.description}</div>
+          <div style={{ display: this.state.showDescription }}>
+            <textarea type="text" id="CV" onChange={this.readTextBoxDescription} />
+            <br />
+            <br />
+            {this.state.profileExists ? <button onClick={() => this.editAPIButton()}>Save</button> : null}
+            {this.state.profileExists ? <button onClick={() => this.hideEditBoxes()}>Cancel</button> : null}
           </div>
-
-          <div style={{display: this.state.show6}}>
-              <textarea type="text" id="CV" onChange={this.readTextBox8}/>
-          </div>
-
-          {/* Job Type */}
-          {/* <div>
-            <button onClick={() => this.showEditBox6()}>Edit</button> 
-            Job Type: {this.state.jobType}
-          </div>
-
-          <div style={{display: this.state.show6}}>
-              <select>
-                <option value="empty">  </option>
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Internship">Internship</option>
-              </select> 
-              <button onClick={() => this.saveJobType()}>Save</button><button onClick={() => this.hideEditBox6()}>Cancel</button>
-          </div> */}
-
           <br />
 
-          <button onClick={() => this.showEditBoxes()}>Edit</button>
-          <button onClick={() => this.saveBoxes()}>Save</button>
-          <button onClick={() => this.hideEditBoxes()}>Cancel</button>
-
-
+          {this.state.profileExists ? null : <button onClick={this.createProfile}>Create Profile</button>}
+          {this.state.profileExists ? this.state.isEdit ? null : <button onClick={() => this.showEditBoxes()}>Edit</button> : null}
+          
 
           <br />
-
         </div>
       </div>
     );
