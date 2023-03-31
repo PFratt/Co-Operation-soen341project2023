@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Co-Operation-soen341project2023/static/css/main.306a2343.css",
-    "main.js": "/Co-Operation-soen341project2023/static/js/main.9080e5f7.js",
+    "main.css": "/Co-Operation-soen341project2023/static/css/main.949bcb2e.css",
+    "main.js": "/Co-Operation-soen341project2023/static/js/main.ebbd34c4.js",
     "index.html": "/Co-Operation-soen341project2023/index.html",
-    "main.306a2343.css.map": "/Co-Operation-soen341project2023/static/css/main.306a2343.css.map",
-    "main.9080e5f7.js.map": "/Co-Operation-soen341project2023/static/js/main.9080e5f7.js.map"
+    "main.949bcb2e.css.map": "/Co-Operation-soen341project2023/static/css/main.949bcb2e.css.map",
+    "main.ebbd34c4.js.map": "/Co-Operation-soen341project2023/static/js/main.ebbd34c4.js.map"
   },
   "entrypoints": [
-    "static/css/main.306a2343.css",
-    "static/js/main.9080e5f7.js"
+    "static/css/main.949bcb2e.css",
+    "static/js/main.ebbd34c4.js"
   ]
 }
