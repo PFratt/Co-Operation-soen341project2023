@@ -8,7 +8,7 @@ jobs:
       - checkout
       - restore_cache:
           key: v1-{{ checksum "career-service-webapp/package-lock.json" }}
-      - run: cd career-service-webapp && npm install --legacy-peer-deps
+      - run: cd career-service-webapp && npm install
       - run: cd career-service-webapp && npm run test:ci
       - save_cache:
           key: v1-{{ checksum "career-service-webapp/package-lock.json" }}
