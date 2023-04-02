@@ -98,11 +98,11 @@ export default class HomePage extends React.Component {
               }
             />
             <Route
-              path={"/admin"}
+              path={"/admin/*"}
               element={
                 <ProtectedRoute user={this.state.adminAccess}>
                   {/* brings to main admin page */}
-                  <AdminPage />
+                  <AdminPage cookie={cookies} />
                 </ProtectedRoute>
               }
             />{" "}
