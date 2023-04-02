@@ -200,19 +200,14 @@ export default class MyJobs extends React.Component {
       <div className="myjobs-page-container">
         <div className="myjobs-wrapper">
           <button
+            className="button-9"
             onClick={() => {
               this.addJob();
             }}
           >
             Add Job
           </button>
-          <button
-            onClick={() => {
-              this.getJobList();
-            }}
-          >
-            get listJob
-          </button>
+
           <Table className="myjobs-table" striped bordered hover>
             <thead>
               <tr>

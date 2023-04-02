@@ -19,6 +19,7 @@ export default class HomePage extends React.Component {
       candidateAccess: false,
       employerAccess: false,
       adminAccess: false,
+      displayUserType: "",
     };
     this.checkAccess();
   }
@@ -42,12 +43,15 @@ export default class HomePage extends React.Component {
     let userType = String(cookies.get("userType"));
     if (userType === "student") {
       this.state.candidateAccess = true;
+      this.state.displayUserType = "Candidate";
     }
     if (userType === "employer") {
       this.state.employerAccess = true;
+      this.state.displayUserType = "Employer";
     }
     if (userType === "admin") {
       this.state.adminAccess = true;
+      this.state.displayUserType = "Admin";
     }
   };
   logout = () => {
@@ -60,7 +64,10 @@ export default class HomePage extends React.Component {
     return (
       <div className="homepage-container">
         {/* temporary access links for quick testing, this should be done by routing but well leave it for development */}
-        <TempLinkAccess logout={this.logout} />
+        <TempLinkAccess
+          logout={this.logout}
+          displayUserType={this.state.displayUserType}
+        />
         <div className="selected-page-container">
           <Routes>
             {/* login page, default page, login and signup */}
@@ -76,7 +83,7 @@ export default class HomePage extends React.Component {
                 <ProtectedRoute user={this.state.candidateAccess}>
                   {" "}
                   {/* brings to main candidate page */}
-                  <CandidatePage cookies={cookies}/>
+                  <CandidatePage cookies={cookies} />
                 </ProtectedRoute>
               }
             />
@@ -108,9 +115,11 @@ export default class HomePage extends React.Component {
   }
 }
 //temporary link access for development
-const TempLinkAccess = ({ logout }) => {
+const TempLinkAccess = ({ logout, displayUserType }) => {
   return (
-    <div className="menu">
+    <div className="menu ">
+      <div className="app-name">Co-Operation</div>
+      <div className="user-type">{displayUserType}</div>
       <button className="button-9 logout" onClick={logout}>
         {" "}
         logout
