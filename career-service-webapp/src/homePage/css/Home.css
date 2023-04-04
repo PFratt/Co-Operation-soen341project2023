@@ -50,7 +50,24 @@
     text-align: right;
     background-color: rgba(98, 49, 212, 0.648);
     padding-bottom: 15px;
-    min-width:650px;
+    padding-right:25px;
+    width:100%;
+    min-width: 650px;
+    display:flex;
+    flex:1;
+    justify-content: space-between;
+}
+.user-type{
+  margin-top:16px;
+  padding-left:20px;
+  font-size: larger;
+  color: white;
+}
+.app-name{
+  margin-top:3px;
+  padding-left:75px;
+  font-size: xx-large;
+  color: whitesmoke;
 }
 .login-false{
     background-color: darkgrey;
@@ -168,6 +185,7 @@
 .logout{
     height:30px;
     width: 20%;
+    padding-right:10px;
 }
 .button-9 {
   appearance: button;
