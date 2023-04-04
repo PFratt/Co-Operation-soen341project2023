@@ -21,16 +21,13 @@ export default class JobList extends React.Component {
   }
   getJobList = async () => {
     axios
-      .get(
-        `https://sawongdomain.com/jobs`,
-        {
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-            Authorization: this.props.cookies.get("authToken"),
-            "Access-Control-Allow-Headers": "Authorization",
-          },
-        }
-      )
+      .get(`https://sawongdomain.com/jobs`, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+        },
+      })
       .then((response) => {
         this.setState({ jobList: response.data });
         console.log(response.data);
@@ -104,7 +101,7 @@ export default class JobList extends React.Component {
       [target.name]: target.value,
     });
   };
-  
+
   render() {
     return (
       <div className="joblist-page-container">
@@ -131,7 +128,7 @@ export default class JobList extends React.Component {
                 this.state.selectedJob.title,
                 this.state.selectedJob.role_description,
                 this.state.selectedJob.date_posted,
-                this.state.selectedJob.date_deadline,
+                this.state.selectedJob.date_deadline
               )
             : null}
         </div>

@@ -102,7 +102,7 @@ export default class HomePage extends React.Component {
               element={
                 <ProtectedRoute user={this.state.adminAccess}>
                   {/* brings to main admin page */}
-                  <AdminPage cookie={cookies} />
+                  <AdminPage cookies={cookies} />
                 </ProtectedRoute>
               }
             />{" "}
