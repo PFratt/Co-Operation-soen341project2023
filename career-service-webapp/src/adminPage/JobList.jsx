@@ -9,11 +9,6 @@ import axios from "axios";
 export default class JobList extends React.Component {
   constructor(props) {
     super(props);
-    const date = new Date();
-    let year = date.getFullYear();
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let currentDate = `${year}-${month}-${day}`;
     this.state = {
       selectedJob: null,
       jobList: [{ title: "N/A" }],
@@ -128,7 +123,6 @@ export default class JobList extends React.Component {
         <div className="myjobs-wrapper">
           {this.state.selectedJob
             ? this.jobPost(
-                this.state.selectedJob.name,
                 this.state.selectedJob.jobID,
                 this.state.selectedJob.title,
                 this.state.selectedJob.role_description,
