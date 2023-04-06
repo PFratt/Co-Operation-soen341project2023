@@ -123,7 +123,6 @@ export default class JobList extends React.Component {
         <div className="myjobs-wrapper">
           {this.state.selectedJob
             ? this.jobPost(
-                this.state.selectedJob.name,
                 this.state.selectedJob.jobID,
                 this.state.selectedJob.title,
                 this.state.selectedJob.role_description,
