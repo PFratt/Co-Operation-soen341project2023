@@ -5,6 +5,9 @@
 .test-menu{
     background-color: rgb(195, 218, 242);
 }
+.selected-page-container::-webkit-scrollbar{
+  display: none !important;
+}
 
 .selected-page-container{
     background-image: linear-gradient(to bottom right, rgba(200, 160, 241, 0.458), rgba(78, 99, 202, 0.605));

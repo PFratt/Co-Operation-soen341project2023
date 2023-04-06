@@ -3,70 +3,78 @@ import * as React from "react";
 import { Table } from "react-bootstrap";
 import { Icon } from "@fluentui/react/lib/Icon";
 import UserProfile from "./UserProfile";
-const fakeUserList = [
-  {
-    userType: "student",
-    userName: "qian1",
-    userEmail: "email.com ",
-  },
-  {
-    userType: "employer",
-    userName: "qian2",
-    userEmail: "email.com",
-  },
-  {
-    userType: "admin",
-    userName: "qian3",
-    userEmail: "email.com",
-  },
-  {
-    userType: "student",
-    userName: "qian4",
-    userEmail: "email.com",
-  },
-  {
-    userType: "student",
-    userName: "qian5",
-    userEmail: "email.comn",
-  },
-];
+import axios from "axios";
+
 export default class UserList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       selectedUser: null,
+      userList: [{ userID: "N/A" }],
     };
+    this.listUsers();
   }
-  listUsers = () => {
-    console.log("maptest called");
-    return fakeUserList.map(({ userType, userName, userEmail }) => {
-      return (
-        <tr>
-          <td>{userType}</td>
-          <td
-            onClick={() => {
-              this.setState({
-                selectedUser: { userType, userName, userEmail },
-              });
-            }}
-          >
-            {userName}
-          </td>
-          <td>{userEmail}</td>
-        </tr>
-      );
-    });
+  listUsers = async () => {
+    axios
+      .get(`https://sawongdomain.com/users`, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+        },
+      })
+      .then((response) => {
+        this.setState({ userList: response.data });
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
-  userProfile = (userType, userName, userEmail) => {
+  userProfile = (name, email, usertype) => {
     return (
       <UserProfile
-        userType={userType}
-        userName={userName}
-        userEmail={userEmail}
+        userType={usertype}
+        userName={name}
+        userEmail={email}
         deleteUser={this.deleteUser}
         hideSelectedUser={this.hideSelectedUser}
       />
     );
+  };
+  mapfunctiontest = () => {
+    console.log("maptest called");
+
+    if (this.state.userList.length == 0) {
+      return (
+        <tr>
+          <td align="center" colSpan="5">
+            There are no job postings yet.
+          </td>
+        </tr>
+      );
+    } else
+      return this.state.userList.map(({ name, email, usertype }) => {
+        return (
+          <tr>
+            <td
+              onClick={() => {
+                this.setState({
+                  selectedUser: {
+                    name,
+                    email,
+                    usertype,
+                  },
+                });
+              }}
+            >
+              {name}
+            </td>
+            <td>{email}</td>
+            <td>{usertype}</td>
+          </tr>
+        );
+      });
   };
   addUser = () => {
     alert("add user called");
@@ -80,25 +88,26 @@ export default class UserList extends React.Component {
   render() {
     return (
       <div className="admin-page-container">
+        {" "}
+        <button onClick={this.addUser}>add User</button>
         <div className="user-list-wrapper">
           <Table className="job-list-table" striped bordered hover>
             <thead>
               <tr>
-                <th>UserType</th>
-                <th>UserName</th>
-                <th>UserEmail</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>User Type</th>
               </tr>
             </thead>
-            <tbody>{this.listUsers()}</tbody>
+            <tbody>{this.mapfunctiontest()}</tbody>
           </Table>{" "}
-          <button onClick={this.addUser}>add User</button>
         </div>
         <div className="job-application-wrapper">
           {this.state.selectedUser
             ? this.userProfile(
-                this.state.selectedUser.userType,
-                this.state.selectedUser.userName,
-                this.state.selectedUser.userEmail
+                this.state.selectedUser.name,
+                this.state.selectedUser.email,
+                this.state.selectedUser.usertype
               )
             : null}
         </div>
