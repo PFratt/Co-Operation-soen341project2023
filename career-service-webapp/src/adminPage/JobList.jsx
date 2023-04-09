@@ -12,12 +12,14 @@ export default class JobList extends React.Component {
     this.state = {
       selectedJob: null,
       jobList: [{ title: "N/A" }],
+      employerList: [],
       editJobTitle: "",
       editJobDesc: "",
       editJobDeadline: "",
       editJobView: false,
     };
     this.getJobList();
+    this.getEmployerList();
   }
   getJobList = async () => {
     axios
@@ -36,6 +38,27 @@ export default class JobList extends React.Component {
         console.log(error);
       });
   };
+
+  getEmployerList = async () => {
+    axios
+      .get(`https://sawongdomain.com/users/employers`, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+        },
+      })
+      .then((response) => {
+        this.setState({ employerList: response.data });
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+        console.log("getEmployerList() FAILED");
+      });
+    
+  };
+  
   mapfunctiontest = () => {
     console.log("maptest called");
 
@@ -49,7 +72,11 @@ export default class JobList extends React.Component {
       );
     } else
       return this.state.jobList.map(
-        ({ jobID, title, role_description, date_posted, date_deadline }) => {
+        ({ jobID, title, role_description, date_posted, date_deadline, employerID }) => {
+          
+          const employer = this.state.employerList.find(emp => emp.id === employerID);
+          const employerName = employer ? employer.name : 'Unknown';
+
           return (
             <tr key={jobID}>
               <td>{jobID}</td>
@@ -71,6 +98,7 @@ export default class JobList extends React.Component {
               <td>{role_description}</td>
               <td>{date_posted}</td>
               <td>{date_deadline}</td>
+              <td>{employerName}</td>
             </tr>
           );
         }
