@@ -6,6 +6,7 @@ export default function UserProfile({
   userEmail,
   deleteUser,
   hideSelectedUser,
+  modify,
 }) {
   return (
     <div
@@ -17,12 +18,13 @@ export default function UserProfile({
         maxWidth: "400px",
       }}
     >
-      <button onClick={hideSelectedUser}>Hide Selected User </button>
+      <button onClick={hideSelectedUser}>Hide</button>
       <p>User Type: {userType}</p>
       <p>User name: {userName}</p>
       <p>User Email: {userEmail}</p>
       <p> some api call to get more profile info</p>
       <button onClick={deleteUser}> Remove User</button>
+      <button onClick={modify}> Modify</button>
     </div>
   );
 }

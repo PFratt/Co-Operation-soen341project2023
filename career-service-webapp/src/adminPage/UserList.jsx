@@ -31,6 +31,7 @@ export default class UserList extends React.Component {
         console.log(error);
       });
   };
+  modify = () => {};
   userProfile = (name, email, usertype) => {
     return (
       <UserProfile
@@ -38,6 +39,7 @@ export default class UserList extends React.Component {
         userName={name}
         userEmail={email}
         deleteUser={this.deleteUser}
+        modify={this.modify}
         hideSelectedUser={this.hideSelectedUser}
       />
     );
@@ -89,7 +91,6 @@ export default class UserList extends React.Component {
     return (
       <div className="admin-page-container">
         {" "}
-        <button onClick={this.addUser}>add User</button>
         <div className="user-list-wrapper">
           <Table className="job-list-table" striped bordered hover>
             <thead>

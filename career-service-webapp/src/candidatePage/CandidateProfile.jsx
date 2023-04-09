@@ -27,6 +27,9 @@ export default class CandidateProfile extends React.Component {
       showDescription: "none",
       isEdit: false,
 
+      wordCountHead: null,
+      wordCountDescription: null,
+
       profiles: [],
       profilesCollected: false,
       users: [],
@@ -37,15 +40,18 @@ export default class CandidateProfile extends React.Component {
     setTimeout(() => {
       this.getAPI();
       this.getUsersAPI();
-    })
+    });
 
     setTimeout(() => {
       this.check();
       this.getNameAPI();
-    },150)
-
+    }, 150);
   }
-
+  getWordCount = (str) => {
+    return str.split(" ").filter(function (num) {
+      return num != "";
+    }).length;
+  };
   // First Name
   showEditBoxName() {
     this.setState({ showName: "block" });
@@ -119,11 +125,14 @@ export default class CandidateProfile extends React.Component {
 
   readTextBoxHeadline = (userInputHeadline) => {
     this.setState({ newHeadline: userInputHeadline.target.value });
+    this.setState({
+      wordCountHead: this.getWordCount(userInputHeadline.target.value),
+    });
     //console.log(userInputHeadline.target.value);
     //console.log(this.state.newHeadline);
   };
 
-  saveHeadline  () {
+  saveHeadline() {
     this.setState({ headline: this.state.newHeadline });
     //this.setState({showHeadline: 'none'});
   }
@@ -139,6 +148,12 @@ export default class CandidateProfile extends React.Component {
 
   readTextBoxDescription = (userInputDescription) => {
     this.setState({ newDescription: userInputDescription.target.value });
+    //console.log(this.getWordCount(userInputDescription.target.value));
+    this.setState({
+      wordCountDescription: this.getWordCount(
+        userInputDescription.target.value
+      ),
+    });
     //console.log(userInputDescription.target.value);
     //console.log(this.state.newDescription);
   };
@@ -182,27 +197,29 @@ export default class CandidateProfile extends React.Component {
     if (document.getElementById("CV").value.trim() != "") {
       this.saveDescription();
     }
-    
+
     setTimeout(() => {
       console.log("NEW SAVED HEADLINE IS : ");
       console.log(this.state.headline);
       console.log("NEW SAVED DESCRIPTION IS : " + this.state.description);
-    },500)
+    }, 500);
 
     this.hideEditBoxes();
 
-    console.log("Boxes Saved")
+    console.log("Boxes Saved");
   }
 
   editAPI = () => {
     let data = {
       //userID: this.props.cookies.get("userID"),
       headline: this.state.headline,
-      description: this.state.description
+      description: this.state.description,
     };
     axios
       .patch(
-        `https://sawongdomain.com/modifyprofile/${this.props.cookies.get("userID")}`,
+        `https://sawongdomain.com/modifyprofile/${this.props.cookies.get(
+          "userID"
+        )}`,
         data,
         {
           headers: {
@@ -219,41 +236,37 @@ export default class CandidateProfile extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   editAPIButton = () => {
     this.saveBoxes();
     setTimeout(() => {
       this.editAPI();
-    },1)
+    }, 1);
     this.setState({ isEdit: false });
-  }
+  };
 
   sendAPI = () => {
-    console.log("sendAPI was called")
+    console.log("sendAPI was called");
     let data = {
       userID: this.props.cookies.get("userID"),
       headline: this.state.headline,
-      description: this.state.description
+      description: this.state.description,
     };
     axios
-      .post(
-        `https://sawongdomain.com/addprofile`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-            Authorization: this.props.cookies.get("authToken"),
-            "Access-Control-Allow-Headers": "Authorization",
-          },
-        }
-      )
+      .post(`https://sawongdomain.com/addprofile`, data, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+        },
+      })
       .then((response) => {
         console.log(response.data);
         this.setState({ profileExists: true });
         setTimeout(() => {
           window.location.reload();
-        },500)
+        }, 500);
       })
       .catch(function (error) {
         console.log(error);
@@ -264,8 +277,8 @@ export default class CandidateProfile extends React.Component {
     this.saveBoxes();
     setTimeout(() => {
       this.sendAPI();
-    },500)
-  }
+    }, 500);
+  };
 
   getAPI = () => {
     //ask sam
@@ -312,8 +325,11 @@ export default class CandidateProfile extends React.Component {
   check = () => {
     console.log("check");
     //this for loop displays target user
-    for(let x = 0; x < this.state.users.length; x++){
-      if(parseInt(this.state.users[x]) == parseInt(this.props.cookies.get("userID"))){
+    for (let x = 0; x < this.state.users.length; x++) {
+      if (
+        parseInt(this.state.users[x]) ==
+        parseInt(this.props.cookies.get("userID"))
+      ) {
         console.log("this is the target user");
         console.log(this.state.users[x]);
         break;
@@ -321,37 +337,45 @@ export default class CandidateProfile extends React.Component {
     }
 
     for (let i = 0; i < this.state.profiles.length; i++) {
-      console.log("for loop")
-      if (parseInt(this.state.profiles[i].userID) == parseInt(this.props.cookies.get("userID"))){
+      console.log("for loop");
+      if (
+        parseInt(this.state.profiles[i].userID) ==
+        parseInt(this.props.cookies.get("userID"))
+      ) {
         console.log("this is the target user's profile");
         console.log(this.state.profiles[i]);
         this.setState({ profileExists: true });
-        
+
         setTimeout(() => {
-          if (this.state.profileExists == true){
+          if (this.state.profileExists == true) {
             this.setState({ headline: this.state.profiles[i].headline });
             this.setState({ description: this.state.profiles[i].description });
           }
-        },1)
+        }, 1);
       }
     }
   };
 
   componentDidMount() {
     setTimeout(() => {
-      if(this.state.profileExists == false){
+      if (this.state.profileExists == false) {
         this.showEditBoxes();
         //displays big red box saying you need a profile to apply and have employers see you.
       }
-    },2000)
+    }, 2000);
   }
 
   getNameAPI = () => {
     //console.log("getNameAPI() ran")
-    for(let i = 0; i < this.state.users.length; i++){
+    for (let i = 0; i < this.state.users.length; i++) {
       //console.log("for getNameAPI ran")
-      if(parseInt(this.state.users[i].id) == parseInt(this.props.cookies.get("userID"))){
-        console.log("TESTING This is the name and email of the user signed in:");
+      if (
+        parseInt(this.state.users[i].id) ==
+        parseInt(this.props.cookies.get("userID"))
+      ) {
+        console.log(
+          "TESTING This is the name and email of the user signed in:"
+        );
         console.log(this.state.users[i].name);
         console.log(this.state.users[i].email);
         this.setState({ name: this.state.users[i].name });
@@ -359,7 +383,7 @@ export default class CandidateProfile extends React.Component {
         break;
       }
     }
-  }
+  };
 
   render() {
     return (
@@ -375,54 +399,67 @@ export default class CandidateProfile extends React.Component {
       >
         {console.log(this.state.profileExists)}
         <div className="candidate-profile-wrapper">
-          {this.state.profileExists ? null : 
-            <p style={{borderWidth: 3, borderColor: 'red', color: 'red'}}>!IMPORTANT! <br/> Please Create your Candidate Profile below before proceeding.</p>}
+          {this.state.profileExists ? null : (
+            <p style={{ borderWidth: 3, borderColor: "red", color: "red" }}>
+              !IMPORTANT! <br /> Please Create your Candidate Profile below
+              before proceeding.
+            </p>
+          )}
           Candidate Profile
           <br />
-
           <br />
           {/* Full Name */}
-          <div>
-            Full Name: {this.state.name}
-          </div>
+          <div>Full Name: {this.state.name}</div>
           <div style={{ display: this.state.showName }}>
             <input type="text" id="fullName" onChange={this.readTextBoxName} />
           </div>
-
           <br />
           {/* Email */}
-          <div>
-            E-mail: {this.state.email}
-          </div>
+          <div>E-mail: {this.state.email}</div>
           <div style={{ display: this.state.showEmail }}>
             <input type="text" id="eMail" onChange={this.readTextBoxEmail} />
           </div>
-          
           <br />
           {/* Headline */}
-          <div>
-            Headline: {this.state.headline}
-          </div>
+          <div>Headline: {this.state.headline}</div>
           <div style={{ display: this.state.showHeadline }}>
-            <input type="text" id="headLine" onChange={this.readTextBoxHeadline} />
+            <input
+              type="text"
+              id="headLine"
+              onChange={this.readTextBoxHeadline}
+            />
+            {this.state.wordCountHead == 0 ? null : this.state.wordCountHead}
           </div>
-
           <br />
           {/* Description */}
           <div>Description: {this.state.description}</div>
           <div style={{ display: this.state.showDescription }}>
-            <textarea type="text" id="CV" onChange={this.readTextBoxDescription} />
+            <textarea
+              type="text"
+              id="CV"
+              onChange={this.readTextBoxDescription}
+            />
+            {this.state.wordCountDescription == 0
+              ? null
+              : this.state.wordCountDescription}
             <br />
             <br />
-            {this.state.profileExists ? <button onClick={() => this.editAPIButton()}>Save</button> : null}
-            {this.state.profileExists ? <button onClick={() => this.hideEditBoxes()}>Cancel</button> : null}
+            {this.state.profileExists ? (
+              <button onClick={() => this.editAPIButton()}>Save</button>
+            ) : null}
+            {this.state.profileExists ? (
+              <button onClick={() => this.hideEditBoxes()}>Cancel</button>
+            ) : null}
           </div>
           <br />
-
-          {this.state.profileExists ? null : <button onClick={this.createProfile}>Create Profile</button>}
-          {this.state.profileExists ? this.state.isEdit ? null : <button onClick={() => this.showEditBoxes()}>Edit</button> : null}
-          
-
+          {this.state.profileExists ? null : (
+            <button onClick={this.createProfile}>Create Profile</button>
+          )}
+          {this.state.profileExists ? (
+            this.state.isEdit ? null : (
+              <button onClick={() => this.showEditBoxes()}>Edit</button>
+            )
+          ) : null}
           <br />
         </div>
       </div>
