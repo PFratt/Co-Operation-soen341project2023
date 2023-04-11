@@ -105,22 +105,20 @@ describe('Employer actions', () =>
 
         const response = await app.get('/jobs/49}').set('Authorization', token);
         var data = JSON.parse(response.text);
-        var size = data.length;
-        var last = data[size-1];
-        expect(last.title).toEqual("TITLE");
-        expect(last.role_description).toEqual("DESC");
-        expect(last.date_posted).toEqual("TODAY");
-        expect(last.date_deadline).toEqual("TOMORROW");
+        var job = data.filter(function(r){return r["title"] === "TITLE"})[0]||'No record found';
+        expect(job.title).toEqual("TITLE");
+        expect(job.role_description).toEqual("DESC");
+        expect(job.date_posted).toEqual("TODAY");
+        expect(job.date_deadline).toEqual("TOMORROW");
         expect(response.statusCode).toBe(200);
 
-        const delResponse = await app.delete(`/deletejob/${last.jobID}`).set('Authorization', token);
+        const delResponse = await app.delete(`/deletejob/${job.jobID}`).set('Authorization', token);
         expect(delResponse.statusCode).toBe(200);
 
         const response2 = await app.get('/jobs/49}').set('Authorization', token);
         data = JSON.parse(response2.text);
-        size = data.length;
-        last = data[size-1];
-        expect(last.title).not.toEqual("TITLE");
+        job = data.filter(function(r){return r["title"] === "TITLE"})[0]||'No record found';
+        expect(job).toEqual("No record found");
         expect(response2.statusCode).toBe(200);
     });
 });
@@ -161,5 +159,30 @@ describe('Admin actions', () =>
         const response = await app.get("/validate").set('Authorization', token);
         expect(response.text).toEqual("Token still valid.");
         expect(response.statusCode).toBe(200);
+    });
+
+    it('Scenario: user signs up and admin deletes them', async() => 
+    {
+        let body = {"name": "unitTestName", "email": "unitTest@gmail.com", "password": "test", "usertype": "student"};
+        const singupResponse = await app.post('/signup').send(body);
+        expect(singupResponse.statusCode).toBe(200);
+
+        const response = await app.get('/users').set('Authorization', token);
+        var data = JSON.parse(response.text);
+        var user = data.filter(function(r){return r["email"] === "unitTest@gmail.com"})[0]||'No record found';
+        expect(user.name).toEqual("unitTestName");
+        expect(user.email).toEqual("unitTest@gmail.com");
+        expect(user.password).toEqual("test");
+        expect(user.usertype).toEqual("student");
+        expect(response.statusCode).toBe(200);
+
+        const delResponse = await app.delete(`/deleteuser/${user.id}`).set('Authorization', token);
+        expect(delResponse.statusCode).toBe(200);
+
+        const response2 = await app.get('/users').set('Authorization', token);
+        data = JSON.parse(response2.text);
+        user = data.filter(function(r){return r["email"] === "unitTest@gmail.com"})[0]||'No record found';
+        expect(user).toEqual("No record found");
+        expect(response2.statusCode).toBe(200);
     });
 });
