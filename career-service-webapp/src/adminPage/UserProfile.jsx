@@ -4,6 +4,9 @@ export default function UserProfile({
   userType,
   userName,
   userEmail,
+  userHeadline,
+  userDescription,
+  isStudent,
   deleteUser,
   hideSelectedUser,
   modify,
@@ -22,7 +25,14 @@ export default function UserProfile({
       <p>User Type: {userType}</p>
       <p>User name: {userName}</p>
       <p>User Email: {userEmail}</p>
-      <p> some api call to get more profile info</p>
+
+      {isStudent ? 
+            (<p>User Headline: {userHeadline}</p>) 
+            : null}
+      {isStudent ? 
+            (<p>User Description: {userDescription}</p>) 
+            : null}    
+      
       <button onClick={deleteUser}> Remove User</button>
       <button onClick={modify}> Modify</button>
     </div>

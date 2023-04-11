@@ -11,9 +11,15 @@ export default class UserList extends React.Component {
     this.state = {
       selectedUser: null,
       userList: [{ userID: "N/A" }],
-      selectedUserID: ""
+      selectedUserID: "",
+      profiles: [],
+      selectUserProfile: null,
+      userHeadline: "",
+      userDescription: "",
+      isStudent: false
     };
     this.listUsers();
+    this.getUserProfiles();
   }
   listUsers = async () => {
     axios
@@ -32,6 +38,23 @@ export default class UserList extends React.Component {
         console.log(error);
       });
   };
+  getUserProfiles = () => {
+    axios
+      .get(`https://sawongdomain.com/profiles/`, {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+        },
+      })
+      .then((response) => {
+        this.setState({ profiles: response.data });
+        console.log("profiles array is: ", response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
   modify = () => {};
   userProfile = (name, email, usertype) => {
     return (
@@ -39,6 +62,9 @@ export default class UserList extends React.Component {
         userType={usertype}
         userName={name}
         userEmail={email}
+        userHeadline={this.state.userHeadline}
+        userDescription={this.state.userDescription}
+        isStudent = {this.state.isStudent}
         deleteUser={this.deleteUser}
         modify={this.modify}
         hideSelectedUser={this.hideSelectedUser}
@@ -69,6 +95,9 @@ export default class UserList extends React.Component {
                     usertype,
                   },
                 });
+                setTimeout(() => {
+                  this.getUserProfile();
+                }, 100);
               }}
             >
               {name}
@@ -82,17 +111,42 @@ export default class UserList extends React.Component {
   addUser = () => {
     alert("add user called");
   };
+  getUserProfile = () => {
+    this.getUserID();
+    console.log("this is profiles:", this.state.profiles);
+    for (let i = 0; i < this.state.profiles.length; i++){
+      console.log("for ran");
+      setTimeout(() => {
+        if (this.state.profiles[i].userID == this.state.selectedUserID){
+          this.setState({selectUserProfile: this.state.profiles[i]});
+          this.setState({userHeadline: this.state.profiles[i].headline})
+          this.setState({userDescription: this.state.profiles[i].description})
+          console.log("headline is:", this.state.userHeadline);
+        }
+      }, 200)
+    }
+  }
   getUserID = () => {
+    console.log("this is the userList: ", this.state.userList);
+    console.log(this.state.selectedUser);
     for (let i = 0; i < this.state.userList.length; i++) {
-      if (
-        this.state.userList[i].name == this.state.selectedUser.name &&
-        this.state.userList[i].email == this.state.selectedUser.email &&
-        this.state.userList[i].usertype == this.state.selectedUser.usertype
-      )
-      {
-        this.setState({ selectedUserID: this.state.userList[i].id });
-      }
-      console.log("this is the selected user's ID:", this.state.selectedUserID);
+      setTimeout(() => {
+        if (
+          this.state.userList[i].name == this.state.selectedUser.name &&
+          this.state.userList[i].email == this.state.selectedUser.email &&
+          this.state.userList[i].usertype == this.state.selectedUser.usertype
+        )
+        {
+          this.setState({ selectedUserID: this.state.userList[i].id });
+          console.log("selected User ID:", this.state.selectedUserID);
+          if(this.state.userList[i].usertype == "student"){
+            this.setState({isStudent: true})
+          }
+          else{
+            this.setState({isStudent: false})
+          }
+        }
+      }, 100)
     }
   }
   deleteUser = () => {
@@ -145,9 +199,15 @@ export default class UserList extends React.Component {
             ? this.userProfile(
                 this.state.selectedUser.name,
                 this.state.selectedUser.email,
-                this.state.selectedUser.usertype
+                this.state.selectedUser.usertype,
+                this.state.userHeadline,
+                this.state.userDescription,
+                this.state.isStudent
               )
             : null}
+        </div>
+        <div className="add-user-wrapper">
+            
         </div>
       </div>
     );
