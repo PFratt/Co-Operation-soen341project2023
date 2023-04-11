@@ -1,6 +1,6 @@
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 const request = require('supertest');
-const { response } = require('../../api');
+//const { response } = require('../../api');
 const app = request("https://sawongdomain.com");
 
 describe('API test methods', () => 
