@@ -11,6 +11,7 @@ export default class UserList extends React.Component {
     this.state = {
       selectedUser: null,
       userList: [{ userID: "N/A" }],
+      selectedUserID: ""
     };
     this.listUsers();
   }
@@ -81,8 +82,44 @@ export default class UserList extends React.Component {
   addUser = () => {
     alert("add user called");
   };
+  getUserID = () => {
+    for (let i = 0; i < this.state.userList.length; i++) {
+      if (
+        this.state.userList[i].name == this.state.selectedUser.name &&
+        this.state.userList[i].email == this.state.selectedUser.email &&
+        this.state.userList[i].usertype == this.state.selectedUser.usertype
+      )
+      {
+        this.setState({ selectedUserID: this.state.userList[i].id });
+      }
+      console.log("this is the selected user's ID:", this.state.selectedUserID);
+    }
+  }
   deleteUser = () => {
-    alert("remove user called");
+    console.log("deleteUser was called");
+    this.getUserID();
+
+    setTimeout(() => {
+    axios
+    .delete(
+      `https://sawongdomain.com/deleteuser/${this.state.selectedUserID}`,
+      {
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: this.props.cookies.get("authToken"),
+          "Access-Control-Allow-Headers": "Authorization",
+        },
+      }
+    )
+      .then((response) => {
+        console.log(response.data);
+          window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }, 1);
+    alert("User deleted successfully.");
   };
   hideSelectedUser = () => {
     this.setState({ selectedUser: null });
