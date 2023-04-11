@@ -16,7 +16,10 @@ export default class UserList extends React.Component {
       selectUserProfile: null,
       userHeadline: "",
       userDescription: "",
-      isStudent: false
+      isStudent: false,
+      newHeadline: "",
+      newDescription: "",
+      showModify: "none"
     };
     this.listUsers();
     this.getUserProfiles();
@@ -55,7 +58,57 @@ export default class UserList extends React.Component {
         console.log(error);
       });
   };
-  modify = () => {};
+  editAPI = () => {
+    let data = {
+      headline: this.state.userHeadline,
+      description: this.state.userDescription,
+    };
+    axios
+      .patch(
+        `https://sawongdomain.com/modifyprofile/${this.state.selectedUserID}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            Authorization: this.props.cookies.get("authToken"),
+            "Access-Control-Allow-Headers": "Authorization",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response.data);
+        window.location.reload();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  modify = () => {
+      this.setState({ showModify: "block" });
+  };
+  cancelModify = () => {
+    this.setState({ showModify: "none" });
+  }
+  saveEdits = () => {
+    if (document.getElementById("headline").value.trim() != "") {
+      this.setState({ userHeadline: this.state.newHeadline });
+    }
+    if (document.getElementById("description").value.trim() != "") {
+      this.setState({ userDescription: this.state.newDescription });
+    }
+    setTimeout(() => {
+      console.log("NEW SAVED HEADLINE IS : ");
+      console.log(this.state.userHeadline);
+      console.log("NEW SAVED DESCRIPTION IS : " + this.state.userDescription);
+    }, 500);
+    this.cancelModify();
+  }
+  saveModify = () => {
+    this.saveEdits();
+    setTimeout(() => {
+      this.editAPI();
+    }, 1);
+  };
   userProfile = (name, email, usertype) => {
     return (
       <UserProfile
@@ -64,10 +117,15 @@ export default class UserList extends React.Component {
         userEmail={email}
         userHeadline={this.state.userHeadline}
         userDescription={this.state.userDescription}
-        isStudent = {this.state.isStudent}
+        isStudent={this.state.isStudent}
+        showModify={this.state.showModify}
         deleteUser={this.deleteUser}
         modify={this.modify}
+        cancelModify={this.cancelModify}
+        saveModify={this.saveModify}
         hideSelectedUser={this.hideSelectedUser}
+        readHeadline={this.readHeadline}
+        readDescription={this.readDescription}
       />
     );
   };
@@ -175,6 +233,12 @@ export default class UserList extends React.Component {
     }, 1);
     alert("User deleted successfully.");
   };
+  readHeadline = (inputHeadline) => {
+    this.setState({ newHeadline: inputHeadline.target.value });
+  };
+  readDescription = (inputDescription) => {
+    this.setState({ newDescription: inputDescription.target.value });
+  };
   hideSelectedUser = () => {
     this.setState({ selectedUser: null });
   };
@@ -202,7 +266,8 @@ export default class UserList extends React.Component {
                 this.state.selectedUser.usertype,
                 this.state.userHeadline,
                 this.state.userDescription,
-                this.state.isStudent
+                this.state.isStudent,
+                this.state.showModify
               )
             : null}
         </div>
