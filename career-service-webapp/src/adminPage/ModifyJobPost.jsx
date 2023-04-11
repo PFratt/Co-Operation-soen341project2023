@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 
 export default function ModifyJobPost({
+  employerID,
   jobID,
   title,
   role_description,
@@ -18,7 +19,7 @@ export default function ModifyJobPost({
   const [DateDeadline, setDateDeadline] = useState(date_deadline);
   const editJob = () => {
     let modifyJob = {
-      employerID: cookies.get("userID"),
+      employerID: employerID,
       title: Title,
       role_description: RoleDescription,
       date_posted: date_posted,
