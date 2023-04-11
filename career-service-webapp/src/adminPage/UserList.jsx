@@ -21,7 +21,8 @@ export default class UserList extends React.Component {
       newDescription: "",
       showModify: "none",
       wordCountHead: null,
-      wordCountDescription: null
+      wordCountDescription: null,
+      profileExists: false
     };
     this.listUsers();
     this.getUserProfiles();
@@ -120,6 +121,7 @@ export default class UserList extends React.Component {
         userHeadline={this.state.userHeadline}
         userDescription={this.state.userDescription}
         isStudent={this.state.isStudent}
+        profileExists={this.state.profileExists}
         showModify={this.state.showModify}
         wordCountHead={this.state.wordCountHead}
         wordCountDescription={this.state.wordCountDescription}
@@ -156,6 +158,7 @@ export default class UserList extends React.Component {
                     email,
                     usertype,
                   },
+                  profileExists: false
                 });
                 setTimeout(() => {
                   this.getUserProfile();
@@ -183,6 +186,7 @@ export default class UserList extends React.Component {
           this.setState({selectUserProfile: this.state.profiles[i]});
           this.setState({userHeadline: this.state.profiles[i].headline})
           this.setState({userDescription: this.state.profiles[i].description})
+          this.setState({profileExists: true})
           console.log("headline is:", this.state.userHeadline);
         }
       }, 200)
@@ -280,7 +284,8 @@ export default class UserList extends React.Component {
                 this.state.isStudent,
                 this.state.showModify,
                 this.state.wordCountHead,
-                this.state.wordCountDescription
+                this.state.wordCountDescription,
+                this.state.profileExists
               )
             : null}
         </div>

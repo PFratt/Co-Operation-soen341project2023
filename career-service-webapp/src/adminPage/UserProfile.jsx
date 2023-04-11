@@ -16,7 +16,8 @@ export default function UserProfile({
   readDescription,
   readHeadline,
   wordCountHead,
-  wordCountDescription
+  wordCountDescription,
+  profileExists
 }) {
   return (
     <div
@@ -33,7 +34,7 @@ export default function UserProfile({
       <p>User name: {userName}</p>
       <p>User Email: {userEmail}</p>
 
-      {isStudent ? 
+      {isStudent && profileExists ? 
             (<p>User Headline: {userHeadline}</p>) 
             : null}
       <div style={{ display: showModify }}>
@@ -41,7 +42,7 @@ export default function UserProfile({
             {wordCountHead == 0 ? null : wordCountHead}
       </div>
 
-      {isStudent ? 
+      {isStudent && profileExists ? 
             (<p>User Description: {userDescription}</p>) 
             : null} 
       <div style={{ display: showModify }}>
@@ -51,6 +52,8 @@ export default function UserProfile({
             <button onClick={saveModify}> Save Changes</button>
             <button onClick={cancelModify}> Cancel</button>
       </div>
+
+      {isStudent && !profileExists ? (<p>This student has not created a Candidate Profile yet. To edit candidate profile please create one first.</p>): null}
 
       
       <button onClick={deleteUser}> Remove User</button>
