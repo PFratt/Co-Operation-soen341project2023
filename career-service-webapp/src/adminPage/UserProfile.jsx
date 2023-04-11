@@ -7,9 +7,14 @@ export default function UserProfile({
   userHeadline,
   userDescription,
   isStudent,
+  showModify,
   deleteUser,
   hideSelectedUser,
   modify,
+  cancelModify,
+  saveModify,
+  readDescription,
+  readHeadline
 }) {
   return (
     <div
@@ -29,12 +34,26 @@ export default function UserProfile({
       {isStudent ? 
             (<p>User Headline: {userHeadline}</p>) 
             : null}
+      <div style={{ display: showModify }}>
+            <input type="text" id="headline" onChange={readHeadline} />
+      </div>
+
       {isStudent ? 
             (<p>User Description: {userDescription}</p>) 
-            : null}    
+            : null} 
+      <div style={{ display: showModify }}>
+            <input type="text" id="description" onChange={readDescription} />
+            <br />
+            <button onClick={saveModify}> Save Changes</button>
+            <button onClick={cancelModify}> Cancel</button>
+      </div>
+
       
       <button onClick={deleteUser}> Remove User</button>
-      <button onClick={modify}> Modify</button>
+      {isStudent ? 
+            (<button onClick={modify}> Modify</button>) 
+            : null}
+      
     </div>
   );
 }
