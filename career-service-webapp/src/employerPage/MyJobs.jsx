@@ -3,8 +3,15 @@ import { Icon } from "@fluentui/react/lib/Icon";
 import { Table } from "react-bootstrap";
 import MyJobPost from "./MyJobPost";
 import { Cookies } from "react-cookie";
+
+import { useState, useEffect } from "react";
 import axios from "axios";
 
+const getWordCount = (str) => {
+  return str.split(" ").filter(function (num) {
+    return num != "";
+  }).length;
+};
 export default class MyJobs extends React.Component {
   constructor(props) {
     super(props);
@@ -101,7 +108,8 @@ export default class MyJobs extends React.Component {
         hideJob={this.hideJob}
         cookies={this.props.cookies}
         refreshJobs={this.getJobList}
-      ></MyJobPost>
+        descriptionCount={getWordCount(role_description)}
+      />
     );
   };
   hideJob = (value) => {
@@ -270,6 +278,7 @@ function AddJobPopup({
   handleInputChange,
   sendJob,
 }) {
+  const [descCount, setDescCount] = useState(null);
   return (
     <div className="add-job-component">
       <button onClick={hideJob}>Cancel </button>
@@ -291,8 +300,12 @@ function AddJobPopup({
             className="add-job-input"
             placeholder="Short Role Description"
             value={role_description}
-            onChange={handleInputChange}
+            onChange={(e) => {
+              handleInputChange(e);
+              setDescCount(getWordCount(e.target.value));
+            }}
           />
+          {descCount}
         </p>
         <p>
           Date Posted:{" "}

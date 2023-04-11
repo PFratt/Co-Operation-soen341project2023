@@ -1,6 +1,6 @@
 import React from "react";
 import "./css/Employer.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function MyJobPost({
@@ -12,10 +12,31 @@ export default function MyJobPost({
   hideJob,
   cookies,
   refreshJobs,
+  descriptionCount,
 }) {
   const [Title, setTitle] = useState(title);
   const [RoleDescription, setRoleDescription] = useState(role_description);
   const [DateDeadline, setDateDeadline] = useState(date_deadline);
+  const [descCount, setDescCount] = useState(descriptionCount);
+  useEffect(() => {
+    setTitle(title);
+    setRoleDescription(role_description);
+    setDateDeadline(date_deadline);
+    setDescCount(descriptionCount);
+  }, [
+    jobID,
+    title,
+    role_description,
+    date_posted,
+    date_deadline,
+    descriptionCount,
+  ]);
+
+  const getWordCount = (str) => {
+    return str.split(" ").filter(function (num) {
+      return num != "";
+    }).length;
+  };
   const editJob = () => {
     let modifyJob = {
       employerID: cookies.get("userID"),
@@ -95,8 +116,10 @@ export default function MyJobPost({
             onChange={(e) => {
               e.preventDefault();
               setRoleDescription(e.target.value);
+              setDescCount(getWordCount(e.target.value));
             }}
           />
+          {descCount}
         </p>
         <p>Date Posted: {date_posted}</p>
         <p>
