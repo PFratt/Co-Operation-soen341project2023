@@ -19,7 +19,9 @@ export default class UserList extends React.Component {
       isStudent: false,
       newHeadline: "",
       newDescription: "",
-      showModify: "none"
+      showModify: "none",
+      wordCountHead: null,
+      wordCountDescription: null
     };
     this.listUsers();
     this.getUserProfiles();
@@ -119,6 +121,8 @@ export default class UserList extends React.Component {
         userDescription={this.state.userDescription}
         isStudent={this.state.isStudent}
         showModify={this.state.showModify}
+        wordCountHead={this.state.wordCountHead}
+        wordCountDescription={this.state.wordCountDescription}
         deleteUser={this.deleteUser}
         modify={this.modify}
         cancelModify={this.cancelModify}
@@ -235,12 +239,19 @@ export default class UserList extends React.Component {
   };
   readHeadline = (inputHeadline) => {
     this.setState({ newHeadline: inputHeadline.target.value });
+    this.setState({wordCountHead: this.getWordCount(inputHeadline.target.value),});
   };
   readDescription = (inputDescription) => {
     this.setState({ newDescription: inputDescription.target.value });
+    this.setState({ wordCountDescription: this.getWordCount(inputDescription.target.value),});
   };
   hideSelectedUser = () => {
     this.setState({ selectedUser: null });
+  };
+  getWordCount = (str) => {
+    return str.split(" ").filter(function (num) {
+      return num != "";
+    }).length;
   };
   render() {
     return (
@@ -267,7 +278,9 @@ export default class UserList extends React.Component {
                 this.state.userHeadline,
                 this.state.userDescription,
                 this.state.isStudent,
-                this.state.showModify
+                this.state.showModify,
+                this.state.wordCountHead,
+                this.state.wordCountDescription
               )
             : null}
         </div>
