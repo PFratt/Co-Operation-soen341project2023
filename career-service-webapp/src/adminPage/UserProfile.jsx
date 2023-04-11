@@ -14,7 +14,9 @@ export default function UserProfile({
   cancelModify,
   saveModify,
   readDescription,
-  readHeadline
+  readHeadline,
+  wordCountHead,
+  wordCountDescription
 }) {
   return (
     <div
@@ -36,6 +38,7 @@ export default function UserProfile({
             : null}
       <div style={{ display: showModify }}>
             <input type="text" id="headline" onChange={readHeadline} />
+            {wordCountHead == 0 ? null : wordCountHead}
       </div>
 
       {isStudent ? 
@@ -43,6 +46,7 @@ export default function UserProfile({
             : null} 
       <div style={{ display: showModify }}>
             <input type="text" id="description" onChange={readDescription} />
+            {wordCountDescription == 0 ? null : wordCountDescription}
             <br />
             <button onClick={saveModify}> Save Changes</button>
             <button onClick={cancelModify}> Cancel</button>
