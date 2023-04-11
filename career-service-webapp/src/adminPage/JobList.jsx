@@ -75,6 +75,9 @@ export default class JobList extends React.Component {
         ({ jobID, title, role_description, date_posted, date_deadline, employerID }) => {
           
           const employer = this.state.employerList.find(emp => emp.id === employerID);
+          if(!employer)
+            return;
+            
           const employerName = employer ? employer.name : 'Unknown';
 
           return (
@@ -84,6 +87,7 @@ export default class JobList extends React.Component {
                 onClick={() => {
                   this.setState({
                     selectedJob: {
+                      employerID,
                       jobID,
                       title,
                       role_description,
@@ -104,9 +108,10 @@ export default class JobList extends React.Component {
         }
       );
   };
-  jobPost = (jobID, title, role_description, date_posted, date_deadline) => {
+  jobPost = (employerID, jobID, title, role_description, date_posted, date_deadline) => {
     return (
       <ModifyJobPost
+        employerID={employerID}
         jobID={jobID}
         title={title}
         role_description={role_description}
@@ -151,6 +156,7 @@ export default class JobList extends React.Component {
         <div className="myjobs-wrapper">
           {this.state.selectedJob
             ? this.jobPost(
+                this.state.selectedJob.employerID,
                 this.state.selectedJob.jobID,
                 this.state.selectedJob.title,
                 this.state.selectedJob.role_description,
