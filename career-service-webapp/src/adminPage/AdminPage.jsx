@@ -1,107 +1,49 @@
 import * as React from "react";
-
-import { Table } from "react-bootstrap";
 import { Icon } from "@fluentui/react/lib/Icon";
-import UserProfile from "./UserProfile";
-const fakeUserList = [
-  {
-    userType: "student",
-    userName: "qian1",
-    userEmail: "email.com ",
-  },
-  {
-    userType: "employer",
-    userName: "qian2",
-    userEmail: "email.com",
-  },
-  {
-    userType: "admin",
-    userName: "qian3",
-    userEmail: "email.com",
-  },
-  {
-    userType: "student",
-    userName: "qian4",
-    userEmail: "email.com",
-  },
-  {
-    userType: "student",
-    userName: "qian5",
-    userEmail: "email.comn",
-  },
-];
+import { Routes, Route } from "react-router-dom";
+import UserList from "./UserList";
+import JobList from "./JobList";
+import "./css/Admin.css";
+
 export default class AdminPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedUser: null,
+      showMenu: true,
     };
   }
-  listUsers = () => {
-    console.log("maptest called");
-    return fakeUserList.map(({ userType, userName, userEmail }) => {
-      return (
-        <tr>
-          <td>{userType}</td>
-          <td
-            onClick={() => {
-              this.setState({
-                selectedUser: { userType, userName, userEmail },
-              });
-            }}
-          >
-            {userName}
-          </td>
-          <td>{userEmail}</td>
-        </tr>
-      );
-    });
+
+  refresh = () => {
+    console.log("before");
+    window.setTimeout(function () {
+      window.location.assign("./#/admin");
+      console.log("after");
+    }, 100);
+    window.location.reload();
   };
-  userProfile = (userType, userName, userEmail) => {
-    return (
-      <UserProfile
-        userType={userType}
-        userName={userName}
-        userEmail={userEmail}
-        deleteUser={this.deleteUser}
-        hideSelectedUser={this.hideSelectedUser}
-      />
-    );
-  };
-  addUser = () => {
-    alert("add user called");
-  };
-  deleteUser = () => {
-    alert("remove user called");
-  };
-  hideSelectedUser = () => {
-    this.setState({ selectedUser: null });
-  };
+
   render() {
     return (
-      <div className="admin-page-container">
-        <div className="user-list-wrapper">
-          <Table className="job-list-table" striped bordered hover>
-            <thead>
-              <tr>
-                <th>UserType</th>
-                <th>UserName</th>
-                <th>UserEmail</th>
-              </tr>
-            </thead>
-            <tbody>{this.listUsers()}</tbody>
-          </Table>{" "}
-          <button onClick={this.addUser}>add User</button>
+      <div className="employer-page-container">
+        <div className="employer-navbar">
+          <a href="./#/admin/" className=" test-link">
+            <button className="employer-options button-9"> All Users</button>
+          </a>
+          <a href="./#/admin/joblist/" className=" test-link">
+            <button className="employer-options button-9">All Jobs </button>
+          </a>
         </div>
-        <div className="job-application-wrapper">
-          {this.state.selectedUser
-            ? this.userProfile(
-                this.state.selectedUser.userType,
-                this.state.selectedUser.userName,
-                this.state.selectedUser.userEmail
-              )
-            : null}
-        </div>
+        <Routes>
+          <Route
+            path={"/"}
+            element={<UserList cookies={this.props.cookies} />}
+          />
+          <Route
+            key={Math.random()}
+            path={"/joblist"}
+            element={<JobList cookies={this.props.cookies} />}
+          />
+        </Routes>
       </div>
     );
   }
