@@ -69,7 +69,6 @@ describe('Employer actions', () =>
 
         const response = await app.post("/login").send(body);
         token = response.body.accessToken;
-        console.log(response.text);
         expect(response.statusCode).toBe(200);
     });
 
